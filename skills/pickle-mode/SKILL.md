@@ -37,14 +37,14 @@ Run the task through the full process below. Playbooks and principles are files 
 Core:
 
 - `playbooks/feature.md`: add or change behaviour a user or caller can observe.
-- `playbooks/bug-fix.md`: something is broken and the symptom is known. Fix it.
+- `playbooks/bug-fix.md`: something is broken, the symptom is known, and the task is to fix it.
 - `playbooks/refactor.md`: change the structure, keep the behaviour identical.
-- `playbooks/investigate.md`: explain how or why something behaves. Answer, do not change code.
-- `playbooks/perf.md`: make a known slow or costly path faster or cheaper.
-- `playbooks/prototype.md`: try one or more throwaway versions to decide a direction before building it.
-- `playbooks/opening-a-pr.md`: turn the current branch into a reviewable pull request.
-- `playbooks/session-pickup.md`: resume work an earlier session left behind.
-- `playbooks/pause-safely.md`: stop mid-task and leave the work resumable.
+- `playbooks/investigate.md`: explain how or why something behaves, or recommend between options. Read-only: no code changes, even when the cause is a bug.
+- `playbooks/perf.md`: make a known slow or costly path faster or cheaper. A target number chased over many iterations is hillclimb.
+- `playbooks/prototype.md`: try one or more throwaway versions so the user can pick a direction. The real build afterwards is feature.
+- `playbooks/opening-a-pr.md`: turn the current branch into a reviewable pull request, alone or after another playbook.
+- `playbooks/session-pickup.md`: resume work an earlier session left behind, from a handoff note, a branch or a transcript.
+- `playbooks/pause-safely.md`: stop mid-task and leave the work resumable. Only when the user asks to stop. "Keep going" is not a pause.
 
 Extended (experimental, ported from pstack):
 
@@ -54,8 +54,8 @@ Extended (experimental, ported from pstack):
 - `playbooks/babysit.md`: get an open pull request green: failing CI and review comments.
 - `playbooks/multi-phase-plan.md`: plan a change that ships over several PRs or deploys.
 - `playbooks/worktree-cleanup.md`: remove stale git worktrees and branches safely.
-- `playbooks/runtime-forensics.md`: diagnose a live process that misbehaves now: CPU, memory, hangs.
-- `playbooks/trace-forensics.md`: analyse a captured profile, trace or log file.
+- `playbooks/runtime-forensics.md`: diagnose a live process that misbehaves now: CPU, memory, hangs. Not a captured trace.
+- `playbooks/trace-forensics.md`: analyse a captured profile, trace or log file. Not a live process.
 - `playbooks/visual-parity.md`: change how a UI is built while the rendered result stays identical.
 - `playbooks/authoring-a-skill.md`: write or change a skill, playbook or agent prompt.
 
@@ -74,7 +74,7 @@ Architecture:
 
 - **principle-boundaries** (`principles/boundaries.md`): framework code, controllers, adapters, third-party APIs, parsing input, or deciding where a check or error handler belongs.
 - **principle-types** (`principles/types.md`): designing types, signatures, enums or casts, or a runtime or null check that hints a type is too weak. Make illegal states unrepresentable.
-- **principle-idempotent-operations** (`principles/idempotent-operations.md`): jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash or run twice.
+- **principle-idempotent-operations** (`principles/idempotent-operations.md`): jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash or run twice. Also a symptom of something happening twice: duplicate rows, sends, charges or shipments.
 - **principle-finish-migrations** (`principles/finish-migrations.md`): a new API, type or format while old callers exist, or a planned rewrite or migration.
 - **principle-no-shared-writes** (`principles/no-shared-writes.md`): two processes, workers, apps, agents or branches that might write the same row, file or key, or a design that calls for a lock.
 
