@@ -55,7 +55,7 @@ Extended (experimental, ported from pstack):
 
 - `playbooks/hillclimb.md`: push a measurable number toward a target over many measured iterations.
 - `playbooks/eval.md`: compare prompts, models or skills with an eval.
-- `playbooks/autonomous-run.md`: keep working unattended until a stop condition is met.
+- `playbooks/autonomous-run.md`: keep working unattended until a stop condition is met: "keep going", "don't stop", "until all tests pass". Read it together with the playbook for the work itself, often bug-fix.
 - `playbooks/babysit.md`: get an open pull request green: failing CI and review comments.
 - `playbooks/multi-phase-plan.md`: plan a change that ships over several PRs or deploys.
 - `playbooks/worktree-cleanup.md`: remove stale git worktrees and branches safely.
