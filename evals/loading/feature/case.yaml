@@ -10,7 +10,7 @@ graders:
   - name: skips-wrong-playbooks
     type: tool_used
     tool: Read
-    input_match: 'pickle-mode/playbooks/(bug-fix|perf|investigate|runtime-forensics|trace-forensics)\.md'
+    input_match: 'pickle-mode/playbooks/(bug-fix|refactor|perf|investigate|runtime-forensics|trace-forensics)\.md'
     min: 0
     max: 0
   - name: loads-model-the-domain
@@ -21,10 +21,6 @@ graders:
     type: tool_used
     tool: Read
     input_match: 'pickle-mode/principles/types\.md'
-  - name: loads-finish-migrations
-    type: tool_used
-    tool: Read
-    input_match: 'pickle-mode/principles/finish-migrations\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(feature)'

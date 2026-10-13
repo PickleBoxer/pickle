@@ -16,7 +16,10 @@ Playbooks and principles are files next to this one. Paths below are relative to
 1. Read `.claude/pickle.md` in the project. It holds the verify commands and gates. If it is missing, use generic defaults and suggest `/pickle:setup`.
 2. Pick the playbooks that fit the task from the index below and read them. Usually one. If it is unclear, ask once.
 3. Copy the playbook steps into the todo list.
-4. Read a principle whenever a playbook step, a non-negotiable or the index below names one that applies. **principle-<name>** is the file `principles/<name>.md`. Read it in full before applying it.
+4. Read principles. **principle-<name>** is the file `principles/<name>.md`.
+   - Every principle a chosen playbook names: always, right after reading the playbook, before its first step. Playbook mentions are not optional.
+   - Every principle a non-negotiable names, when the non-negotiable applies.
+   - Any other principle whose index trigger fits the task.
 5. Name the principle file in the todo items it shapes. Before starting a todo, if a principle it names is no longer in context (for example after compaction), read it again.
 6. When delegating to a subagent, give it the absolute paths of the principle files that apply and tell it to read them.
 7. Run the steps. Verify with the profile commands.
