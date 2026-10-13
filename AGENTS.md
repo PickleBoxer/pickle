@@ -43,7 +43,7 @@ Current:
 .github/workflows/            CI: validate, dash check
 evals/                        eval cases (results/ is ignored)
 .claude/CLAUDE.md            imports AGENTS.md
-AGENTS.md  README.md  CREDITS.md  LICENSE
+AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
 ```
 
 Planned:
@@ -53,7 +53,6 @@ skills/
   pickle-mode/                entry skill, user-invoked only
     SKILL.md                  process, non-negotiables, playbook and principle indexes
     playbooks/*.md            plain files, read on demand
-    glossary.md
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
@@ -144,7 +143,7 @@ From Anthropic's skill authoring guide. Apply to every skill, playbook and princ
 - Match freedom to fragility. Exact commands and scripts for fragile steps, prose for judgment.
 - Scripts for deterministic work. Say whether Claude runs a script or reads it.
 - Workflows as checklists Claude copies into its todo list. Feedback loops: run, fix, rerun.
-- One term per concept, defined in `glossary.md`.
+- One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, playbook and principle, and never the words it lists under _Avoid_.
 - No time-sensitive statements. No hardcoded model names in prose; models live in agent frontmatter.
 - Forward slashes in paths. Fully qualified MCP tool names (`Server:tool`).
 - Evals before content. Test on Haiku, Sonnet and Opus.
