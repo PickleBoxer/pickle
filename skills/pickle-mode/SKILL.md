@@ -53,15 +53,15 @@ Core:
 
 Extended (experimental, ported from pstack):
 
-- `playbooks/hillclimb.md`: push a measurable number toward a target over many measured iterations.
-- `playbooks/eval.md`: compare prompts, models or skills with an eval.
-- `playbooks/autonomous-run.md`: keep working unattended until a stop condition is met: "keep going", "don't stop", "until all tests pass". Read it together with the playbook for the work itself, often bug-fix.
-- `playbooks/babysit.md`: get an open pull request green: failing CI and review comments.
-- `playbooks/multi-phase-plan.md`: plan a change that ships over several PRs or deploys.
+- `playbooks/hillclimb.md`: push a measurable number toward a target over many measured iterations, such as build time, test time, bundle size or memory: "bring X down to Y", "keep at it until it hits the target".
+- `playbooks/eval.md`: compare prompts, models or skills and judge which does better: "A or B?", "is the new version an improvement".
+- `playbooks/autonomous-run.md`: keep working unattended until a pass or fail condition is met: "carry on without me", "work until it's green", "no need to check in". Read it together with the playbook for the work itself, often bug-fix. A number pushed toward a target is hillclimb.
+- `playbooks/babysit.md`: get an open pull request to mergeable: red checks, failed builds or review comments on the PR.
+- `playbooks/multi-phase-plan.md`: plan a change that ships over several PRs or deploys, such as a schema or service migration with both versions live. The deliverable is the plan, not the change.
 - `playbooks/worktree-cleanup.md`: remove stale git worktrees and branches safely.
 - `playbooks/runtime-forensics.md`: diagnose a live process that misbehaves now: CPU, memory, hangs. Not a captured trace.
 - `playbooks/trace-forensics.md`: analyse a captured profile, trace or log file. Not a live process.
-- `playbooks/visual-parity.md`: change how a UI is built while the rendered result stays identical.
+- `playbooks/visual-parity.md`: change how a UI is built while the rendered result stays identical: a component or design-system migration, a CSS rewrite, a framework swap with no visible change.
 - `playbooks/authoring-a-skill.md`: write or change a skill, playbook or agent prompt.
 
 ## Principles
@@ -79,7 +79,7 @@ Architecture:
 
 - **principle-boundaries** (`principles/boundaries.md`): framework code, controllers, adapters, third-party APIs, parsing input, or deciding where a check or error handler belongs.
 - **principle-types** (`principles/types.md`): designing types, signatures, enums or casts, or a runtime or null check that hints a type is too weak. Make illegal states unrepresentable.
-- **principle-idempotent-operations** (`principles/idempotent-operations.md`): jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash or run twice. Also a symptom of something happening twice: duplicate rows, sends, charges or shipments.
+- **principle-idempotent-operations** (`principles/idempotent-operations.md`): jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash or run twice. Also a symptom of something happening twice: duplicate rows, emails, payments or job runs.
 - **principle-finish-migrations** (`principles/finish-migrations.md`): a new API, type or format while old callers exist, or a planned rewrite or migration.
 - **principle-no-shared-writes** (`principles/no-shared-writes.md`): two processes, workers, apps, agents or branches that might write the same row, file or key, or a design that calls for a lock.
 
