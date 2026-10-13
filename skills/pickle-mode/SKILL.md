@@ -19,8 +19,13 @@ Run the task through the full process below. Playbooks and principles are files 
    - Every principle a non-negotiable names, when the non-negotiable applies.
    - Any other principle whose trigger in the principle index fits the task.
 5. Name the principle file in the todo items it shapes. Before starting a todo, if a principle it names is no longer in context (for example after compaction), read it again.
-6. Run the steps. Use the tools a playbook lists, in its order: `explore`, `design-options`, an implementer subagent, `review`. A playbook may skip a tool, and says when.
-7. When delegating to a subagent, give it the absolute paths of the principle files that apply and tell it to read them first.
+6. Run the steps. Use the tools a playbook lists, in its order. A playbook may skip a tool, and says when.
+   - `explore`: the `pickle:explore` skill. Pass what to explore and why.
+   - `design-options`: the `pickle:design-options` skill. Pass the problem, the constraints and the explore findings.
+   - Implementer subagent: the `pickle:pickle-implementer` agent. Pass the files, the data shape, the success check and the verify commands.
+   - `review`: the `pickle:review` skill. Pass what the change is for and the base branch.
+   - If a tool or agent is not installed, use Claude Code's own: `Explore` for explore, `Plan` for design-options, `general-purpose` for the implementer and for review.
+7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files that apply, and tell it to read them first.
 8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
 9. End the reply with one line: `Loaded: <playbooks>, <principles>`.
 

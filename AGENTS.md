@@ -25,7 +25,7 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 ## Status and build order
 
-Bootstrap. No skills yet, on purpose. Evals come before content:
+In progress. `pickle-mode`, all playbooks and principles, the tools and the agents exist. Evals came before content:
 
 1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
 2. Build `pickle-mode`, all 19 playbooks, all 14 principles, `pack-php`, the tools and the agents.
@@ -41,6 +41,9 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
+skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
+skills/explore/ design-options/ review/   tools, context: fork
+agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 .claude/CLAUDE.md            imports AGENTS.md
 AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
