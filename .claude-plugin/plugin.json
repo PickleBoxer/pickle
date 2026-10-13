@@ -1,0 +1,23 @@
+{
+  "name": "pickle",
+  "displayName": "pickle",
+  "version": "0.1.0",
+  "description": "Language-agnostic engineering playbooks and principles for Claude Code, lazy-loaded by effort level (low, medium, high) and extendable per project",
+  "author": {
+    "name": "PickleBoxer"
+  },
+  "homepage": "https://github.com/PickleBoxer/pickle",
+  "repository": "https://github.com/PickleBoxer/pickle",
+  "license": "MIT",
+  "keywords": [
+    "pickle",
+    "skills",
+    "mod",
+    "workflow",
+    "playbooks",
+    "principles",
+    "subagents",
+    "verification",
+    "language-agnostic"
+  ]
+}
