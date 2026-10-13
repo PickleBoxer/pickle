@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: loading-perf
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-perf
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/perf\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-prove-it-works
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-prove-it-works"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(perf)'
+    target: last_message

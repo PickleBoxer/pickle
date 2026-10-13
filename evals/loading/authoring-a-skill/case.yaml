@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-authoring-a-skill
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-authoring-a-skill
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/authoring-a-skill\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|bug-fix)\.md'
+    min: 0
+    max: 0
+  - name: loads-minimize-reader-load
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-minimize-reader-load"'
+  - name: loads-laziness
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-laziness"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(authoring-a-skill)'
+    target: last_message

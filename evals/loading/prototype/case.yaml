@@ -1,0 +1,19 @@
+schema_version: "1.1"
+name: loading-prototype
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-prototype
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/prototype\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(bug-fix|perf|refactor)\.md'
+    min: 0
+    max: 0
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(prototype)'
+    target: last_message

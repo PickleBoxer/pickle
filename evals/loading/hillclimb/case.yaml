@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-hillclimb
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-hillclimb
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/hillclimb\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-prove-it-works
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-prove-it-works"'
+  - name: loads-small-verified-steps
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-small-verified-steps"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(hillclimb)'
+    target: last_message

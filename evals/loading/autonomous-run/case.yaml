@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: loading-autonomous-run
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-autonomous-run
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/autonomous-run\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-small-verified-steps
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-small-verified-steps"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(autonomous-run)'
+    target: last_message

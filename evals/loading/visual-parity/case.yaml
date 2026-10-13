@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-visual-parity
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-visual-parity
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/visual-parity\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(bug-fix|perf)\.md'
+    min: 0
+    max: 0
+  - name: loads-test-behavior
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-test-behavior"'
+  - name: loads-prove-it-works
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-prove-it-works"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(visual-parity)'
+    target: last_message

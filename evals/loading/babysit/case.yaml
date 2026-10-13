@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: loading-babysit
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-babysit
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/babysit\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-fix-root-causes
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-fix-root-causes"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(babysit)'
+    target: last_message

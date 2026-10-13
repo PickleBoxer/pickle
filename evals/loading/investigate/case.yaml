@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-investigate
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-investigate
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/investigate\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|refactor|prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-fix-root-causes
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-fix-root-causes"'
+  - name: loads-idempotent-operations
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-idempotent-operations"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(investigate)'
+    target: last_message

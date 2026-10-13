@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-refactor
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-refactor
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/refactor\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(bug-fix|perf|prototype)\.md'
+    min: 0
+    max: 0
+  - name: loads-boundaries
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-boundaries"'
+  - name: loads-redesign-from-first-principles
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-redesign-from-first-principles"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(refactor)'
+    target: last_message

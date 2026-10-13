@@ -3,7 +3,7 @@ name: loading-feature
 context:
   scaffold_script: scaffold.sh
 graders:
-  - name: reads-feature-playbook
+  - name: reads-feature
     type: tool_used
     tool: Read
     input_match: 'pickle-mode/playbooks/feature\.md'
@@ -27,5 +27,5 @@ graders:
     input_match: '"skill"\s*:\s*"(?:pickle:)?principle-finish-migrations"'
   - name: reports-loaded
     type: regex
-    pattern: 'Loaded:.*feature'
+    pattern: 'Loaded:.*(feature)'
     target: last_message

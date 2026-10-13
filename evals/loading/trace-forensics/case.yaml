@@ -1,0 +1,27 @@
+schema_version: "1.1"
+name: loading-trace-forensics
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-trace-forensics
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/trace-forensics\.md'
+  - name: skips-wrong-playbooks
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/(feature|prototype|runtime-forensics)\.md'
+    min: 0
+    max: 0
+  - name: loads-guard-the-context
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-guard-the-context"'
+  - name: loads-prove-it-works
+    type: tool_used
+    tool: Skill
+    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-prove-it-works"'
+  - name: reports-loaded
+    type: regex
+    pattern: 'Loaded:.*(trace-forensics)'
+    target: last_message
