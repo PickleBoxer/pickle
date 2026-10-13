@@ -15,12 +15,12 @@ graders:
     max: 0
   - name: loads-minimize-reader-load
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-minimize-reader-load"'
+    tool: Read
+    input_match: 'pickle-mode/principles/minimize-reader-load\.md'
   - name: loads-laziness
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-laziness"'
+    tool: Read
+    input_match: 'pickle-mode/principles/laziness\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(authoring-a-skill)'

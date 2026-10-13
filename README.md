@@ -13,7 +13,7 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 
 - **Full process.** A read-only explorer, design options, an implementer subagent and a reviewer. For small tasks, don't start pickle.
 - **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
-- **Principles.** Short background skills, loaded by name when a playbook step needs one.
+- **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
 - **Language packs.** PHP, TypeScript and Swift ship with pickle. They load only when Claude touches matching files.
 - **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands.
 

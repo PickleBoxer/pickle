@@ -15,12 +15,12 @@ graders:
     max: 0
   - name: loads-prove-it-works
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-prove-it-works"'
+    tool: Read
+    input_match: 'pickle-mode/principles/prove-it-works\.md'
   - name: loads-small-verified-steps
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-small-verified-steps"'
+    tool: Read
+    input_match: 'pickle-mode/principles/small-verified-steps\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(hillclimb)'

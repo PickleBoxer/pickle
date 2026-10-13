@@ -15,8 +15,8 @@ graders:
     max: 0
   - name: loads-fix-root-causes
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-fix-root-causes"'
+    tool: Read
+    input_match: 'pickle-mode/principles/fix-root-causes\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(babysit)'

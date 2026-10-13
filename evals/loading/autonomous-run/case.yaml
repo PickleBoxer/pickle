@@ -15,8 +15,8 @@ graders:
     max: 0
   - name: loads-small-verified-steps
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-small-verified-steps"'
+    tool: Read
+    input_match: 'pickle-mode/principles/small-verified-steps\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(autonomous-run)'

@@ -15,16 +15,16 @@ graders:
     max: 0
   - name: loads-model-the-domain
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-model-the-domain"'
+    tool: Read
+    input_match: 'pickle-mode/principles/model-the-domain\.md'
   - name: loads-types
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-types"'
+    tool: Read
+    input_match: 'pickle-mode/principles/types\.md'
   - name: loads-finish-migrations
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-finish-migrations"'
+    tool: Read
+    input_match: 'pickle-mode/principles/finish-migrations\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(feature)'

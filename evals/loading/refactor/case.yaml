@@ -15,12 +15,12 @@ graders:
     max: 0
   - name: loads-boundaries
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-boundaries"'
+    tool: Read
+    input_match: 'pickle-mode/principles/boundaries\.md'
   - name: loads-redesign-from-first-principles
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-redesign-from-first-principles"'
+    tool: Read
+    input_match: 'pickle-mode/principles/redesign-from-first-principles\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(refactor)'

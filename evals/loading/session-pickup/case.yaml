@@ -15,8 +15,8 @@ graders:
     max: 0
   - name: loads-guard-the-context
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-guard-the-context"'
+    tool: Read
+    input_match: 'pickle-mode/principles/guard-the-context\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(session-pickup)'

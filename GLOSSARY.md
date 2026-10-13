@@ -39,7 +39,7 @@ _Avoid_: load report, footer
 ## Principles
 
 **Principle**:
-A language-agnostic engineering rule with a trigger, loaded by name only when a task reaches that trigger.
+A language-agnostic engineering rule with a trigger, read only when a task reaches that trigger. Principles exist only inside pickle-mode.
 _Avoid_: rule, guideline, best practice
 
 **Trigger**:

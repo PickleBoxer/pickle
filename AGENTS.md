@@ -19,7 +19,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks are lazy-loaded files, principles are lazy-loaded skills, language packs load on matching files. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. Language packs load on matching files. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
@@ -53,10 +53,10 @@ skills/
   pickle-mode/                entry skill, user-invoked only
     SKILL.md                  process, non-negotiables, playbook and principle indexes
     playbooks/*.md            plain files, read on demand
+    principles/*.md           plain files, read on demand
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
-  principle-*/                background skills (user-invocable: false)
   explore/ design-options/ review/          context: fork
   bakeoff/ adversarial-review/               opt-in only
   pack-php/ pack-typescript/ pack-swift/ pack-template/   background, scoped with paths
@@ -143,7 +143,7 @@ From Anthropic's skill authoring guide. Apply to every skill, playbook and princ
 - Match freedom to fragility. Exact commands and scripts for fragile steps, prose for judgment.
 - Scripts for deterministic work. Say whether Claude runs a script or reads it.
 - Workflows as checklists Claude copies into its todo list. Feedback loops: run, fix, rerun.
-- One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, playbook and principle, and never the words it lists under _Avoid_.
+- One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, playbook and principle, and never use a word it lists under _Avoid_ to name that concept.
 - No time-sensitive statements. No hardcoded model names in prose; models live in agent frontmatter.
 - Forward slashes in paths. Fully qualified MCP tool names (`Server:tool`).
 - Evals before content. Test on Haiku, Sonnet and Opus.
@@ -185,7 +185,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 - Default is 3 runs per case, with and without the plugin. Use `--runs 1` while iterating, 3 for decisions.
 - Loading evals run with `--ablation none`: a no-plugin arm has nothing to load, and in a two-arm run `Skill` graders are reported but not scored.
 - Read-only tools are granted when listed in `allowed_tools`. Edit, Write and Bash need `--allow-tools`. Loading cases don't need them.
-- Loading cases are dry runs: `append_system_prompt` stops the agent after it loads principles, `max_turns: 12`, no `Agent`. Use `--tag smoke` (three cases) and `--model haiku` while iterating, about $0.01 per pass.
+- Loading cases are dry runs: `append_system_prompt` stops the agent after it reads principles, `allowed_tools: [Read, Glob, Grep]`, `max_turns: 12`. Use `--tag smoke` (three cases) and `--model haiku` while iterating, about $0.01 per pass.
 - Narrow with `--case` and `--tag`. Override with `--model`. LLM graders default to Haiku (`--judge-model`).
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. There is no tests-pass grader: have Claude write the result to a file and grade that file.
 - Fixtures are tiny purpose-built repos created by a `scaffold_script` in the case directory, which needs `--scaffold`. No `.claude/` config loads inside a run, but files there can still be read.
@@ -199,14 +199,14 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Entry skill | `pickle-mode`, user-invoked only, `/pickle:pickle-mode <task>`. Like pstack's `poteto-mode`: the user starts the skill, the agent decides from the task which playbooks to read and which principles to load |
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
 | Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
-| Principles | 14 background skills, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**`). The agent loads them by name with the Skill tool when a mention applies |
+| Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
 | Packs | background skills scoped with `paths`, holding each principle's language half and default verify commands |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
 | Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
-| Observability | Skill calls in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
+| Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 
-`pickle-mode` flow: read the profile, read the playbooks the task needs (ask once if unclear), copy the steps into todos, load principles by name with the Skill tool where the playbook steps or the `pickle-mode` Principles index name them, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
+`pickle-mode` flow: read the profile, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
 
 ## References
 

@@ -15,16 +15,16 @@ graders:
     max: 0
   - name: loads-small-verified-steps
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-small-verified-steps"'
+    tool: Read
+    input_match: 'pickle-mode/principles/small-verified-steps\.md'
   - name: loads-finish-migrations
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-finish-migrations"'
+    tool: Read
+    input_match: 'pickle-mode/principles/finish-migrations\.md'
   - name: loads-no-shared-writes
     type: tool_used
-    tool: Skill
-    input_match: '"skill"\s*:\s*"(?:pickle:)?principle-no-shared-writes"'
+    tool: Read
+    input_match: 'pickle-mode/principles/no-shared-writes\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(multi-phase-plan)'
