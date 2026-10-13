@@ -19,7 +19,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. One router skill, `/pickle:work [low|medium|high] <task>`, sizes the task, reads one playbook and loads only the principles, tools and language packs that playbook needs. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks are lazy-loaded files, principles are lazy-loaded skills, language packs load on matching files. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
@@ -27,10 +27,10 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 Bootstrap. No skills yet, on purpose. Evals come before content:
 
-1. Pilot eval case and fixture (`evals/pilot-low-laravel/`).
-2. Run the pilot once, with the user's go-ahead, to measure real token use.
-3. Build the router, `setup`, three playbooks (feature, bug-fix, refactor), six principles and `pack-php`. Rerun evals.
-4. Grow only where evals show gaps.
+1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
+2. Build `pickle-mode`, all 19 playbooks, all 14 principles, `pack-php`, the tools and the agents.
+3. Run the loading evals, with the user's go-ahead, until the agent reads the right playbooks and loads the right principles for each task.
+4. Then `setup`, outcome evals and token evals. Grow only where evals show gaps.
 
 The working plan lives in `.scratch/plan.md`. `.scratch/` is excluded through `.git/info/exclude` and never committed. If it is missing, ask the user for it.
 
@@ -50,8 +50,8 @@ Planned:
 
 ```
 skills/
-  work/                       router, user-invoked only
-    SKILL.md                  profile injection, effort rules, playbook index
+  pickle-mode/                entry skill, user-invoked only
+    SKILL.md                  profile injection, process, playbook index
     playbooks/*.md            plain files, read on demand
     glossary.md
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
@@ -106,7 +106,7 @@ Verified against the docs on 2026-10-13, Claude Code 2.1.296.
 | `name` | lowercase letters, numbers, hyphens, max 64 chars. Defaults to the folder name. In a plugin it sets the last segment only |
 | `description` | what it does and when to use it, third person |
 | `when_to_use` | extra trigger phrases, appended to the description |
-| `argument-hint` | autocomplete hint, for example `[low\|medium\|high] <task>` |
+| `argument-hint` | autocomplete hint, for example `<task>` |
 | `arguments` | named positional arguments for `$name` |
 | `disable-model-invocation: true` | user-only. Description is not in context. Blocks the Skill tool and preloading into subagents |
 | `user-invocable: false` | Claude-only background skill, hidden from the `/` menu. Description stays in context |
@@ -130,7 +130,7 @@ Outside Claude Code (claude.ai uploads, the Skills API) only `name`, `descriptio
 
 - Enterprise, personal (`~/.claude/skills/`), project (`.claude/skills/`), nested, plugin (`<plugin>/skills/`). Enterprise beats personal beats project.
 - Plugin skills are namespaced `plugin:skill`, so projects can add skills beside pickle but never override it.
-- A skill named like its plugin becomes `/pickle:pickle`. That is why the router is `work`.
+- A skill named like its plugin becomes `/pickle:pickle`. That is why the entry skill is `pickle-mode`.
 
 ## Skill authoring best practices
 
@@ -184,30 +184,29 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 - Always ask the user before running any eval. Each run is a full agent session on their account.
 - Always pass `--no-publish` (reports publish to claude.ai by default) and `--max-cost-usd`.
 - Default is 3 runs per case, with and without the plugin. Use `--runs 1` while iterating, 3 for decisions.
+- Loading evals run with `--ablation none`: a no-plugin arm has nothing to load, and in a two-arm run `Skill` graders are reported but not scored.
+- Read-only tools are granted when listed in `allowed_tools`. Edit, Write and Bash need `--allow-tools`. Loading cases don't need them.
 - Narrow with `--case` and `--tag`. Override with `--model`. LLM graders default to Haiku (`--judge-model`).
-- Prefer free graders (tool used, files changed, tests pass) over LLM graders.
-- Fixtures are tiny purpose-built repos created by a `scaffold_script`, which needs `--scaffold`.
-- Stage cost: pilot, then low cases, then medium and high, then the three-model pass before releases.
+- Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. There is no tests-pass grader: have Claude write the result to a file and grade that file.
+- Fixtures are tiny purpose-built repos created by a `scaffold_script` in the case directory, which needs `--scaffold`. No `.claude/` config loads inside a run, but files there can still be read.
+- Docs: https://code.claude.com/docs/en/plugin-evals.md
+- Stages: loading evals, then outcome evals, then token evals, then the three-model pass before releases.
 
 ## Design decisions
 
 | Topic | Decision |
 |---|---|
-| Router | `work`, user-invoked only, `/pickle:work [low\|medium\|high] <task>` |
-| Effort | `low`, `medium`, `high`. Picked automatically and reported, asked when borderline, manual argument wins. Independent of Claude Code's `/effort` |
-| Playbooks | plain files under the router, all lazy. Steps copied into todos so they survive compaction |
-| Principles | about 14 background skills, merged from pstack's 24, rewritten language-agnostic |
+| Entry skill | `pickle-mode`, user-invoked only, `/pickle:pickle-mode <task>`. Like pstack's `poteto-mode`: the user starts the skill, the agent decides from the task which playbooks to read and which principles to load |
+| Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
+| Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
+| Principles | 14 background skills, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**`). The agent loads them by name with the Skill tool when a mention applies |
 | Packs | background skills scoped with `paths`, holding each principle's language half and default verify commands |
-| Profile | `.claude/pickle.md` in the user's project, injected by the router, written by `/pickle:setup` |
+| Profile | `.claude/pickle.md` in the user's project, injected by `pickle-mode`, written by `/pickle:setup` |
 | Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | Skill calls in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 
-| Effort | Signals | Runs |
-|---|---|---|
-| low | 1 or 2 files, no new data shape | main thread, verify |
-| medium | a few files or a new data shape, clear design | `explore`, implement in main, verify, self-review |
-| high | crosses modules, unclear design, or touches a profile gate | `explore`, `design-options`, implementer subagent, `review` |
+`pickle-mode` flow: read the profile, read the playbooks the task needs (ask once if unclear), copy the steps into todos, load principles by name with the Skill tool where the playbook steps or the `pickle-mode` Principles index name them, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
 
 ## References
 
