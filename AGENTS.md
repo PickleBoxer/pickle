@@ -51,7 +51,7 @@ Planned:
 ```
 skills/
   pickle-mode/                entry skill, user-invoked only
-    SKILL.md                  profile injection, process, playbook index
+    SKILL.md                  process, non-negotiables, playbook and principle indexes
     playbooks/*.md            plain files, read on demand
     glossary.md
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
@@ -124,7 +124,7 @@ Outside Claude Code (claude.ai uploads, the Skills API) only `name`, `descriptio
 
 - `$ARGUMENTS`, `$0`, `$name`. If no placeholder takes the arguments, Claude Code appends `ARGUMENTS: <value>`.
 - `${CLAUDE_SKILL_DIR}`, `${CLAUDE_PROJECT_DIR}`, `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}`, `${CLAUDE_SESSION_ID}`, `${CLAUDE_EFFORT}`.
-- `` !`command` `` runs before Claude sees the skill and inlines its output. A failing command aborts the whole invocation, so guard it: `` !`cat .claude/pickle.md 2>/dev/null || echo NO_PROFILE` ``. The command needs a permission rule or an `allowed-tools` entry.
+- `` !`command` `` runs before Claude sees the skill and inlines its output. A failing command aborts the whole invocation, so guard it: `` !`cat .claude/pickle.md 2>/dev/null || echo NO_PROFILE` ``. The command needs a permission rule or an `allowed-tools` entry. If Bash is denied, the permission check fails and the skill aborts with zero turns, guard or not (measured in an eval run). pickle reads its profile with Read instead.
 
 ### Locations and names
 
@@ -201,7 +201,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
 | Principles | 14 background skills, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**`). The agent loads them by name with the Skill tool when a mention applies |
 | Packs | background skills scoped with `paths`, holding each principle's language half and default verify commands |
-| Profile | `.claude/pickle.md` in the user's project, injected by `pickle-mode`, written by `/pickle:setup` |
+| Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
 | Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | Skill calls in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
