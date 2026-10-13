@@ -1,7 +1,5 @@
 # Finish migrations
 
-Applies when introducing a new API, type or format while old callers exist, or when planning a rewrite or migration.
-
 When the new design is decided, move every caller to it and delete the old path in the same wave. Do not keep both.
 
 **Steps:**

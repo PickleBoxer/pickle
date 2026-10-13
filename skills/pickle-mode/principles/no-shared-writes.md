@@ -1,7 +1,5 @@
 # No shared writes
 
-Applies when two processes, workers, apps, agents or branches might write the same row, file, key or object, or when a design calls for a lock.
-
 When concurrent actors might write the same state, first ask whether they need to. Usually they do not. Remove the sharing before you try to coordinate it.
 
 1. **Find the shared write targets:** rows, tables, files, cache keys, branches or objects that more than one actor writes.

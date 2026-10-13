@@ -1,7 +1,5 @@
 # Test behavior
 
-Applies when writing, changing, reviewing or keeping a test, including a failing test that reproduces a bug.
-
 A test calls the code the way its users do and asserts what they would observe, against a literal expected value.
 
 **The check:** would the test still pass if every function it imports returned nothing? If yes, it observes no behaviour and cannot catch a defect. Rewrite the assertion or delete the test.

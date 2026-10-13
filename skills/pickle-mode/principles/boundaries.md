@@ -1,7 +1,5 @@
 # Boundaries
 
-Applies when wiring framework code, controllers, adapters or third-party APIs, parsing input, or deciding where a check or error handler belongs.
-
 Validate, parse and handle errors at the edges of the system. Trust the inside. Keep business logic in plain functions that do not know about frameworks or vendors.
 
 **At a boundary** (HTTP requests, CLI arguments, config, environment, database rows, queues, third-party APIs):

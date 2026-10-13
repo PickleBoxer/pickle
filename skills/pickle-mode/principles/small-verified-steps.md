@@ -1,6 +1,5 @@
 # Small verified steps
 
-
 Break work into small units. Each unit ends in a state you can check. Do not start the next unit until the current check passes.
 
 **Why:** a break caught in the unit that caused it is cheap to find. A break caught after a batch is buried, and more work is already built on top of it.

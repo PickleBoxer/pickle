@@ -1,6 +1,5 @@
 # Prove it works
 
-
 Check the real thing, not a proxy. A claim without direct evidence is a guess.
 
 **Check directly.**

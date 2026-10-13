@@ -1,7 +1,5 @@
 # Idempotent operations
 
-Applies when writing jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash, restart or run twice.
-
 Every operation that changes state should converge to the correct end state, whether it runs once, twice, or after a crash halfway through.
 
 **Ask of every state-changing operation:**

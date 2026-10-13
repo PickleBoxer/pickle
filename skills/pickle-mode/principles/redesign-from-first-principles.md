@@ -1,7 +1,5 @@
 # Redesign from first principles
 
-Applies when integrating a new requirement, provider, variant or behaviour into an existing design, or when a change only fits by adding special cases.
-
 Do not bolt a new requirement onto the current design. Design as if it had been a requirement from the start, then move the code there.
 
 1. Read every affected file and understand the current design and why it has its shape.

@@ -1,7 +1,5 @@
 # Fix root causes
 
-Applies when debugging, investigating wrong behaviour or failing CI, or when a fix is about to target a symptom with a guard, retry or workaround.
-
 Do not fix symptoms. Trace the problem to its cause and fix it there.
 
 **Pattern:**

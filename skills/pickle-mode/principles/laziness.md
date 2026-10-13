@@ -1,7 +1,5 @@
 # Laziness
 
-Applies when sizing a change, sequencing an addition or refactor, or when tempted to add an abstraction, layer, option or guard the task did not ask for.
-
 The best change is the smallest one that solves the problem. The best addition starts with a removal.
 
 **Subtract first.**

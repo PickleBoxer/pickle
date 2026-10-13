@@ -2,7 +2,7 @@
   "name": "pickle",
   "displayName": "pickle",
   "version": "0.1.0",
-  "description": "Language-agnostic engineering playbooks and principles for Claude Code, lazy-loaded by effort level (low, medium, high) and extendable per project",
+  "description": "Language-agnostic engineering playbooks and principles for Claude Code, loaded on demand per task and extendable per project",
   "author": {
     "name": "PickleBoxer"
   },

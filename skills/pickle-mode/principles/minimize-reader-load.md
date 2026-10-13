@@ -1,7 +1,5 @@
 # Minimize reader load
 
-Applies when reviewing or writing code that is hard to follow, adding a wrapper, adapter or piece of state, or writing anything another person or agent must read, such as a PR description or a skill.
-
 Maintainability is the work a reader must do to understand something. Measure it on two axes:
 
 - **Layers to trace:** the indirections between a question and its answer.

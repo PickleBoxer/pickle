@@ -1,7 +1,5 @@
 # Types
 
-Applies when designing types, signatures, enums or casts, or when a runtime check, null check or "should never happen" error hints that a type is too weak.
-
 Let the type checker reject impossible states, mixed-up values and unhandled cases. Prefer designing a case out of existence over handling it everywhere. The language pack names the syntax for each idea.
 
 - **Make illegal states unrepresentable.** Model variants as a closed set (enum, sum type, sealed class), not as a bag of optional fields where contradictory combinations are allowed. If you need a comment explaining which field combinations are valid, split the type.

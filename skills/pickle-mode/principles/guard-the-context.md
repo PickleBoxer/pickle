@@ -1,7 +1,5 @@
 # Guard the context
 
-Applies when reading large files, logs, traces or transcripts, fanning out work, resuming or pausing a session, or when the context is filling up.
-
 Context is finite. When it overflows, reasoning degrades, details get lost in compaction, and progress stalls. Spend it on decisions, not on raw material.
 
 **Route bulk elsewhere.**

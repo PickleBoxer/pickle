@@ -1,7 +1,5 @@
 # Model the domain
 
-Applies when writing stateful logic, adding a branch to an existing if/else chain, or when the same shape check repeats across files.
-
 Get the data shape right first. Then encode the domain in a structure, not in conditionals spread across files.
 
 **Data first.** Before writing logic, name the core types and data structures, trace how each is read and written, and pick structures that fit the main access paths. A structure chosen at write time is cheap. Recovering it later looks like a refactor and gets postponed.
