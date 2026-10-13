@@ -7,7 +7,7 @@ disable-model-invocation: true
 
 # pickle mode
 
-Stub for the eval smoke test. Only the feature playbook and three principles exist.
+Stub for the eval smoke test. Only three playbooks and seven principles exist.
 
 ## Process
 
@@ -27,6 +27,8 @@ Stub for the eval smoke test. Only the feature playbook and three principles exi
 Paths are relative to this file.
 
 - `playbooks/feature.md`: add or change behaviour.
+- `playbooks/bug-fix.md`: something is broken and the symptom is known.
+- `playbooks/refactor.md`: change the structure, keep the behaviour.
 
 ## Principles
 
@@ -35,3 +37,7 @@ Load the skill by name before applying it. In the reply, name each principle tha
 - **principle-model-the-domain**: stateful or branch-heavy logic, or the same shape check repeated across files.
 - **principle-types**: designing types or signatures. Make illegal states unrepresentable.
 - **principle-finish-migrations**: a new API or representation while old callers exist. Migrate every caller and delete the old one in the same change.
+- **principle-fix-root-causes**: debugging. Reproduce first, find the cause before the fix.
+- **principle-test-behavior**: writing, changing or keeping a test.
+- **principle-boundaries**: validation, error handling, framework adapters or third-party services.
+- **principle-redesign-from-first-principles**: integrating a new requirement into an existing design.

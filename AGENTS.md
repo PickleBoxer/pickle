@@ -186,6 +186,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 - Default is 3 runs per case, with and without the plugin. Use `--runs 1` while iterating, 3 for decisions.
 - Loading evals run with `--ablation none`: a no-plugin arm has nothing to load, and in a two-arm run `Skill` graders are reported but not scored.
 - Read-only tools are granted when listed in `allowed_tools`. Edit, Write and Bash need `--allow-tools`. Loading cases don't need them.
+- Loading cases are dry runs: `append_system_prompt` stops the agent after it loads principles, `max_turns: 12`, no `Agent`. Use `--tag smoke` (three cases) and `--model haiku` while iterating, about $0.01 per pass.
 - Narrow with `--case` and `--tag`. Override with `--model`. LLM graders default to Haiku (`--judge-model`).
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. There is no tests-pass grader: have Claude write the result to a file and grade that file.
 - Fixtures are tiny purpose-built repos created by a `scaffold_script` in the case directory, which needs `--scaffold`. No `.claude/` config loads inside a run, but files there can still be read.
