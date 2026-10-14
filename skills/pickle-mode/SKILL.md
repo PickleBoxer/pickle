@@ -7,27 +7,28 @@ disable-model-invocation: true
 
 # pickle mode
 
-Run the task through the full process below. Playbooks and principles are files next to this one, and paths below are relative to this file. Read a file only when the task needs it.
+Run the task through the full process below. Playbooks, principles and packs are files next to this one, and paths below are relative to this file. Read a file only when the task needs it.
 
 ## Process
 
 1. Read `.claude/pickle.md` in the project with Read. It holds the stack, the verify commands and the gates. If it is missing, use the project's obvious test and lint commands and suggest `/pickle:setup` once in the reply.
+   - Read each pack the profile lists under `packs:` before step 2: a name is `packs/<name>.md`, a path is a file in the project. Without a profile, read the pack for the language of the files the task names, if one exists. Packs: `packs/php.md`.
 2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go.
 3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
 4. Read principles. **principle-<name>** is the file `principles/<name>.md`.
    - Every principle a chosen playbook names: always, right after reading the playbook, before its first step. Playbook mentions are not optional.
    - Every principle a non-negotiable names, when the non-negotiable applies.
    - Any other principle whose trigger in the principle index fits the task.
-5. Name the principle file in the todo items it shapes. Before starting a todo, if a principle it names is no longer in context (for example after compaction), read it again.
+5. Name the principle file, and the pack file for code todos, in the todo items they shape. Before starting a todo, if a file it names is no longer in context (for example after compaction), read it again.
 6. Run the steps. Use the tools a playbook lists, in its order. A playbook may skip a tool, and says when.
    - `explore`: the `pickle:explore` skill. Pass what to explore and why.
    - `design-options`: the `pickle:design-options` skill. Pass the problem, the constraints and the explore findings.
    - Implementer subagent: the `pickle:pickle-implementer` agent. Pass the files, the data shape, the success check and the verify commands.
    - `review`: the `pickle:review` skill. Pass what the change is for and the base branch.
    - If a tool or agent is not installed, use Claude Code's own: `Explore` for explore, `Plan` for design-options, `general-purpose` for the implementer and for review.
-7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files that apply, and tell it to read them first.
+7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files and pack files that apply, and tell it to read them first.
 8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
-9. End the reply with one line: `Loaded: <playbooks>, <principles>`.
+9. End the reply with one line: `Loaded: <playbooks>, <principles>, <packs>`.
 
 ## Non-negotiables
 

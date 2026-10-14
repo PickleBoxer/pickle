@@ -1,13 +1,6 @@
----
-name: pack-php
-description: "PHP and Laravel forms of the pickle principles: backed enums, readonly value objects, Form Request boundaries, exhaustive match checked by PHPStan, idempotent jobs, Pest behaviour tests. Also the default PHP verify commands and the PHP language server. Use when reading or editing PHP files or composer.json."
-user-invocable: false
-paths: ["**/*.php", "composer.json"]
----
+# PHP pack
 
-# pack-php
-
-The PHP half of the pickle principles. Each section gives only the PHP form of one principle. Under pickle-mode, read the principle file first, then apply it with the lines below. Lines marked Laravel apply when `composer.json` requires `laravel/framework`.
+The PHP half of the principles, plus default verify commands and the language server. Each section gives only the PHP form of one principle: read the principle file first, then apply it with the lines below. Lines marked Laravel apply when `composer.json` requires `laravel/framework`.
 
 ## Verify commands
 

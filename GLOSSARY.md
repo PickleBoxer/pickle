@@ -55,7 +55,7 @@ A principle named inline in a playbook step or a non-negotiable, at the point wh
 _Avoid_: reference, link
 
 **Pack**:
-The language-specific half of the principles for one language, plus that language's default verify commands. Loads only when the agent works on files of that language.
+The language-specific half of the principles for one language, plus that language's default verify commands. A file inside pickle-mode, read when the profile lists it.
 _Avoid_: language skill, adapter, plugin
 
 ## Project

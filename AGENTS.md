@@ -19,7 +19,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. Language packs load on matching files. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks, principles and language packs are plain files inside `pickle-mode`, read only when the task needs them. The profile names the packs. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
@@ -41,9 +41,8 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
-skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
+skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), packs/ (php)
 skills/explore/ design-options/ review/   tools, context: fork
-skills/pack-php/              background pack, scoped to PHP files with paths
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 .claude/CLAUDE.md            imports AGENTS.md
@@ -58,12 +57,12 @@ skills/
     SKILL.md                  process, non-negotiables, playbook and principle indexes
     playbooks/*.md            plain files, read on demand
     principles/*.md           plain files, read on demand
+    packs/*.md                plain files, read when the profile lists them: php, typescript, swift, template
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
   explore/ design-options/ review/          context: fork
   bakeoff/ adversarial-review/               opt-in only
-  pack-php/ pack-typescript/ pack-swift/ pack-template/   background, scoped with paths
 agents/                       pickle-explorer (haiku), pickle-implementer (sonnet), pickle-reviewer (opus)
 hooks/                        mod: hooks.json plus register.tsx
 tests/                        *.test.ts for the mod
@@ -204,13 +203,13 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
 | Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
-| Packs | background skills scoped with `paths`, holding each principle's language half and default verify commands |
+| Packs | plain files under `pickle-mode/packs/`, holding each principle's language half and default verify commands. Read in step 1 for each pack the profile lists, or a project file the profile names by path. Not skills: as skills they put a description in context in every session that touches the language, and the model saw `pack-php` after reading a PHP file but did not invoke it (measured, Haiku, 2 runs) |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
 | Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 
-`pickle-mode` flow: read the profile, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
+`pickle-mode` flow: read the profile and its packs, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and pack paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
 
 ## References
 
