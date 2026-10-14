@@ -136,8 +136,8 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
-| skills/pickle-mode/scripts/worktree-audit.sh | script | skills/poteto-mode/scripts/worktree-audit.sh | pending | 0.15.24 | Claude transcript path, portable `stat` and `date` |
-| skills/pickle-mode/scripts/pr-state.sh | script | skills/poteto-mode/scripts/watch-pr | pending | 0.15.24 | about 40 lines instead of the Bun tool |
+| skills/pickle-mode/scripts/worktree-audit.sh | script | skills/poteto-mode/scripts/worktree-audit.sh | ported | 0.15.24 | Claude transcript path (`projects/<slug>/`, own folder plus main-checkout search), portable `stat` and `date`, `grep -F` for `rg`, `jq` check, CLAUDE column (`.claude/worktrees/` path) |
+| skills/pickle-mode/scripts/pr-state.sh | script | skills/poteto-mode/scripts/watch-pr | rebuilt | 0.15.24 | one-shot state in bash instead of the Bun poller: `gh pr view` plus GraphQL review threads. Waiting is Monitor on `gh pr checks --watch` |
 | - | script | skills/poteto-mode/scripts/orch | dropped | 0.15.24 | with `orchestrate` |
 | - | script | skills/poteto-mode/scripts/check-plan.mjs | dropped | 0.15.24 | playbook reread step covers it |
 | - | script | skills/poteto-mode/scripts/bootstrap.ts | dropped | 0.15.24 | no Bun tools left |

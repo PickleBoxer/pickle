@@ -105,10 +105,10 @@ Source: pstack 0.15.21 in [cursor/plugins](https://github.com/cursor/plugins/tre
 |---|---|---|---|
 | `poteto-agent` | delegate that reads poteto-mode first | custom agent with `skills:` preload, or brief with paths | `pickle-implementer` |
 | `comment-sicko` | comment deletion reviewer | read-only custom agent | planned |
-| `watch-pr` (Bun, about 3k lines) | poll PR checks, threads, merge queue | `/loop` plus ScheduleWakeup, Monitor on `gh pr checks --watch`, plugin monitor, `/autofix-pr` (cloud) | planned: small `pr-state.sh` |
+| `watch-pr` (Bun, about 3k lines) | poll PR checks, threads, merge queue | `/loop` plus ScheduleWakeup, Monitor on `gh pr checks --watch`, plugin monitor, `/autofix-pr` (cloud) | `scripts/pr-state.sh` (state plus unresolved threads); `babysit` waits with Monitor, stays local (no `/autofix-pr` cloud hand-off) and names the Desktop CI bar's local auto-fix |
 | `orch` (Bun, about 2.8k lines) | file ledger for orchestrate | TaskCreate, `/batch`, agent teams, SendMessage | dropped |
 | `check-plan.mjs` | lint a multi-phase plan | PostToolUse hook | dropped, hook later |
-| `worktree-audit.sh` | audit worktrees | none for the audit | planned: port |
+| `worktree-audit.sh` | audit worktrees | none for the audit; native cleanup removes only worktrees Claude Code created | ported to `skills/pickle-mode/scripts/` |
 | `show-me-your-work/log.sh` | append a TSV decision row | none | planned: port with `show-me-your-work` |
 | `bootstrap.ts` | install Bun deps | none needed | dropped |
 | `sync-upstream.sh` | maintainer: upstream subtree | none | planned: `upstream-diff.sh` |

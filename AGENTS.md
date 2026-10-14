@@ -42,7 +42,7 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
-skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
+skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), scripts/ (pr-state, worktree-audit)
 skills/how/ why/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack

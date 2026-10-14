@@ -34,7 +34,7 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 | MCP server | plugin root `.mcp.json` or `plugin.json` `mcpServers` | starts when the plugin is enabled, tools deferred behind ToolSearch | tool names | no. See MCP |
 | LSP server | `.lsp.json`, binary on user PATH | on matching files | 0 | no |
 | Output style | `output-styles/*.md`, used as `<plugin>:<name>` | when selected | 0 | no (reply style is the user's) |
-| Monitor | `monitors/monitors.json` via `experimental.monitors`, `when: always` or `on-skill-invoke:<skill>` | interactive sessions only | 0 | candidate for `babysit` |
+| Monitor | `monitors/monitors.json` via `experimental.monitors`, `when: always` or `on-skill-invoke:<skill>` | interactive sessions only | 0 | `babysit` uses the Monitor tool on `gh pr checks --watch`; a plugin monitor is not used |
 | Executables | `bin/` on Bash PATH | while enabled. Not installed by claude.ai, Cowork or `npx skills add` | 0 | no (scripts stay in skill folders) |
 | Workflow | `workflows/*.js` | dynamic workflows | unverified | no |
 | Theme | `themes/*.json` via `experimental.themes` | when selected | 0 | no |
