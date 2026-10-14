@@ -47,6 +47,7 @@ skills/explore/ design-options/ review/   tools, context: fork
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
+docs/                         claude-code.md (native features), pstack.md (pstack map)
 .claude/CLAUDE.md            imports AGENTS.md
 AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
 ```
@@ -214,6 +215,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 
 ## References
 
+- Claude Code native features and the pstack map: `docs/claude-code.md`, `docs/pstack.md`
 - Skills: https://code.claude.com/docs/en/skills
 - Authoring best practices: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 - Plugin manifest: https://code.claude.com/docs/en/plugins-reference
