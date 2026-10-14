@@ -12,7 +12,8 @@ Run the task through the full process below. Playbooks, principles and packs are
 ## Process
 
 1. Read `.claude/pickle.md` in the project with Read. It holds the stack, the verify commands and the gates. If it is missing, use the project's obvious test and lint commands and suggest `/pickle:setup` once in the reply.
-   - Read each pack the profile lists under `packs:` before step 2: a name is `packs/<name>.md`, a path is a file in the project. Without a profile, read the pack for the language of the files the task names, if one exists. Packs: `packs/php.md`, `packs/typescript.md`, `packs/swift.md`. To write one for another language, copy `packs/template.md`.
+   - Read each pack the profile lists under `packs:` before step 2. Always, also for tasks that write no code (investigating, reading a trace, planning): the pack names the language's tools, commands and failure modes those tasks rely on.
+   - A pack name is `packs/<name>.md`, a path is a file in the project. Without a profile, read the pack for the language of the files the task names, if one exists. Packs: `packs/php.md`, `packs/typescript.md`, `packs/swift.md`. To write one for another language, copy `packs/template.md`.
 2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go.
 3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
 4. Read principles. **principle-<name>** is the file `principles/<name>.md`.
