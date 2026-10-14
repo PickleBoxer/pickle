@@ -31,12 +31,13 @@ Mentions in this skill, its playbooks and its principles:
 5. Name the principle file, and the convention file or skill for code todos, in the todo items they shape. Before starting a todo, if a file it names is no longer in context (for example after compaction), read it again.
 6. Run the steps. Use the tools a playbook lists, in its order. A playbook may skip a tool, and says when.
    - `how`: the **how** skill (Skill tool, `pickle:how`). Pass the question and why it matters.
+   - `why`: the **why** skill (Skill tool, `pickle:why`). Pass the question and the target. It searches git and every connected MCP source.
    - `architect`: the **architect** skill (Skill tool, `pickle:architect`). Pass the design task, the constraints and the how findings. Add `with sign-off` when the user wants to approve the design before code.
    - Implementer subagent: the `pickle:pickle-implementer` agent. Pass the files, the data shape, the success check and the verify commands.
    - `interrogate`: the **interrogate** skill (Skill tool, `pickle:interrogate`). Pass what the change is for and the base branch. Add `panel` when the playbook says so or the user asks for it.
    - `swarm`: the **swarm** skill (Skill tool, `pickle:swarm`). Pass the done predicate, N and the shape.
    - When a tool returns a question for the user (`Intent unclear:`, `Done predicate unclear:`, a `Sign-off:` line), ask it with `AskUserQuestion` and run the tool again with the answer. When swarm returns `Use /batch:`, give the user that command. When it returns `Cannot fan out:`, start its briefs yourself with the Agent tool, `isolation: "worktree"`.
-   - If a tool or agent is not installed, use Claude Code's own: `Explore` for how, `Plan` for architect, `general-purpose` for the implementer and for interrogate.
+   - If a tool or agent is not installed, use Claude Code's own: `Explore` for how, `general-purpose` told to change nothing for why, `Plan` for architect, `general-purpose` for the implementer and for interrogate.
 7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files and convention files that apply and the convention skills to load, and tell it to read them first.
 8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
 9. End the reply with one line: `Loaded: <playbooks>, <principles>, <conventions>`.

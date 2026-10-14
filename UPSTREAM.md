@@ -46,7 +46,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/sharpen | skill | skills/sharpen | ported | 0.15.24 | user-only |
 | skills/in-your-own-words | skill | skills/in-your-own-words | ported | 0.15.24 | user-only |
 | skills/swarm | skill | skills/swarm | rebuilt | 0.15.24 | forked lead, implementer workers in worktrees, foreground. Suggests `/batch` for many mechanical slices |
-| skills/why | skill | skills/why | pending | 0.15.24 | trim hard |
+| skills/why | skill | skills/why | rebuilt | 0.15.24 | forked `pickle-historian` lead that writes the answer itself (no separate synthesizer), one investigator per MCP source found in its tool list. Source guides: code-archaeology, linear, notion, slack, sentry, datadog ported and trimmed, newrelic new. databricks.md and incident-postmortem.md dropped: warehouse stays a category without a guide, incident hints moved into the investigator brief |
 | skills/tdd | skill | skills/tdd | rewritten | 0.15.24 | model-invocable, red step alone when a playbook delegates the fix |
 | skills/unslop | skill | skills/unslop | ported | 0.15.24 | model-invocable, apply steps added, rule 13 allows parentheses |
 | skills/no-comments | skill | skills/no-comments | rewritten | 0.15.24 | model-invocable, deletes in the main thread from the reviewer's report, `how` instead of `why` until `why` lands |
@@ -129,6 +129,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | agents/pickle-explorer.md | agent | - | new | n/a | explorer role from `how` |
 | agents/pickle-implementer.md | agent | agents/poteto-agent.md | rewritten | 0.15.24 | |
 | agents/pickle-reviewer.md | agent | - | new | n/a | reviewer role from `interrogate` |
+| agents/pickle-historian.md | agent | - | new | n/a | lead and investigators for `why`. No tools list so it inherits MCP tools, denies Edit, Write, NotebookEdit |
 | agents/comment-sicko.md | agent | agents/comment-sicko.md | rewritten | 0.15.24 | read-only, report only, plain voice, git history instead of `how` and `why` |
 
 ## Scripts, mod and automations

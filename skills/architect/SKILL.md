@@ -19,7 +19,7 @@ $ARGUMENTS
 You lead. Change nothing: the sketch is text in your answer, and the implementation comes after.
 
 1. Read every principle and convention file named above.
-2. Ground. Run the **how** skill (Skill tool, `pickle:how`) on every system the change touches, unless the arguments already carry how findings that cover them. Naming a file is not grounding. Skip only for greenfield work with nothing to integrate.
+2. Ground. Run the **how** skill (Skill tool, `pickle:how`) on every system the change touches, unless the arguments already carry how findings that cover them. Naming a file is not grounding. Skip only for greenfield work with nothing to integrate. If the design changes ownership or layering, also run the **why** skill (Skill tool, `pickle:why`) on the current shape, so its reasons become constraints, not guesses.
 3. Sketch twice. Start two runners in one message with the Agent tool: `subagent_type: Plan`, `run_in_background: false`. Prompt each with the task, the grounding, the principle and convention file paths, the principles folder `${CLAUDE_SKILL_DIR}/../pickle-mode/principles/`, its angle, and: "Read `${CLAUDE_SKILL_DIR}/references/runner.md` first and follow it."
    - Runner A: the smallest change that fits the existing design.
    - Runner B: the shape you would build if today's requirements had been there from day one, per **principle-redesign-from-first-principles**.

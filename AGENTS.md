@@ -43,11 +43,11 @@ Current:
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
 skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
-skills/how/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
+skills/how/ why/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
 skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/ show-me-your-work/   inline skills ported from pstack (deslop from cursor-team-kit)
-agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, comment-sicko
+agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, pickle-historian, comment-sicko
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
 scripts/                      check-refs.sh (CI), upstream-diff.sh (maintainer)
@@ -67,7 +67,7 @@ skills/
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
-  how/ architect/ interrogate/ swarm/      context: fork, run as pickle-lead
+  how/ why/ architect/ interrogate/ swarm/  context: fork, run as pickle-lead (why as pickle-historian)
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer
 hooks/                        mod: hooks.json plus register.tsx
 tests/                        *.test.ts for the mod
@@ -214,7 +214,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
 | Conventions | pickle ships no language rules. Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Shipped language rules go stale and fight project choices |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
-| Tools | `how`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
+| Tools | `how`, `why`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `why` forks as `pickle-historian` instead, which has no tools list so it can reach MCP sources. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 

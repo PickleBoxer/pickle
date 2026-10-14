@@ -75,7 +75,7 @@ _Avoid_: init, onboarding
 ## Tools and roles
 
 **Tool**:
-A pickle skill that runs one stage of the process in its own subagent: how, architect, interrogate or swarm.
+A pickle skill that runs one stage of the process in its own subagent: how, why, architect, interrogate or swarm.
 _Avoid_: helper, sub-skill
 
 **Opt-in tool**:
@@ -85,6 +85,10 @@ _Avoid_: advanced tool
 **Explorer**, **Implementer**, **Reviewer**:
 The three subagent roles pickle delegates to. The explorer reads, the implementer changes code, the reviewer judges the result.
 _Avoid_: helper agent
+
+**Historian**:
+The read-only subagent why runs as, both as lead and as investigators. It searches git, PRs and the session's MCP sources for the reasons behind code, and never changes anything in them.
+_Avoid_: archaeologist, synthesizer
 
 **Comment sicko**:
 The read-only subagent no-comments starts. It lists which comments in a diff die and which code a surprising comment hides, and never edits.

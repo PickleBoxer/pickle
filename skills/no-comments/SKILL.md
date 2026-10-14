@@ -21,7 +21,7 @@ Keep list: a comment survives only as a legal or license header, behaviour force
 2. Judge the report.
    - Reject a flag outside the scope, a deletion of a comment on the keep list, a `MUST KILL` whose reason is false, and a flag on code that is intentional and stays.
    - A keep survives only with proof that it is about something we cannot change. A refuted or still unclear keep is deleted.
-   - When an `IMPORTANT` or `do not remove` verdict rests on thin evidence, run the **how** skill (Skill tool, `pickle:how`) on its symbol first. A deletion that stays unclear after that stands.
+   - When an `IMPORTANT` or `do not remove` verdict rests on thin evidence, run the **why** skill (Skill tool, `pickle:why`) on its symbol first, or the **how** skill (Skill tool, `pickle:how`) when the claim is about behaviour. A deletion that stays unclear after that stands.
    - Check for lint and type suppressions in the scope that the report missed. One that hides a correctness or safety rule becomes a `MUST KILL`.
    - On a bad report, start the reviewer once more with the failure named. If the second report is also bad, stop and report no-comments as failed.
 3. Delete every accepted comment.
