@@ -25,7 +25,7 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 ## Status and build order
 
-In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Loading evals passed on Haiku, Sonnet and Opus before plan 2 renamed the tools to `how`, `architect`, `interrogate` and `swarm`. They have not run on the renamed set yet. Evals came before content:
+In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Plan 2 renamed the tools to `how`, `architect`, `interrogate` and `swarm`. Loading evals pass on the renamed set on Haiku, Sonnet and Opus. Evals came before content:
 
 1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
 2. Build `pickle-mode`, all 19 playbooks, all 14 principles, the tools and the agents.
