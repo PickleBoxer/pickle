@@ -1,6 +1,6 @@
 ---
 description: Loading. Stopping mid-task with uncommitted work.
-tags: [loading, core]
+tags: [loading, core, no-code]
 runs: 1
 max_turns: 12
 allowed_tools: [Read, Glob, Grep]

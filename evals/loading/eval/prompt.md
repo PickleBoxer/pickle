@@ -1,6 +1,6 @@
 ---
 description: Loading. Comparing two prompts is an eval.
-tags: [loading, extended]
+tags: [loading, extended, no-code]
 runs: 1
 max_turns: 12
 allowed_tools: [Read, Glob, Grep]
