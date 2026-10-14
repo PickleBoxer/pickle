@@ -1,3 +1,5 @@
+<!-- TODO: written from memory, not checked against docs. Verify every command, API and version claim against the official docs, then delete this comment. Least certain: `expectsDatabaseQueryCount`, `Benchmark::measure()`, PHPStan reporting a missing `match` case, `casts()` from Laravel 11, `withExceptions`, the laravel-lsp and php-lsp install commands. -->
+
 # PHP pack
 
 The PHP half of the principles, plus default verify commands and the language server. Each section gives only the PHP form of one principle: read the principle file first, then apply it with the lines below. Lines marked Laravel apply when `composer.json` requires `laravel/framework`.

@@ -41,7 +41,7 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
-skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), packs/ (php)
+skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), packs/ (php, typescript, swift, template)
 skills/explore/ design-options/ review/   tools, context: fork
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
