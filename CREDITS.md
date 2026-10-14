@@ -9,6 +9,6 @@ What pickle takes from pstack:
 - Verifying on the real surface, not a proxy.
 - Engineering principles, merged and rewritten language-agnostic. Language rules come from each project's conventions.
 
-pickle does not track pstack's wording. Differences are deliberate: effort levels instead of one pipeline, a project profile with the project's own conventions, and Claude Code native skills and agents.
+pickle does not track pstack's wording. Differences are deliberate: one full process with playbooks and principles loaded only when the task needs them, a project profile with the project's own conventions, and Claude Code native skills and agents.
 
 The Claude Code port of pstack is [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack).

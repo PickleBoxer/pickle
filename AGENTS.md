@@ -25,12 +25,13 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 ## Status and build order
 
-In progress. `pickle-mode`, all playbooks and principles, the tools and the agents exist. Evals came before content:
+In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Loading evals pass on Haiku, Sonnet and Opus. Evals came before content:
 
 1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
 2. Build `pickle-mode`, all 19 playbooks, all 14 principles, the tools and the agents.
 3. Run the loading evals, with the user's go-ahead, until the agent reads the right playbooks and loads the right principles for each task.
-4. Then `setup`, outcome evals and token evals. Grow only where evals show gaps.
+4. Build `setup`, which writes the profile with the project's verify commands and conventions.
+5. Then outcome evals and token evals. Grow only where evals show gaps.
 
 The working plan lives in `.scratch/plan.md`. `.scratch/` is excluded through `.git/info/exclude` and never committed. If it is missing, ask the user for it.
 
