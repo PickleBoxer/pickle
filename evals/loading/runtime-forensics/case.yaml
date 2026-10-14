@@ -17,10 +17,10 @@ graders:
     type: tool_used
     tool: Read
     input_match: 'pickle-mode/principles/prove-it-works\.md'
-  - name: loads-pack-php
+  - name: loads-conventions
     type: tool_used
     tool: Read
-    input_match: 'pickle-mode/packs/php\.md'
+    input_match: 'docs/conventions\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(runtime-forensics)'

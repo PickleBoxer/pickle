@@ -14,12 +14,12 @@ q() { if [ -z "$1" ]; then printf 'null'; else printf '"%s"' "$(printf '%s' "$1"
 list() { local out="" x; for x in "$@"; do out="$out${out:+,}$(q "$x")"; done; printf '[%s]' "$out"; }
 
 stacks=()
-packs=()
+langs=()
 
 # PHP
 php_test="" php_types="" php_lint="" php_ui=""
 if has composer.json; then
-  packs+=(php)
+  langs+=(php)
   if json_key composer.json laravel/framework || has artisan; then
     stacks+=(laravel)
     php_test="php artisan test"
@@ -42,7 +42,7 @@ fi
 # JavaScript and TypeScript
 pm="" js_test="" js_types="" js_lint="" js_ui=""
 if has tsconfig.json && ! has package.json; then
-  packs+=(typescript); stacks+=(typescript-node); js_types="tsc --noEmit"
+  langs+=(typescript); stacks+=(typescript-node); js_types="tsc --noEmit"
 fi
 if has package.json; then
   if has pnpm-lock.yaml; then pm=pnpm; run="pnpm"; x="pnpm exec"
@@ -50,7 +50,7 @@ if has package.json; then
   elif has bun.lock || has bun.lockb; then pm=bun; run="bun run"; x="bunx"
   else pm=npm; run="npm run"; x="npx"; fi
   ts=false
-  if has tsconfig.json || json_key package.json typescript; then ts=true; packs+=(typescript); fi
+  if has tsconfig.json || json_key package.json typescript; then ts=true; langs+=(typescript); fi
   # A Laravel app ships a package.json for Vite. It is a JS stack only when it has its own tooling.
   if json_key package.json react || json_key package.json next; then stacks+=(typescript-react)
   elif $ts; then stacks+=(typescript-node)
@@ -71,7 +71,7 @@ fi
 swift_test="" swift_types="" swift_lint="" swift_ui=""
 xcode="$(ls -d ./*.xcworkspace ./*.xcodeproj 2>/dev/null | grep -v '/project.xcworkspace' | head -1 || true)"
 if has Package.swift || [ -n "$xcode" ]; then
-  packs+=(swift)
+  langs+=(swift)
   stacks+=(swift)
   if [ -n "$xcode" ]; then
     flag="-project"; case "$xcode" in *.xcworkspace) flag="-workspace" ;; esac
@@ -91,7 +91,7 @@ if has Package.swift || [ -n "$xcode" ]; then
   elif has .swift-format; then swift_lint="swift format lint --recursive ."; fi
 fi
 
-# Other stacks without a pack yet: commands only.
+# Other stacks: commands only, no language server entry yet.
 other_test="" other_types="" other_lint=""
 if has go.mod; then
   stacks+=(go); other_test="go test ./..."; other_types="go vet ./..."
@@ -145,7 +145,18 @@ for f in .github/workflows/*.yml .github/workflows/*.yaml .gitlab-ci.yml bitbuck
   [ -f "$f" ] && ci+=("$f")
 done
 
-# LSP plugin per pack: enabled in settings, and the server binary on PATH.
+# Files that may hold coding rules, by name. Setup reads each and keeps the real ones.
+conventions=()
+while IFS= read -r f; do conventions+=("${f#./}"); done < <(find . -maxdepth 3 -mindepth 1 \
+  \( -name node_modules -o -name vendor -o -name Pods -o -name build -o -name dist -o -name .git -o -name storage \) -prune -o \
+  -type f \( \
+    \( \( -iname '*convention*' -o -iname '*standard*' -o -iname '*style*guide*' -o -iname '*guideline*' -o -iname '*coding*' -o -iname 'contributing*' \) \
+       \( -iname '*.md' -o -iname '*.mdc' -o -iname '*.txt' -o -iname '*.rst' \) \) \
+    -o -path './.cursor/rules/*' -o -name .cursorrules -o -name .windsurfrules -o -name .clinerules \
+    -o -path './.github/copilot-instructions.md' -o -path './.github/instructions/*' \
+  \) -print 2>/dev/null | sort)
+
+# LSP plugin per language: enabled in settings, and the server binary on PATH.
 enabled() {
   local f
   for f in "$config_dir/settings.json" .claude/settings.json .claude/settings.local.json; do
@@ -153,15 +164,15 @@ enabled() {
   done
   return 1
 }
-lsp_entry() { # pack plugin server install
+lsp_entry() { # language plugin server install
   local on=false found=false
   enabled "$2" && on=true
   command -v "$3" >/dev/null 2>&1 && found=true
-  printf '{"pack":%s,"plugin":%s,"enabled":%s,"server":%s,"server_found":%s,"install":%s}' \
+  printf '{"language":%s,"plugin":%s,"enabled":%s,"server":%s,"server_found":%s,"install":%s}' \
     "$(q "$1")" "$(q "$2")" "$on" "$(q "$3")" "$found" "$(q "$4")"
 }
 lsp=()
-for p in "${packs[@]+"${packs[@]}"}"; do
+for p in "${langs[@]+"${langs[@]}"}"; do
   case "$p" in
     php)
       if enabled laravel-lsp@laravel || { [[ " ${stacks[*]} " == *" laravel "* ]] && ! enabled php-lsp@claude-plugins-official; }; then
@@ -184,7 +195,6 @@ cmd() { # name values...: one JSON list per verify purpose, empty values dropped
 printf '{\n'
 printf '  "profile": %s,\n' "$(q "$profile")"
 printf '  "stacks": %s,\n' "$(list "${stacks[@]+"${stacks[@]}"}")"
-printf '  "packs": %s,\n' "$(list "${packs[@]+"${packs[@]}"}")"
 printf '  "package_manager": %s,\n' "$(q "$pm")"
 printf '  "verify": {\n'
 printf '    "test": %s,\n' "$(cmd test "${task_test[@]+"${task_test[@]}"}" "$php_test" "$js_test" "$swift_test" "$other_test")"
@@ -195,5 +205,6 @@ printf '  },\n'
 printf '  "task_runner": %s,\n' "$( [ -n "$runner" ] && printf '{"tool":%s,"file":%s,"targets":%s}' "$(q "$runner")" "$(q "$runner_file")" "$(list "${targets[@]+"${targets[@]}"}")" || printf null )"
 printf '  "subprojects": %s,\n' "$(list "${subprojects[@]+"${subprojects[@]}"}")"
 printf '  "ci": %s,\n' "$(list "${ci[@]+"${ci[@]}"}")"
+printf '  "convention_files": %s,\n' "$(list "${conventions[@]+"${conventions[@]}"}")"
 printf '  "lsp": %s\n' "$lsp_json"
 printf '}\n'

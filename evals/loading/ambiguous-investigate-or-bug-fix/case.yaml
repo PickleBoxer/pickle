@@ -13,10 +13,10 @@ graders:
     input_match: 'pickle-mode/playbooks/(feature|prototype)\.md'
     min: 0
     max: 0
-  - name: loads-pack-php
+  - name: loads-conventions
     type: tool_used
     tool: Read
-    input_match: 'pickle-mode/packs/php\.md'
+    input_match: 'docs/conventions\.md'
   - name: reports-loaded
     type: regex
     pattern: 'Loaded:.*(investigate|bug-fix)'

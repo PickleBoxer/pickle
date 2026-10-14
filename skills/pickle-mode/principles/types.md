@@ -1,6 +1,6 @@
 # Types
 
-Let the type checker reject impossible states, mixed-up values and unhandled cases. Prefer designing a case out of existence over handling it everywhere. The language pack names the syntax for each idea.
+Let the type checker reject impossible states, mixed-up values and unhandled cases. Prefer designing a case out of existence over handling it everywhere. The project's conventions name the syntax for each idea.
 
 - **Make illegal states unrepresentable.** Model variants as a closed set (enum, sum type, sealed class), not as a bag of optional fields where contradictory combinations are allowed. If you need a comment explaining which field combinations are valid, split the type.
 - **Build types from the values you want.** A non-empty list is a first item plus the rest. A valid range is a start plus a length. Pick the shape that cannot hold the illegal value.

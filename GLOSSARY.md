@@ -54,14 +54,14 @@ _Avoid_: principle list, catalogue
 A principle named inline in a playbook step or a non-negotiable, at the point where it applies. A mention is what prompts the agent to load the principle.
 _Avoid_: reference, link
 
-**Pack**:
-The language-specific half of the principles for one language, plus that language's default verify commands. A file inside pickle-mode, read when the profile lists it.
-_Avoid_: language skill, adapter, plugin
+**Convention**:
+A rule for how one project writes code: its language idioms, frameworks, tools and traps. A skill name or a file path in the project, listed in the profile and read before work starts. Conventions win over pickle's defaults.
+_Avoid_: pack, style guide, language skill
 
 ## Project
 
 **Profile**:
-A short description of one project for pickle: its stack, packs, verify commands and gates.
+A short description of one project for pickle: its stack, conventions, verify commands and gates.
 _Avoid_: config, settings, project file
 
 **Verify command**:

@@ -116,10 +116,20 @@ it('ships a paid order', function () {
 });
 EOF
 
+mkdir -p docs
+cat > docs/conventions.md <<'EOF'
+# Conventions
+
+- Tests are Pest feature tests that call the route and assert the stored state.
+- Status columns are backed enums, cast on the model.
+- Jobs that write orders implement ShouldBeUnique.
+- Read the real error in storage/logs/laravel.log before changing code.
+EOF
+
 cat > .claude/pickle.md <<'EOF'
 ---
 stack: laravel
-packs: [php]
+conventions: [docs/conventions.md]
 gates: [migrations on shared DBs, deploy]
 ---
 ## Verify

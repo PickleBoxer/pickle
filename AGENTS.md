@@ -19,7 +19,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks, principles and language packs are plain files inside `pickle-mode`, read only when the task needs them. The profile names the packs. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. pickle ships no language rules: each project lists its own conventions in the profile. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
@@ -28,7 +28,7 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 In progress. `pickle-mode`, all playbooks and principles, the tools and the agents exist. Evals came before content:
 
 1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
-2. Build `pickle-mode`, all 19 playbooks, all 14 principles, `pack-php`, the tools and the agents.
+2. Build `pickle-mode`, all 19 playbooks, all 14 principles, the tools and the agents.
 3. Run the loading evals, with the user's go-ahead, until the agent reads the right playbooks and loads the right principles for each task.
 4. Then `setup`, outcome evals and token evals. Grow only where evals show gaps.
 
@@ -41,7 +41,7 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
-skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), packs/ (php, typescript, swift, template)
+skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
 skills/explore/ design-options/ review/   tools, context: fork
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
@@ -58,7 +58,6 @@ skills/
     SKILL.md                  process, non-negotiables, playbook and principle indexes
     playbooks/*.md            plain files, read on demand
     principles/*.md           plain files, read on demand
-    packs/*.md                plain files, read when the profile lists them: php, typescript, swift, template
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
@@ -204,13 +203,13 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
 | Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
-| Packs | plain files under `pickle-mode/packs/`, holding each principle's language half and default verify commands. Read in step 1 for each pack the profile lists, or a project file the profile names by path. Not skills: as skills they put a description in context in every session that touches the language, and the model saw `pack-php` after reading a PHP file but did not invoke it (measured, Haiku, 2 runs) |
+| Conventions | pickle ships no language rules. Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Shipped language rules go stale and fight project choices |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
 | Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 
-`pickle-mode` flow: read the profile and its packs, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and pack paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
+`pickle-mode` flow: read the profile and load its conventions, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and convention paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
 
 ## References
 

@@ -1,6 +1,6 @@
 # pickle
 
-Language-agnostic engineering playbooks and principles for Claude Code. Start it on a task that deserves the full process. pickle picks the playbook, loads only the principles and language pack it needs, and reads how your project tests and runs from a small profile.
+Language-agnostic engineering playbooks and principles for Claude Code. Start it on a task that deserves the full process. pickle picks the playbook, loads only the principles it needs, and reads how your project tests, runs and writes code from a small profile.
 
 > Early. The repo is being bootstrapped: evals first, skills next. Nothing installable yet.
 
@@ -14,8 +14,12 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 - **Full process.** A read-only explorer, design options, an implementer subagent and a reviewer. For small tasks, don't start pickle.
 - **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
 - **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
-- **Language packs.** PHP, TypeScript and Swift halves of the principles, with default verify commands. pickle reads the packs your profile lists. A template helps you write one for another language.
-- **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands.
+- **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands and your conventions.
+- **Your conventions.** pickle has no language rules of its own. Your project defines them, and they win over pickle's defaults. List them under `conventions:` in the profile, as skill names or paths to files in your repo. pickle reads every one before it starts, also for tasks that write no code.
+
+## Writing a conventions file
+
+A conventions file tells pickle how your project applies the principles in its own language and framework. Keep it short, one line per rule, with concrete names and commands: your test framework and how tests assert, how input is validated at the edges, how jobs and scheduled tasks avoid running twice, where the real error log lives, and the traps your stack has bitten you with. Skip what `CLAUDE.md` already says, since it is in context anyway. Then list the file in the profile, for example `conventions: [docs/conventions.md]`.
 
 ## Install
 

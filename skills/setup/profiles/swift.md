@@ -1,6 +1,5 @@
 ---
 stack: swift
-packs: [swift]
 conventions: []
 gates: [signing and provisioning, App Store Connect, release builds, Core Data or SwiftData model migrations]
 ---

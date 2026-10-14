@@ -1,6 +1,5 @@
 ---
 stack: typescript-node
-packs: [typescript]
 conventions: []
 gates: [database migrations, deploy, publishing a package, .env files]
 ---

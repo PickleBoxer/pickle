@@ -1,6 +1,5 @@
 ---
 stack: typescript-react
-packs: [typescript]
 conventions: []
 gates: [database migrations, deploy, .env files]
 ---

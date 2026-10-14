@@ -22,4 +22,4 @@ A test calls the code the way its users do and asserts what they would observe, 
 
 **Keep** tests of relations across data (a key present in two tables, a parent that exists) and compile-time type tests.
 
-The language pack names the test framework's idioms.
+The project's conventions name the test framework's idioms.

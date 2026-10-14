@@ -21,4 +21,4 @@ Validate, parse and handle errors at the edges of the system. Trust the inside. 
 - Is this data crossing a boundary right now? If not, validating it again is noise.
 - Could this be a pure function the framework code just calls? If yes, extract it.
 
-Related: **principle-types** says what the parsed data looks like. The language pack names the framework's boundary idioms.
+Related: **principle-types** says what the parsed data looks like. The project's conventions name the framework's boundary idioms.
