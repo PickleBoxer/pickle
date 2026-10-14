@@ -7,7 +7,7 @@ agent: pickle:pickle-reviewer
 background: false
 metadata:
   upstream: pstack/skills/interrogate
-  upstream-version: 0.15.21
+  upstream-version: 0.15.24
 ---
 
 Review this change:

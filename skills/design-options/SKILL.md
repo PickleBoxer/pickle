@@ -7,7 +7,7 @@ agent: Plan
 background: false
 metadata:
   upstream: pstack/skills/architect
-  upstream-version: 0.15.21
+  upstream-version: 0.15.24
 ---
 
 Design options for this task:

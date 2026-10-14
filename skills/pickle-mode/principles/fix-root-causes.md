@@ -7,6 +7,7 @@ Do not fix symptoms. Trace the problem to its cause and fix it there.
 - **Reproduce first.** A bug you cannot trigger is a bug you cannot confirm fixed.
 - **Ask "why" until you reach the cause.** Each answer must come from evidence, not from reading code and guessing.
 - **Instrument when stuck.** Add logging, read the actual error, inspect the real state.
+- **After a deep dig, propose the signal.** If the deciding fact took a long search to find, propose the cheap, always-on signal (a log line, a metric, a check) that would have shown it at first look.
 - **No silencing guards.** A null check that hides a crash, a retry that hides a failure, or a catch that swallows an error is a symptom fix.
 - **A workaround that needs a paragraph of explanation means the code is wrong.** Fix the code, not the comment.
 - **Fix the pattern, not the instance.** Search for the same mistake elsewhere and fix every occurrence.

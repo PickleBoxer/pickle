@@ -7,7 +7,7 @@ agent: pickle:pickle-explorer
 background: false
 metadata:
   upstream: pstack/skills/how
-  upstream-version: 0.15.21
+  upstream-version: 0.15.24
 ---
 
 Explore the code for this task:

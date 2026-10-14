@@ -5,7 +5,7 @@ argument-hint: "<task>"
 disable-model-invocation: true
 metadata:
   upstream: pstack/skills/poteto-mode/SKILL.md
-  upstream-version: 0.15.21
+  upstream-version: 0.15.24
 ---
 
 # pickle mode

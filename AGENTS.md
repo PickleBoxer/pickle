@@ -45,6 +45,7 @@ Current:
 skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
 skills/explore/ design-options/ review/   tools, context: fork
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
+skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)

@@ -14,6 +14,7 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 - **Full process.** A read-only explorer, design options, an implementer subagent and a reviewer. For small tasks, don't start pickle.
 - **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
 - **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
+- **Before you start.** `/pickle:sharpen <task>` frames the task the way an expert would before doing it. `/pickle:in-your-own-words` plays back your goal and problem so you can correct it.
 - **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands and your conventions.
 - **Your conventions.** pickle has no language rules of its own. Your project defines them, and they win over pickle's defaults. List them under `conventions:` in the profile, as skill names or paths to files in your repo. pickle reads every one before it starts, also for tasks that write no code.
 
