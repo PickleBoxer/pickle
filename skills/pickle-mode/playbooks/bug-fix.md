@@ -5,7 +5,7 @@ Tools: `how`, implementer subagent, `interrogate`. `architect` only when the fix
 Every changed line traces to evidence. A change that "might help" is a hypothesis. It does not ship.
 
 1. Copy these steps into the todo list. Mark a skipped step `skip: <reason>`.
-2. Reproduce the bug with a failing test that calls the code the way its users do (**principle-test-behavior**). If a test cannot reach it, reproduce it another way and say how.
+2. Reproduce the bug with the **tdd** skill (Skill tool, `pickle:tdd`), red step only: a failing test that calls the code the way its users do (**principle-test-behavior**) and fails for the reason the bug gives. Pass the bug and the principle file paths. If a test cannot reach it, reproduce it another way and say how.
 3. Find the root cause before changing anything (**principle-fix-root-causes**). Run the **how** skill (Skill tool, `pickle:how`) over the code on the failing path, list the hypotheses, and rule them out with evidence until one survives.
 4. Plan the smallest fix the evidence justifies. Run the **architect** skill (Skill tool, `pickle:architect`) only if it crosses a module boundary.
 5. Delegate the fix to an implementer subagent with the cause, the failing test and the principle file paths. Revert anything a refuted hypothesis motivated.

@@ -46,7 +46,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/in-your-own-words | skill | skills/in-your-own-words | ported | 0.15.24 | user-only |
 | skills/swarm | skill | skills/swarm | rebuilt | 0.15.24 | forked lead, implementer workers in worktrees, foreground. Suggests `/batch` for many mechanical slices |
 | skills/why | skill | skills/why | pending | 0.15.24 | trim hard |
-| skills/tdd | skill | skills/tdd | pending | 0.15.24 | |
+| skills/tdd | skill | skills/tdd | rewritten | 0.15.24 | model-invocable, red step alone when a playbook delegates the fix |
 | skills/unslop | skill | skills/unslop | pending | 0.15.24 | |
 | skills/no-comments | skill | skills/no-comments | pending | 0.15.24 | with `comment-sicko` |
 | skills/technical-writing | skill | skills/technical-writing | pending | 0.15.24 | |
