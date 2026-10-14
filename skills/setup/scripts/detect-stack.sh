@@ -186,6 +186,28 @@ for p in "${langs[@]+"${langs[@]}"}"; do
 done
 lsp_json="[$(IFS=,; printf '%s' "${lsp[*]+"${lsp[*]}"}")]"
 
+# Language skills per stack, in precedence order. pickle ships its own; third-party ones
+# are never copied, only detected where Claude Code loads them: the project, then personal.
+skill_entry() { # name source install
+  local where=null
+  if [ "$2" = pickle ]; then where='"pickle"'
+  elif [ -f ".claude/skills/$1/SKILL.md" ]; then where='"project"'
+  elif [ -f "$config_dir/skills/$1/SKILL.md" ]; then where='"personal"'; fi
+  printf '{"name":%s,"source":%s,"installed":%s,"install":%s}' "$(q "$1")" "$(q "$2")" "$where" "$(q "$3")"
+}
+skills=() seen_skills=" "
+add_skill() { [[ "$seen_skills" == *" $1 "* ]] && return; seen_skills="$seen_skills$1 "; skills+=("$(skill_entry "$@")"); }
+for s in "${stacks[@]+"${stacks[@]}"}"; do
+  case "$s" in
+    laravel) add_skill laravel-best-practices laravel/boost 'composer require laravel/boost --dev && php artisan boost:install' ;;
+    typescript-node) add_skill typescript-best-practices pickle '' ;;
+    typescript-react)
+      add_skill typescript-best-practices pickle ''
+      add_skill vercel-react-best-practices vercel-labs/agent-skills 'npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices -a claude-code' ;;
+  esac
+done
+skills_json="[$(IFS=,; printf '%s' "${skills[*]+"${skills[*]}"}")]"
+
 cmd() { # name values...: one JSON list per verify purpose, empty values dropped
   local vals=() v; shift
   for v in "$@"; do [ -n "$v" ] && vals+=("$v"); done
@@ -206,5 +228,6 @@ printf '  "task_runner": %s,\n' "$( [ -n "$runner" ] && printf '{"tool":%s,"file
 printf '  "subprojects": %s,\n' "$(list "${subprojects[@]+"${subprojects[@]}"}")"
 printf '  "ci": %s,\n' "$(list "${ci[@]+"${ci[@]}"}")"
 printf '  "convention_files": %s,\n' "$(list "${conventions[@]+"${conventions[@]}"}")"
+printf '  "language_skills": %s,\n' "$skills_json"
 printf '  "lsp": %s\n' "$lsp_json"
 printf '}\n'

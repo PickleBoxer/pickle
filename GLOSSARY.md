@@ -59,7 +59,7 @@ A rule for how one project writes code: its language idioms, frameworks, tools a
 _Avoid_: pack, style guide
 
 **Language skill**:
-A pickle skill with default idioms for one language or framework, such as typescript-best-practices. Listed in the profile as a convention after the project's own, so the project wins.
+A skill with default idioms for one language or framework: pickle's own (typescript-best-practices) or a third-party one the user installs (laravel-best-practices from Laravel Boost, vercel-react-best-practices from Vercel). Listed in the profile as a convention after the project's own, so the project wins.
 _Avoid_: language pack, rules pack
 
 ## Project

@@ -22,6 +22,7 @@ Mentions in this skill, its playbooks and its principles:
 
 1. Read `.claude/pickle.md` in the project with Read. It holds the stack, the verify commands and the gates. If it is missing, use the project's obvious test and lint commands and suggest `/pickle:setup` once in the reply.
    - Load every convention the profile lists under `conventions:` before step 2: read a file path with Read, invoke a skill name with the Skill tool. Always, also for tasks that write no code (investigating, reading a trace, planning): conventions name the project's tools, commands and failure modes those tasks rely on.
+   - A convention that cannot be loaded (the file is missing, or the skill is not installed or not available): go on without it, say so in the reply, and suggest `/pickle:setup`, which gives the install command for a missing language skill.
 2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go. If no playbook fits, or the work is a large cross-cutting migration the user will review after stepping away, run the **figure-it-out** skill (Skill tool, `pickle:figure-it-out`) instead of forcing one.
 3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
 4. Read principles.
@@ -40,7 +41,7 @@ Mentions in this skill, its playbooks and its principles:
    - If a tool or agent is not installed, use Claude Code's own: `Explore` for how, `general-purpose` told to change nothing for why, `Plan` for architect, `general-purpose` for the implementer and for interrogate.
 7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files and convention files that apply and the convention skills to load, and tell it to read them first.
 8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
-9. End the reply with one line: `Loaded: <playbooks>, <principles>, <conventions>`.
+9. End the reply with one line: `Loaded: <playbooks>, <principles>, <conventions>`. List every convention the profile names, in its order, and mark one that could not be loaded `<name> (not found)`.
 
 ## Non-negotiables
 
