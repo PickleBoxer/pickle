@@ -1,8 +1,8 @@
 # Refactor
 
-Tools: `how`, `architect`, implementer subagent, `interrogate`.
+Tools: `how`, `architect`, implementer subagent, `interrogate`. `figure-it-out` for large migrations.
 
-You own the contract. The structure changes, the behaviour does not.
+You own the contract. The structure changes, the behaviour does not. This playbook is for a focused to medium change. Large or cross-cutting structural work, such as a migration across many call sites, goes to the **figure-it-out** skill (Skill tool, `pickle:figure-it-out`) instead.
 
 1. Copy these steps into the todo list. Mark a skipped step `skip: <reason>`.
 2. Run the **how** skill (Skill tool, `pickle:how`) over the code to move: its callers, its tests, what it depends on.

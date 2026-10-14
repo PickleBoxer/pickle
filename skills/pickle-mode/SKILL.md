@@ -22,7 +22,7 @@ Mentions in this skill, its playbooks and its principles:
 
 1. Read `.claude/pickle.md` in the project with Read. It holds the stack, the verify commands and the gates. If it is missing, use the project's obvious test and lint commands and suggest `/pickle:setup` once in the reply.
    - Load every convention the profile lists under `conventions:` before step 2: read a file path with Read, invoke a skill name with the Skill tool. Always, also for tasks that write no code (investigating, reading a trace, planning): conventions name the project's tools, commands and failure modes those tasks rely on.
-2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go.
+2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go. If no playbook fits, or the work is a large cross-cutting migration the user will review after stepping away, run the **figure-it-out** skill (Skill tool, `pickle:figure-it-out`) instead of forcing one.
 3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
 4. Read principles.
    - Every principle a chosen playbook names: always, right after reading the playbook, before its first step. Playbook mentions are not optional.

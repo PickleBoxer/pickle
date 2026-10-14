@@ -55,7 +55,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | rewritten | 0.15.24 | model-invocable, tool examples made stack-neutral, macOS core count. Where to vet moved into the perf and hillclimb playbooks |
 | skills/show-me-your-work | skill | skills/show-me-your-work | rebuilt | 0.15.24 | model-invocable. `scripts/log.sh` as is. Audit reads this session's transcript by `${CLAUDE_SESSION_ID}`. Cross-model review becomes `pickle-reviewer` on another model with `references/trail-reviewer.md` |
 | skills/blast-radius | skill | skills/blast-radius | rewritten | 0.15.24 | model-invocable (pstack has it user-only), inline. The `arena` step becomes `interrogate panel`. Framework examples made stack-neutral. No playbook calls it, as in pstack |
-| skills/figure-it-out | skill | skills/figure-it-out | pending | 0.15.24 | without `arena` |
+| skills/figure-it-out | skill | skills/figure-it-out | rewritten | 0.15.24 | model-invocable (pstack has it user-only), inline. `architect` runs with sign-off instead of `arena`. Principle skills mapped to pickle principle files; never-block-on-the-human becomes profile gates plus one checkpoint, encode-lessons-in-structure becomes plain text. Adds `how` grounding, `swarm` for fan-out and `interrogate` as the judge |
 | skills/typescript-best-practices | skill | skills/typescript-best-practices | pending | 0.15.24 | no `paths`: ignored for plugin skills |
 | skills/teach | skill | skills/teach | pending | 0.15.24 | later, on request |
 | skills/recall | skill | skills/recall | pending | 0.15.24 | later, on request |
