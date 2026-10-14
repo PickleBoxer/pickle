@@ -86,6 +86,10 @@ _Avoid_: advanced tool
 The three subagent roles pickle delegates to. The explorer reads, the implementer changes code, the reviewer judges the result.
 _Avoid_: helper agent
 
+**Comment sicko**:
+The read-only subagent no-comments starts. It lists which comments in a diff die and which code a surprising comment hides, and never edits.
+_Avoid_: comment reviewer, comment linter
+
 **Worker**:
 An implementer started by swarm in its own git worktree, on one slice or one race arm. It reports PASS, ISSUES or BLOCKED with evidence.
 _Avoid_: cloud agent

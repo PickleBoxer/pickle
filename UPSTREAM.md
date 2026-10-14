@@ -48,7 +48,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/why | skill | skills/why | pending | 0.15.24 | trim hard |
 | skills/tdd | skill | skills/tdd | rewritten | 0.15.24 | model-invocable, red step alone when a playbook delegates the fix |
 | skills/unslop | skill | skills/unslop | ported | 0.15.24 | model-invocable, apply steps added, rule 13 allows parentheses |
-| skills/no-comments | skill | skills/no-comments | pending | 0.15.24 | with `comment-sicko` |
+| skills/no-comments | skill | skills/no-comments | rewritten | 0.15.24 | model-invocable, deletes in the main thread from the reviewer's report, `how` instead of `why` until `why` lands |
 | skills/deslop | skill | kit:skills/deslop | pending | 1.2.0 | from cursor-team-kit, called by pstack before every commit |
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.24 | model-invocable, project conventions win, snippet style follows the project |
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | pending | 0.15.24 | |
@@ -128,7 +128,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | agents/pickle-explorer.md | agent | - | new | n/a | explorer role from `how` |
 | agents/pickle-implementer.md | agent | agents/poteto-agent.md | rewritten | 0.15.24 | |
 | agents/pickle-reviewer.md | agent | - | new | n/a | reviewer role from `interrogate` |
-| agents/comment-sicko.md | agent | agents/comment-sicko.md | pending | 0.15.24 | read-only, report only |
+| agents/comment-sicko.md | agent | agents/comment-sicko.md | rewritten | 0.15.24 | read-only, report only, plain voice, git history instead of `how` and `why` |
 
 ## Scripts, mod and automations
 
