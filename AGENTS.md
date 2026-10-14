@@ -46,7 +46,7 @@ skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles
 skills/how/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
-skills/tdd/ unslop/ technical-writing/ no-comments/   inline skills ported from pstack
+skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/   inline skills ported from pstack (deslop from cursor-team-kit)
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, comment-sicko
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
@@ -94,7 +94,7 @@ claude plugin test .
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream pstack changes since the baseline in `UPSTREAM.md`.
+`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream changes since each baseline in `UPSTREAM.md`: pstack, and cursor-team-kit for `kit:` rows.
 
 `plugin test` runs every `*.test.ts` under the folder against the engine. It needs at least one test, so it joins CI with the first mod code.
 

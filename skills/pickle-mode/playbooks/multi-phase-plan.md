@@ -33,7 +33,7 @@ One box is one unit of work. Check a box only when its evidence exists: a test r
 - [ ] <PR id> first. Branches from the base branch.
 - [ ] <PR id> after <PR id>.
 - [ ] Writers per phase: <which app or job writes which table at each phase>.
-- [ ] Before review, each PR runs the **no-comments** skill (Skill tool, `pickle:no-comments`) on its diff.
+- [ ] Before each commit, run the **deslop** skill (Skill tool, `pickle:deslop`). Before review, each PR runs the **no-comments** skill (Skill tool, `pickle:no-comments`) on its diff.
 - [ ] Live verification runs as the **swarm** skill (Skill tool, `pickle:swarm`): one full swarm at the code-ready head of each PR. Another full swarm only for new behaviour, a redesign or a large new diff. A rebase, conflict fix or minor fix gets one verifier at the new head.
 
 ## <Task as a verb phrase> (<PR id>)

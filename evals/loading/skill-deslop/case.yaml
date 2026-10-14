@@ -1,0 +1,15 @@
+schema_version: "1.1"
+name: loading-skill-deslop
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: calls-deslop
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?deslop"'
+  - name: skips-other-skills
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?(how|architect|interrogate|swarm|unslop|technical-writing|no-comments)"'
+    min: 0
+    max: 0

@@ -96,7 +96,8 @@ while IFS='|' read -r item kind src rel ver; do
     if [ "$rel" = "new" ]; then
       [ -z "$up" ] || err "$sk: metadata upstream '$up' on a new skill"
     else
-      [ "$up" = "pstack/$src" ] || err "$sk: metadata upstream '$up', UPSTREAM.md says 'pstack/$src'"
+      case "$src" in kit:*) exp="cursor-team-kit/${src#kit:}";; *) exp="pstack/$src";; esac
+      [ "$up" = "$exp" ] || err "$sk: metadata upstream '$up', UPSTREAM.md says '$exp'"
       [ "$upv" = "$ver" ] || err "$sk: metadata upstream-version '$upv', UPSTREAM.md says '$ver'"
     fi
   fi

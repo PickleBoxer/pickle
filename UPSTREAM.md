@@ -18,6 +18,7 @@ Where each pickle file comes from in pstack, and the pstack version it was last 
 |---|---|---|---|---|
 | pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.24 | 1e5c90a | 2026-10-14 |
 | pstack Claude port | [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack) | 0.15.15+claude.7, merges 0.15.21 | fc2375c | 2026-10-14 |
+| cursor-team-kit | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit) (`cursor-team-kit/`) | 1.2.0 | 1e5c90a | 2026-10-14 |
 
 pickle compares against upstream pstack, not the port. pstack source paths below are relative to `pstack/` in cursor/plugins. The port is listed only for the few `port:` rows.
 
@@ -49,7 +50,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/tdd | skill | skills/tdd | rewritten | 0.15.24 | model-invocable, red step alone when a playbook delegates the fix |
 | skills/unslop | skill | skills/unslop | ported | 0.15.24 | model-invocable, apply steps added, rule 13 allows parentheses |
 | skills/no-comments | skill | skills/no-comments | rewritten | 0.15.24 | model-invocable, deletes in the main thread from the reviewer's report, `how` instead of `why` until `why` lands |
-| skills/deslop | skill | kit:skills/deslop | pending | 1.2.0 | from cursor-team-kit, called by pstack before every commit |
+| skills/deslop | skill | kit:skills/deslop | rewritten | 1.2.0 | from cursor-team-kit, called by pstack before every commit. Language-agnostic, adds dead compatibility paths and unrelated edits from pstack's guide. Kept over bundled `/simplify`: narrow checklist, inline, no subagents, works without the plugin |
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.24 | model-invocable, project conventions win, snippet style follows the project |
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | pending | 0.15.24 | |
 | skills/show-me-your-work | skill | skills/show-me-your-work | pending | 0.15.24 | with `scripts/log.sh` |
