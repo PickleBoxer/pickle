@@ -50,7 +50,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/unslop | skill | skills/unslop | ported | 0.15.24 | model-invocable, apply steps added, rule 13 allows parentheses |
 | skills/no-comments | skill | skills/no-comments | pending | 0.15.24 | with `comment-sicko` |
 | skills/deslop | skill | kit:skills/deslop | pending | 1.2.0 | from cursor-team-kit, called by pstack before every commit |
-| skills/technical-writing | skill | skills/technical-writing | pending | 0.15.24 | |
+| skills/technical-writing | skill | skills/technical-writing | ported | 0.15.24 | model-invocable, project conventions win, snippet style follows the project |
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | pending | 0.15.24 | |
 | skills/show-me-your-work | skill | skills/show-me-your-work | pending | 0.15.24 | with `scripts/log.sh` |
 | skills/blast-radius | skill | skills/blast-radius | pending | 0.15.24 | without `arena` |
