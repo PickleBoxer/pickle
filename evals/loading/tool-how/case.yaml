@@ -1,0 +1,23 @@
+schema_version: "1.1"
+name: loading-tool-how
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: reads-investigate
+    type: tool_used
+    tool: Read
+    input_match: 'pickle-mode/playbooks/investigate\.md'
+  - name: loads-conventions
+    type: tool_used
+    tool: Read
+    input_match: 'docs/conventions\.md'
+  - name: calls-how
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?how"'
+  - name: skips-other-tools
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?(architect|interrogate|swarm)"'
+    min: 0
+    max: 0

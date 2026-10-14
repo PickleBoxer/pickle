@@ -1,0 +1,19 @@
+schema_version: "1.1"
+name: loading-tool-interrogate-panel
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: calls-interrogate
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?interrogate"'
+  - name: asks-for-panel
+    type: tool_used
+    tool: Skill
+    input_match: 'interrogate.*panel'
+  - name: skips-other-tools
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?(how|architect|swarm)"'
+    min: 0
+    max: 0

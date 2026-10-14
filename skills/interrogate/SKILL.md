@@ -1,6 +1,6 @@
 ---
 name: interrogate
-description: Reviews a change adversarially in a read-only subagent against its stated intent and the named pickle principles, then judges every finding into Act on, Consider, Noted or Dismissed. Never edits. Use when a pickle playbook step names interrogate, or for "interrogate", "adversarial review", "challenge this", "stress test this code", "find blind spots". Add panel for two reviewers with different lenses.
+description: Reviews a change adversarially in a read-only subagent against its stated intent and the named pickle principles, then judges every finding into Act on, Consider, Noted or Dismissed. Never edits. Use when a pickle playbook step names interrogate, or for "interrogate", "adversarial review", "challenge this", "stress test this code", "find blind spots". Pass panel in the arguments when the user asks for more than one angle or a second reviewer, or the design is contested: two reviewers then attack it with different lenses.
 argument-hint: "[base or files] [intent] [principle and convention file paths] [panel]"
 context: fork
 agent: pickle:pickle-lead
