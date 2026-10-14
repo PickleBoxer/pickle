@@ -48,6 +48,8 @@ skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ 
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
+scripts/                      check-refs.sh (CI), upstream-diff.sh (maintainer)
+UPSTREAM.md                   pstack source and version per pickle file
 .claude/CLAUDE.md            imports AGENTS.md
 AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
 ```
@@ -85,9 +87,12 @@ types/index.d.ts              mod state contract, if the mod keeps $.state value
 
 ```bash
 claude plugin validate . --strict
+bash scripts/check-refs.sh
 claude plugin test .
 claude --plugin-dir ~/dev/code/pickle
 ```
+
+`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream pstack changes since the baseline in `UPSTREAM.md`.
 
 `plugin test` runs every `*.test.ts` under the folder against the engine. It needs at least one test, so it joins CI with the first mod code.
 

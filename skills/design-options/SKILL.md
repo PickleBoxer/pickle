@@ -5,6 +5,9 @@ argument-hint: "<the problem, constraints and explore findings> [principle file 
 context: fork
 agent: Plan
 background: false
+metadata:
+  upstream: pstack/skills/architect
+  upstream-version: 0.15.21
 ---
 
 Design options for this task:

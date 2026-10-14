@@ -5,6 +5,9 @@ argument-hint: "<what to explore and why> [principle file paths]"
 context: fork
 agent: pickle:pickle-explorer
 background: false
+metadata:
+  upstream: pstack/skills/how
+  upstream-version: 0.15.21
 ---
 
 Explore the code for this task:

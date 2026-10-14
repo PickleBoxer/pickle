@@ -1,0 +1,113 @@
+#!/usr/bin/env bash
+# Fails when a skill, principle or agent mention does not resolve, when a called
+# skill is user-only, or when UPSTREAM.md disagrees with the files.
+# Run from anywhere: bash scripts/check-refs.sh
+set -uo pipefail
+cd "$(dirname "$0")/.."
+
+fail=0
+err() { echo "check-refs: $*"; fail=1; }
+
+SKILL_KEYS=" name description when_to_use argument-hint arguments disable-model-invocation user-invocable allowed-tools disallowed-tools model effort context agent background hooks paths shell metadata license compatibility "
+AGENT_KEYS=" name description tools disallowedTools model effort maxTurns skills memory background isolation color omitClaudeMd experimental "
+
+# Frontmatter of a file: the lines between the first two --- lines.
+fm() { awk '/^---$/{n++; next} n==1' "$1"; }
+fm_key() { fm "$1" | awk -v k="$2" -F': *' '$1==k {sub(/^[^:]*: */, ""); gsub(/^"|"$/, ""); print; exit}'; }
+fm_meta() { fm "$1" | awk -v k="$2" '/^metadata:/{m=1; next} m && /^[^ ]/{m=0} m {sub(/^ +/, ""); split($0, a, /: */); if (a[1]==k) {sub(/^[^:]*: */, ""); print; exit}}'; }
+user_only() { [ "$(fm_key "skills/$1/SKILL.md" disable-model-invocation)" = "true" ]; }
+
+shipped=$(find skills agents -name '*.md' -type f | sort; ls README.md GLOSSARY.md 2>/dev/null)
+
+# Frontmatter keys
+for f in skills/*/SKILL.md; do
+  for k in $(fm "$f" | grep -oE '^[A-Za-z_-]+:' | tr -d ':'); do
+    case "$SKILL_KEYS" in *" $k "*) ;; *) err "$f: unknown skill frontmatter key '$k'";; esac
+  done
+done
+for f in agents/*.md; do
+  for k in $(fm "$f" | grep -oE '^[A-Za-z_-]+:' | tr -d ':'); do
+    case "$AGENT_KEYS" in *" $k "*) ;; *) err "$f: agent frontmatter key '$k' is unknown or ignored for plugin agents";; esac
+  done
+done
+
+# /pickle:<skill>: the user runs it, or prose names it. Must exist.
+while IFS=: read -r f l m; do
+  n=${m#/pickle:}
+  [ -f "skills/$n/SKILL.md" ] || err "$f:$l: /pickle:$n has no skills/$n/SKILL.md"
+done < <(grep -noE '/pickle:[a-z0-9-]+' $shipped)
+
+# pickle:<name> without a slash: the agent calls a skill (Skill tool) or an agent (subagent_type).
+while IFS=: read -r f l m; do
+  n=${m##*pickle:}
+  if [ -f "skills/$n/SKILL.md" ]; then
+    user_only "$n" && err "$f:$l: pickle:$n is called, but skills/$n is disable-model-invocation"
+  elif [ ! -f "agents/$n.md" ]; then
+    err "$f:$l: pickle:$n is neither skills/$n nor agents/$n.md"
+  fi
+done < <(grep -noE '(^|[^/[:alnum:]-])pickle:[a-z0-9-]+' $shipped)
+
+# **name** (/pickle:name): a skill the agent calls. Names must match and the skill must be model-invocable.
+while IFS=: read -r f l m; do
+  a=$(echo "$m" | sed -E 's/^\*\*([a-z0-9-]+)\*\*.*/\1/'); b=${m##*/pickle:}; b=${b%)}
+  [ "$a" = "$b" ] || err "$f:$l: **$a** points at /pickle:$b"
+  [ -f "skills/$b/SKILL.md" ] && user_only "$b" && err "$f:$l: **$b** is called, but skills/$b is disable-model-invocation"
+done < <(grep -noE '\*\*[a-z0-9-]+\*\* \(/pickle:[a-z0-9-]+\)' $shipped)
+
+# **principle-<name>**: a principle file.
+while IFS=: read -r f l m; do
+  n=${m#\*\*principle-}; n=${n%\*\*}
+  [ -f "skills/pickle-mode/principles/$n.md" ] || err "$f:$l: **principle-$n** has no skills/pickle-mode/principles/$n.md"
+done < <(grep -noE '\*\*principle-[a-z0-9-]+\*\*' $shipped)
+
+# Agent skills: preload lists. A user-only skill there is skipped silently.
+for f in agents/*.md; do
+  for s in $(fm "$f" | awk '/^skills:/{m=1; sub(/^skills: */, ""); gsub(/[][,]/, " "); print; next} m && /^ *- /{sub(/^ *- */, ""); print; next} m{m=0}'); do
+    n=${s#pickle:}
+    [ -f "skills/$n/SKILL.md" ] || { err "$f: skills: $s has no skills/$n/SKILL.md"; continue; }
+    user_only "$n" && err "$f: skills: $s is disable-model-invocation and would be skipped silently"
+  done
+done
+
+# UPSTREAM.md rows: item | kind | source | relation | version | notes
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|playbook|principle|agent|script|mod|automation) $/ {
+  for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
+[ -n "$rows" ] || err "UPSTREAM.md: no rows found"
+
+while IFS='|' read -r item kind src rel ver; do
+  case "$rel" in ported|rewritten|rebuilt|merged|new|pending|dropped) ;; *) err "UPSTREAM.md: $item: unknown relation '$rel'";; esac
+  if [ "$item" = "-" ]; then
+    [ "$rel" = "dropped" ] || err "UPSTREAM.md: row for $src has no pickle item but is $rel"
+    continue
+  fi
+  if [ "$rel" = "pending" ]; then
+    [ -e "$item" ] && err "UPSTREAM.md: $item exists but is still pending"
+    continue
+  fi
+  [ -e "$item" ] || { err "UPSTREAM.md: $item does not exist"; continue; }
+  if [ "$kind" = "skill" ]; then
+    sk=$item; [ -d "$sk" ] && sk="$sk/SKILL.md"
+    up=$(fm_meta "$sk" upstream); upv=$(fm_meta "$sk" upstream-version)
+    if [ "$rel" = "new" ]; then
+      [ -z "$up" ] || err "$sk: metadata upstream '$up' on a new skill"
+    else
+      [ "$up" = "pstack/$src" ] || err "$sk: metadata upstream '$up', UPSTREAM.md says 'pstack/$src'"
+      [ "$upv" = "$ver" ] || err "$sk: metadata upstream-version '$upv', UPSTREAM.md says '$ver'"
+    fi
+  fi
+done <<< "$rows"
+
+# Every shipped skill, playbook, principle, script and agent has a row.
+items=$(echo "$rows" | cut -d'|' -f1)
+has_row() { echo "$items" | grep -qxF "$1"; }
+for f in skills/*/SKILL.md; do
+  d=${f%/SKILL.md}
+  has_row "$d" || has_row "$f" || err "$f: no UPSTREAM.md row"
+done
+for f in skills/pickle-mode/playbooks/*.md skills/pickle-mode/principles/*.md skills/pickle-mode/scripts/* agents/*.md; do
+  [ -e "$f" ] || continue
+  has_row "$f" || err "$f: no UPSTREAM.md row"
+done
+
+[ "$fail" = 0 ] && echo "check-refs: ok"
+exit "$fail"

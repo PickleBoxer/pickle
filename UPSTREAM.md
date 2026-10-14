@@ -1,0 +1,141 @@
+# Upstream
+
+Where each pickle file comes from in pstack, and the pstack version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline.
+
+## Contents
+
+- Baseline
+- Relations
+- Skills
+- Playbooks
+- Principles
+- Agents
+- Scripts, mod and automations
+
+## Baseline
+
+| Source | Repo | Version | Commit | Compared |
+|---|---|---|---|---|
+| pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.21 | 997ffc7 | 2026-10-14 |
+| pstack Claude port | [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack) | 0.15.15+claude.7, merges 0.15.21 | fc2375c | 2026-10-14 |
+
+pickle compares against upstream pstack, not the port. pstack source paths below are relative to `pstack/` in cursor/plugins. The port is listed only for the few `port:` rows.
+
+## Relations
+
+- `ported`: same text, small fixes.
+- `rewritten`: same job, new text.
+- `rebuilt`: same job, new mechanics.
+- `merged`: several pstack sources in one pickle file.
+- `new`: no pstack source.
+- `pending`: planned port, the pickle file does not exist yet.
+- `dropped`: not coming. The row stays so an upstream change to it is noticed and ignored on purpose.
+
+A pstack source starting with `port:` exists only in the Claude port, not upstream. A pickle item `-` means no pickle file.
+
+## Skills
+
+| pickle item | Kind | pstack source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/pickle-mode/SKILL.md | skill | skills/poteto-mode/SKILL.md | rewritten | 0.15.21 | entry skill |
+| skills/explore | skill | skills/how | rebuilt | 0.15.21 | one explorer, forked. Becomes `how` in plan 2 |
+| skills/design-options | skill | skills/architect | rebuilt | 0.15.21 | one Plan subagent. Becomes `architect` in plan 2 |
+| skills/review | skill | skills/interrogate | rebuilt | 0.15.21 | one reviewer. Becomes `interrogate` in plan 2 |
+| skills/setup | skill | - | new | n/a | writes the profile |
+| skills/swarm | skill | skills/swarm | pending | 0.15.21 | worktree workers |
+| skills/why | skill | skills/why | pending | 0.15.21 | trim hard |
+| skills/tdd | skill | skills/tdd | pending | 0.15.21 | |
+| skills/unslop | skill | skills/unslop | pending | 0.15.21 | |
+| skills/no-comments | skill | skills/no-comments | pending | 0.15.21 | with `comment-sicko` |
+| skills/technical-writing | skill | skills/technical-writing | pending | 0.15.21 | |
+| skills/benchmark-checklist | skill | skills/benchmark-checklist | pending | 0.15.21 | |
+| skills/show-me-your-work | skill | skills/show-me-your-work | pending | 0.15.21 | with `scripts/log.sh` |
+| skills/blast-radius | skill | skills/blast-radius | pending | 0.15.21 | without `arena` |
+| skills/figure-it-out | skill | skills/figure-it-out | pending | 0.15.21 | without `arena` |
+| skills/typescript-best-practices | skill | skills/typescript-best-practices | pending | 0.15.21 | no `paths`: ignored for plugin skills |
+| skills/teach | skill | skills/teach | pending | 0.15.21 | later, on request |
+| skills/recall | skill | skills/recall | pending | 0.15.21 | later, on request |
+| skills/reflect | skill | skills/reflect | pending | 0.15.21 | later, on request |
+| skills/correct | skill | skills/correct | pending | 0.15.21 | later, on request |
+| skills/create-verification-skill | skill | skills/create-verification-skill | pending | 0.15.21 | later, compare with `/run-skill-generator` first |
+| skills/maintain-verification-skill | skill | skills/maintain-verification-skill | pending | 0.15.21 | later, on request |
+| skills/ketchup | skill | skills/ketchup | pending | 0.15.21 | later, on request |
+| skills/bro | skill | skills/bro | pending | 0.15.21 | later, on request |
+| skills/automate-me | skill | skills/automate-me | pending | 0.15.21 | later, on request |
+| - | skill | skills/arena | dropped | 0.15.21 | one model family |
+| - | skill | skills/poteto-help | dropped | 0.15.21 | README plus the `pickle-mode` index |
+
+## Playbooks
+
+| pickle item | Kind | pstack source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/pickle-mode/playbooks/feature.md | playbook | skills/poteto-mode/playbooks/feature.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/bug-fix.md | playbook | skills/poteto-mode/playbooks/bug-fix.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/refactor.md | playbook | skills/poteto-mode/playbooks/refactoring.md | rewritten | 0.15.21 | renamed |
+| skills/pickle-mode/playbooks/investigate.md | playbook | skills/poteto-mode/playbooks/investigation.md | rewritten | 0.15.21 | renamed |
+| skills/pickle-mode/playbooks/perf.md | playbook | skills/poteto-mode/playbooks/perf-issue.md | rewritten | 0.15.21 | renamed |
+| skills/pickle-mode/playbooks/prototype.md | playbook | skills/poteto-mode/playbooks/prototype.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/opening-a-pr.md | playbook | skills/poteto-mode/playbooks/opening-a-pr.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/session-pickup.md | playbook | skills/poteto-mode/playbooks/session-pickup.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/pause-safely.md | playbook | skills/poteto-mode/playbooks/pause-safely.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/hillclimb.md | playbook | skills/poteto-mode/playbooks/hillclimb.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/eval.md | playbook | skills/poteto-mode/playbooks/eval.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/autonomous-run.md | playbook | skills/poteto-mode/playbooks/autonomous-run.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/babysit.md | playbook | skills/poteto-mode/playbooks/babysit.md, skills/poteto-mode/references/bugbot-triage.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/multi-phase-plan.md | playbook | skills/poteto-mode/playbooks/multi-phase-plan.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/worktree-cleanup.md | playbook | skills/poteto-mode/playbooks/worktree-cleanup.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/runtime-forensics.md | playbook | skills/poteto-mode/playbooks/runtime-forensics.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/trace-forensics.md | playbook | skills/poteto-mode/playbooks/trace-forensics.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/visual-parity.md | playbook | skills/poteto-mode/playbooks/visual-parity.md | rewritten | 0.15.21 | |
+| skills/pickle-mode/playbooks/authoring-a-skill.md | playbook | skills/poteto-mode/playbooks/authoring-a-skill.md | rewritten | 0.15.21 | |
+| - | playbook | skills/poteto-mode/playbooks/shipping.md | dropped | 0.15.21 | Cursor control skills |
+| - | playbook | skills/poteto-mode/playbooks/autopilot-full.md | dropped | 0.15.21 | |
+| - | playbook | skills/poteto-mode/playbooks/autopilot-stack.md | dropped | 0.15.21 | |
+| - | playbook | skills/poteto-mode/playbooks/orchestrate.md | dropped | 0.15.21 | Cursor cloud agents, `orch` ledger |
+
+## Principles
+
+| pickle item | Kind | pstack source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/pickle-mode/principles/laziness.md | principle | skills/principle-laziness-protocol, skills/principle-subtract-before-you-add | merged | 0.15.21 | |
+| skills/pickle-mode/principles/model-the-domain.md | principle | skills/principle-model-the-domain, skills/principle-foundational-thinking | merged | 0.15.21 | |
+| skills/pickle-mode/principles/redesign-from-first-principles.md | principle | skills/principle-redesign-from-first-principles | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/minimize-reader-load.md | principle | skills/principle-minimize-reader-load | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/boundaries.md | principle | skills/principle-boundary-discipline | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/types.md | principle | skills/principle-type-system-discipline | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/idempotent-operations.md | principle | skills/principle-make-operations-idempotent | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/finish-migrations.md | principle | skills/principle-migrate-callers-then-delete-legacy-apis, skills/principle-outcome-oriented-execution | merged | 0.15.21 | |
+| skills/pickle-mode/principles/no-shared-writes.md | principle | skills/principle-separate-before-serializing-shared-state | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/prove-it-works.md | principle | skills/principle-prove-it-works, skills/principle-explain-the-number | merged | 0.15.21 | |
+| skills/pickle-mode/principles/fix-root-causes.md | principle | skills/principle-fix-root-causes, skills/principle-attack-the-premise | merged | 0.15.21 | |
+| skills/pickle-mode/principles/small-verified-steps.md | principle | skills/principle-sequence-verifiable-units | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/test-behavior.md | principle | skills/principle-test-behavior-not-implementation | rewritten | 0.15.21 | |
+| skills/pickle-mode/principles/guard-the-context.md | principle | skills/principle-guard-the-context-window | rewritten | 0.15.21 | |
+| - | principle | skills/principle-experience-first | dropped | 0.15.21 | folded into playbooks |
+| - | principle | skills/principle-exhaust-the-design-space | dropped | 0.15.21 | folded into playbooks |
+| - | principle | skills/principle-build-the-lever | dropped | 0.15.21 | pickle authoring only |
+| - | principle | skills/principle-encode-lessons-in-structure | dropped | 0.15.21 | pickle authoring only |
+| - | principle | skills/principle-never-block-on-the-human | dropped | 0.15.21 | replaced by profile gates |
+
+## Agents
+
+| pickle item | Kind | pstack source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| agents/pickle-explorer.md | agent | - | new | n/a | explorer role from `how` |
+| agents/pickle-implementer.md | agent | agents/poteto-agent.md | rewritten | 0.15.21 | |
+| agents/pickle-reviewer.md | agent | - | new | n/a | reviewer role from `interrogate` |
+| agents/comment-sicko.md | agent | agents/comment-sicko.md | pending | 0.15.21 | read-only, report only |
+
+## Scripts, mod and automations
+
+| pickle item | Kind | pstack source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/pickle-mode/scripts/worktree-audit.sh | script | skills/poteto-mode/scripts/worktree-audit.sh | pending | 0.15.21 | Claude transcript path, portable `stat` and `date` |
+| skills/pickle-mode/scripts/pr-state.sh | script | skills/poteto-mode/scripts/watch-pr | pending | 0.15.21 | about 40 lines instead of the Bun tool |
+| - | script | skills/poteto-mode/scripts/orch | dropped | 0.15.21 | with `orchestrate` |
+| - | script | skills/poteto-mode/scripts/check-plan.mjs | dropped | 0.15.21 | playbook reread step covers it |
+| - | script | skills/poteto-mode/scripts/bootstrap.ts | dropped | 0.15.21 | no Bun tools left |
+| scripts/upstream-diff.sh | script | port:scripts/sync-upstream.sh | rewritten | n/a | maintainer only |
+| - | script | port:scripts/principle-reads.ts | dropped | n/a | `claude plugin eval` |
+| - | mod | port:hooks | dropped | n/a | translation layer. pickle's planned mod keeps only observability |
+| - | automation | automations/benny | dropped | 0.15.21 | Cursor automations |

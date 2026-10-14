@@ -5,6 +5,9 @@ argument-hint: "<what the change is for, the base to diff against> [principle fi
 context: fork
 agent: pickle:pickle-reviewer
 background: false
+metadata:
+  upstream: pstack/skills/interrogate
+  upstream-version: 0.15.21
 ---
 
 Review this change:

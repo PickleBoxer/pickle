@@ -3,11 +3,20 @@ name: pickle-mode
 description: Runs a coding task through the full pickle process, reading only the playbooks and loading only the principles the task needs. Use when the user runs /pickle:pickle-mode.
 argument-hint: "<task>"
 disable-model-invocation: true
+metadata:
+  upstream: pstack/skills/poteto-mode/SKILL.md
+  upstream-version: 0.15.21
 ---
 
 # pickle mode
 
 Run the task through the full process below. Playbooks and principles are files next to this one, and paths below are relative to this file. Read a file only when the task needs it.
+
+Mentions in this skill, its playbooks and its principles:
+
+- `**<name>** (/pickle:<name>)`: a skill. Call it with the Skill tool as `pickle:<name>`, or `<name>` when pickle is installed without the plugin.
+- `**principle-<name>**`: the file `principles/<name>.md`. Read it with Read.
+- `pickle:<name>` as a subagent type: an agent. Start it with the Agent tool.
 
 ## Process
 
@@ -15,7 +24,7 @@ Run the task through the full process below. Playbooks and principles are files 
    - Load every convention the profile lists under `conventions:` before step 2: read a file path with Read, invoke a skill name with the Skill tool. Always, also for tasks that write no code (investigating, reading a trace, planning): conventions name the project's tools, commands and failure modes those tasks rely on.
 2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go.
 3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
-4. Read principles. **principle-<name>** is the file `principles/<name>.md`.
+4. Read principles.
    - Every principle a chosen playbook names: always, right after reading the playbook, before its first step. Playbook mentions are not optional.
    - Every principle a non-negotiable names, when the non-negotiable applies.
    - Any other principle whose trigger in the principle index fits the task.
