@@ -53,7 +53,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/deslop | skill | kit:skills/deslop | rewritten | 1.2.0 | from cursor-team-kit, called by pstack before every commit. Language-agnostic, adds dead compatibility paths and unrelated edits from pstack's guide. Kept over bundled `/simplify`: narrow checklist, inline, no subagents, works without the plugin |
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.24 | model-invocable, project conventions win, snippet style follows the project |
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | rewritten | 0.15.24 | model-invocable, tool examples made stack-neutral, macOS core count. Where to vet moved into the perf and hillclimb playbooks |
-| skills/show-me-your-work | skill | skills/show-me-your-work | pending | 0.15.24 | with `scripts/log.sh` |
+| skills/show-me-your-work | skill | skills/show-me-your-work | rebuilt | 0.15.24 | model-invocable. `scripts/log.sh` as is. Audit reads this session's transcript by `${CLAUDE_SESSION_ID}`. Cross-model review becomes `pickle-reviewer` on another model with `references/trail-reviewer.md` |
 | skills/blast-radius | skill | skills/blast-radius | pending | 0.15.24 | without `arena` |
 | skills/figure-it-out | skill | skills/figure-it-out | pending | 0.15.24 | without `arena` |
 | skills/typescript-best-practices | skill | skills/typescript-best-practices | pending | 0.15.24 | no `paths`: ignored for plugin skills |

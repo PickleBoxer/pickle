@@ -26,7 +26,7 @@ You own the plan, not the code. The plan is the deliverable: a checklist someone
 
 ## How to read this
 
-One box is one unit of work. Check a box only when its evidence exists: a test run, a command output, a screenshot, a commit. Run each PR with the pickle playbook named in it.
+One box is one unit of work. Check a box only when its evidence exists: a test run, a command output, a screenshot, a commit. Run each PR with the pickle playbook named in it. Keep the decision trail with the **show-me-your-work** skill (Skill tool, `pickle:show-me-your-work`).
 
 ## Order
 

@@ -2,7 +2,7 @@
 
 Experimental, ported from pstack.
 
-Tools: `how`, `benchmark-checklist`, implementer subagent.
+Tools: `how`, `benchmark-checklist`, `show-me-your-work`, implementer subagent.
 
 You own the metric and the integrity of the experiment. One change, one measurement, keep or revert.
 
@@ -10,7 +10,7 @@ You own the metric and the integrity of the experiment. One change, one measurem
 2. Run the **how** skill (Skill tool, `pickle:how`) over the target. Pick a case that reproduces the user's complaint. If none does, fix the reproduction first.
 3. Fix one metric, the direction that counts as better, and a stop rule: a target plus a minimum number of attempts, so a lucky early win does not end the run. Use the user's numbers when given.
 4. Build one command that prints the metric, run enough times to clear the noise (median of several runs). Check it tells a slow case from a fast one. Vet it with the **benchmark-checklist** skill (Skill tool, `pickle:benchmark-checklist`) and make it print its error count and a count of the work done, then freeze it. Record the baseline and a green run of `verify.test` (**principle-prove-it-works**).
-5. Keep a decision log outside the tree: one row per attempt with the hypothesis, the change, before, after, and kept or reverted. Read it before each attempt.
+5. Keep the decision log with the **show-me-your-work** skill (Skill tool, `pickle:show-me-your-work`), outside the tree: one row per attempt, the hypothesis and change as the decision, before and after as evidence, kept or reverted as the result. Read it before each attempt.
 6. Loop, one hypothesis per iteration (**principle-small-verified-steps**):
    - Name the mechanism the change targets, not "try caching something".
    - Delegate the change to an implementer subagent with a tight scope.

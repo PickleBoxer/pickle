@@ -46,7 +46,7 @@ skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles
 skills/how/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
-skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/   inline skills ported from pstack (deslop from cursor-team-kit)
+skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/ show-me-your-work/   inline skills ported from pstack (deslop from cursor-team-kit)
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, comment-sicko
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
