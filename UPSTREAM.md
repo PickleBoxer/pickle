@@ -40,7 +40,8 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/pickle-mode/SKILL.md | skill | skills/poteto-mode/SKILL.md | rewritten | 0.15.24 | entry skill |
 | skills/how | skill | skills/how | rebuilt | 0.15.24 | forked lead, 1 to 3 explorers |
 | skills/explore | skill | skills/how | rebuilt | 0.15.24 | replaced by `how`, deleted in plan 2 task 2.6 |
-| skills/design-options | skill | skills/architect | rebuilt | 0.15.24 | one Plan subagent. Becomes `architect` in plan 2 |
+| skills/architect | skill | skills/architect | rebuilt | 0.15.24 | forked lead, grounds with `how`, two angled Plan runners, no arena. Implement and scrap phases run on the main thread |
+| skills/design-options | skill | skills/architect | rebuilt | 0.15.24 | replaced by `architect`, deleted in plan 2 task 2.6 |
 | skills/review | skill | skills/interrogate | rebuilt | 0.15.24 | one reviewer. Becomes `interrogate` in plan 2 |
 | skills/setup | skill | - | new | n/a | writes the profile |
 | skills/sharpen | skill | skills/sharpen | ported | 0.15.24 | user-only |

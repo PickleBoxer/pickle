@@ -47,11 +47,16 @@ while IFS=: read -r f l m; do
   fi
 done < <(grep -noE '(^|[^/[:alnum:]-])pickle:[a-z0-9-]+' $shipped)
 
-# **name** (/pickle:name): a skill the agent calls. Names must match and the skill must be model-invocable.
+# the **name** skill (Skill tool, `pickle:name`): a skill the agent calls. The pickle:name part is
+# checked above (exists, model-invocable). Here: the bold name matches it.
 while IFS=: read -r f l m; do
-  a=$(echo "$m" | sed -E 's/^\*\*([a-z0-9-]+)\*\*.*/\1/'); b=${m##*/pickle:}; b=${b%)}
-  [ "$a" = "$b" ] || err "$f:$l: **$a** points at /pickle:$b"
-  [ -f "skills/$b/SKILL.md" ] && user_only "$b" && err "$f:$l: **$b** is called, but skills/$b is disable-model-invocation"
+  a=$(echo "$m" | sed -E 's/^\*\*([a-z0-9-]+)\*\*.*/\1/'); b=${m##*pickle:}; b=${b%\`)}
+  [ "$a" = "$b" ] || err "$f:$l: **$a** skill points at pickle:$b"
+done < <(grep -noE '\*\*[a-z0-9-]+\*\* skill \(Skill tool, `pickle:[a-z0-9-]+`\)' $shipped)
+
+# Old mention form, replaced because /pickle:name reads as a command for the user.
+while IFS=: read -r f l m; do
+  err "$f:$l: $m is the old form, write: the **name** skill (Skill tool, \`pickle:name\`)"
 done < <(grep -noE '\*\*[a-z0-9-]+\*\* \(/pickle:[a-z0-9-]+\)' $shipped)
 
 # **principle-<name>**: a principle file.

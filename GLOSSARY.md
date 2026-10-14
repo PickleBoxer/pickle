@@ -85,6 +85,10 @@ _Avoid_: advanced tool
 **Explorer**, **Implementer**, **Reviewer**:
 The three subagent roles pickle delegates to. The explorer reads, the implementer changes code, the reviewer judges the result.
 
+**Sign-off**:
+The user approving an architect sketch before implementation starts. Opt-in: only when the task asks for it.
+_Avoid_: checkpoint, approval step
+
 **Lead**:
 The read-only subagent a tool runs as. It picks the angles, starts explorers or reviewers, and writes the one answer the tool returns.
 _Avoid_: orchestrator, coordinator

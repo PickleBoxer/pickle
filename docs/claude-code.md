@@ -78,7 +78,7 @@ Substitutions: `$ARGUMENTS` (appended as `ARGUMENTS: ...` if no placeholder), `$
 
 `` !`command` `` injection: runs before Claude sees the skill. Exit 2 or higher aborts the invocation. Needs an allow rule or `allowed-tools`, else aborts outside auto mode. 2 min timeout. Fenced ` ```! ` runs each line.
 
-Skill tool names (measured): a skill body can call a sibling as `pickle:<name>` or by its bare name when it is unique. Both run.
+Skill tool names (measured): a skill body can call a sibling as `pickle:<name>` or by its bare name when it is unique. Both run. Phrasing (measured, Haiku, 3 runs each, three-line skill body): `**callee** (/probe:callee)`, `the **callee** skill` and `the **callee** skill (Skill tool, \`probe:callee\`)` all led to a Skill tool call, 9 of 9. pickle uses the last form: it names the tool and the exact name, so it needs no rule from elsewhere and does not read as a command for the user.
 
 Locations: enterprise beats personal (`~/.claude/skills`) beats project (`.claude/skills`). Nested and `--add-dir` also load. Plugin skills are namespaced, so they never collide.
 

@@ -14,7 +14,7 @@ Run the task through the full process below. Playbooks and principles are files 
 
 Mentions in this skill, its playbooks and its principles:
 
-- `**<name>** (/pickle:<name>)`: a skill. Call it with the Skill tool as `pickle:<name>`, or `<name>` when pickle is installed without the plugin.
+- ``the **<name>** skill (Skill tool, `pickle:<name>`)``: call that skill with the Skill tool. When pickle is installed without the plugin, the name is `<name>`.
 - `**principle-<name>**`: the file `principles/<name>.md`. Read it with Read.
 - `pickle:<name>` as a subagent type: an agent. Start it with the Agent tool.
 
