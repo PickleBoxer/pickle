@@ -2,13 +2,13 @@
 
 Experimental, ported from pstack.
 
-Tools: `explore`, `design-options`. Prototype playbook for open questions.
+Tools: `how`, `architect`. Prototype playbook for open questions.
 
 You own the plan, not the code. The plan is the deliverable: a checklist someone else can run box by box. Do not implement.
 
 1. Copy these steps into the todo list. Mark a skipped step `skip: <reason>`.
 2. If the change fits in one PR with an obvious approach, say so and stop.
-3. Run `explore` over the code involved: entry points, data stores, callers, tests, and the verify commands. Keep the findings as file pointers, not dumps.
+3. Run the **how** skill (Skill tool, `pickle:how`) over the code involved: entry points, data stores, callers, tests, and the verify commands. Keep the findings as file pointers, not dumps.
 4. Settle open questions before writing: by prototype when a run can answer them, by one question to the user when only they can.
 5. Find every writer of the data that moves. When old and new code both write during the move, remove the shared write before planning a sync or a lock: one writer per row or table at each phase (**principle-no-shared-writes**). Every step that copies or backfills data must be safe to run twice.
 6. Cut the work into PRs that each land on their own, leave the system working, and carry their own check (**principle-small-verified-steps**). Order them so each phase can be stopped or rolled back.
@@ -33,6 +33,7 @@ One box is one unit of work. Check a box only when its evidence exists: a test r
 - [ ] <PR id> first. Branches from the base branch.
 - [ ] <PR id> after <PR id>.
 - [ ] Writers per phase: <which app or job writes which table at each phase>.
+- [ ] Live verification runs as the **swarm** skill (Skill tool, `pickle:swarm`): one full swarm at the code-ready head of each PR. Another full swarm only for new behaviour, a redesign or a large new diff. A rebase, conflict fix or minor fix gets one verifier at the new head.
 
 ## <Task as a verb phrase> (<PR id>)
 

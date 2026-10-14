@@ -2,12 +2,12 @@
 
 Experimental, ported from pstack.
 
-Tools: `explore`, implementer subagent.
+Tools: `how`, implementer subagent.
 
 You own the metric and the integrity of the experiment. One change, one measurement, keep or revert.
 
 1. Copy these steps into the todo list. Mark a skipped step `skip: <reason>`.
-2. Run `explore` over the target. Pick a case that reproduces the user's complaint. If none does, fix the reproduction first.
+2. Run the **how** skill (Skill tool, `pickle:how`) over the target. Pick a case that reproduces the user's complaint. If none does, fix the reproduction first.
 3. Fix one metric, the direction that counts as better, and a stop rule: a target plus a minimum number of attempts, so a lucky early win does not end the run. Use the user's numbers when given.
 4. Build one command that prints the metric, run enough times to clear the noise (median of several runs). Check it tells a slow case from a fast one, then freeze it. Record the baseline and a green run of `verify.test` (**principle-prove-it-works**).
 5. Keep a decision log outside the tree: one row per attempt with the hypothesis, the change, before, after, and kept or reverted. Read it before each attempt.

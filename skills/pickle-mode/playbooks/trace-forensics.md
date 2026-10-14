@@ -2,7 +2,7 @@
 
 Experimental, ported from pstack.
 
-Tools: `explore` to map the finding back to source.
+Tools: `how` to map the finding back to source.
 
 You own the diagnosis from the capture. It already exists: read it, do not rerun it. No fix unless asked.
 

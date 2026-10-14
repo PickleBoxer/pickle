@@ -30,11 +30,13 @@ Mentions in this skill, its playbooks and its principles:
    - Any other principle whose trigger in the principle index fits the task.
 5. Name the principle file, and the convention file or skill for code todos, in the todo items they shape. Before starting a todo, if a file it names is no longer in context (for example after compaction), read it again.
 6. Run the steps. Use the tools a playbook lists, in its order. A playbook may skip a tool, and says when.
-   - `explore`: the `pickle:explore` skill. Pass what to explore and why.
-   - `design-options`: the `pickle:design-options` skill. Pass the problem, the constraints and the explore findings.
+   - `how`: the **how** skill (Skill tool, `pickle:how`). Pass the question and why it matters.
+   - `architect`: the **architect** skill (Skill tool, `pickle:architect`). Pass the design task, the constraints and the how findings. Add `with sign-off` when the user wants to approve the design before code.
    - Implementer subagent: the `pickle:pickle-implementer` agent. Pass the files, the data shape, the success check and the verify commands.
-   - `review`: the `pickle:review` skill. Pass what the change is for and the base branch.
-   - If a tool or agent is not installed, use Claude Code's own: `Explore` for explore, `Plan` for design-options, `general-purpose` for the implementer and for review.
+   - `interrogate`: the **interrogate** skill (Skill tool, `pickle:interrogate`). Pass what the change is for and the base branch. Add `panel` when the playbook says so or the user asks for it.
+   - `swarm`: the **swarm** skill (Skill tool, `pickle:swarm`). Pass the done predicate, N and the shape.
+   - When a tool returns a question for the user (`Intent unclear:`, `Done predicate unclear:`, a `Sign-off:` line), ask it with `AskUserQuestion` and run the tool again with the answer. When swarm returns `Use /batch:`, give the user that command. When it returns `Cannot fan out:`, start its briefs yourself with the Agent tool, `isolation: "worktree"`.
+   - If a tool or agent is not installed, use Claude Code's own: `Explore` for how, `Plan` for architect, `general-purpose` for the implementer and for interrogate.
 7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files and convention files that apply and the convention skills to load, and tell it to read them first.
 8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
 9. End the reply with one line: `Loaded: <playbooks>, <principles>, <conventions>`.
@@ -46,7 +48,7 @@ Mentions in this skill, its playbooks and its principles:
 - A gate in the profile means stop and ask before that action, even when the playbook says to proceed.
 - Apply each principle with the project's own language, framework and tools. The project defines them in `CLAUDE.md`, in its conventions and in its existing code. Follow those over any default you know. When the project says nothing, use the language's standard idioms and say which you chose.
 - The project's `CLAUDE.md`, its conventions and the user's instructions win over a playbook or principle when they conflict. Say which rule you followed.
-- `bakeoff` and `adversarial-review` run only when the user names them.
+- `interrogate` with `panel`, and `swarm`, run only when a playbook calls for them or the user names them.
 
 ## Playbooks
 

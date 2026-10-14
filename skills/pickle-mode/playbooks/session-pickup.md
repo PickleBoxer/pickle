@@ -1,6 +1,6 @@
 # Session pickup
 
-Tools: `explore` for long notes or transcripts.
+Tools: a subagent for long notes or transcripts.
 
 The earlier session's trail is input you trust. Resume from it, do not redo it.
 
