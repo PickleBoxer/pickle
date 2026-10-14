@@ -75,11 +75,11 @@ _Avoid_: init, onboarding
 ## Tools and roles
 
 **Tool**:
-A pickle skill that runs one stage of the process in its own subagent: explore, design options or review.
+A pickle skill that runs one stage of the process in its own subagent: how, architect, interrogate or swarm.
 _Avoid_: helper, sub-skill
 
 **Opt-in tool**:
-A heavy tool that runs only when the user names it: bakeoff or adversarial review.
+A heavy tool run that happens only when a playbook calls for it or the user names it: interrogate with a panel, or swarm.
 _Avoid_: advanced tool
 
 **Explorer**, **Implementer**, **Reviewer**:

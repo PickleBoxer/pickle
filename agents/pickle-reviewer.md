@@ -1,6 +1,6 @@
 ---
 name: pickle-reviewer
-description: Read-only reviewer for pickle. Judges a diff for correctness bugs and against the pickle principles named in its prompt. Used by the pickle review tool.
+description: Read-only reviewer for pickle. Judges a diff adversarially against its intent and the pickle principles named in its prompt. Used by the pickle interrogate tool.
 tools: Read, Grep, Glob, LSP, Bash
 disallowedTools: Edit, Write, NotebookEdit
 model: opus

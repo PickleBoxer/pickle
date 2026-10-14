@@ -1,6 +1,6 @@
 ---
 name: pickle-explorer
-description: Read-only code explorer for pickle. Maps the code a task touches and returns file:line pointers and short findings, never file dumps. Used by the pickle explore tool.
+description: Read-only code explorer for pickle. Maps the code a task touches and returns file:line pointers and short findings, never file dumps. Used by the pickle how tool.
 tools: Read, Grep, Glob, LSP
 model: haiku
 effort: medium

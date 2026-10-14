@@ -125,12 +125,12 @@ Native overlap: a Claude Code feature that already does part of the job. pickle 
 |---|---|---|---|
 | `poteto-mode` | none | `pickle-mode` | same |
 | `poteto-help` | `/skills`, `/help` | none | dropped, README |
-| `how` | `Explore` agent | `explore` (forked, one explorer) | `how`, fan-out of 2 to 3 explorers |
+| `how` | `Explore` agent | `how` (forked lead, 1 to 3 explorers) | same |
 | `why` | none (git log, `gh`, MCPs) | none | next, trimmed |
-| `architect` | `Plan` agent, plan mode | `design-options` | `architect` |
+| `architect` | `Plan` agent, plan mode | `architect` (forked lead, grounds with `how`, two `Plan` runners) | same |
 | `arena` | parallel Agent calls with `isolation: worktree` | none | dropped (one model family) |
-| `interrogate` | `/code-review`, `/simplify`, `/security-review`, `/ultrareview` | `review` | `interrogate`, `panel` opt-in |
-| `swarm` | `/batch`, worktree subagents, agent teams | none | `swarm` |
+| `interrogate` | `/code-review`, `/simplify`, `/security-review`, `/ultrareview` | `interrogate` (forked lead, one reviewer, `panel` opt-in) | same |
+| `swarm` | `/batch`, worktree subagents, agent teams | `swarm` (forked lead, implementer workers in worktrees) | same |
 | `tdd` | none | principle test-behavior | next |
 | `blast-radius` | none | none | next |
 | `benchmark-checklist` | none | prose in perf, hillclimb | next |

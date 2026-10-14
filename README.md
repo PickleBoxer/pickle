@@ -11,7 +11,7 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 /pickle:pickle-mode extract the payment gateway behind an interface
 ```
 
-- **Full process.** A read-only explorer, design options, an implementer subagent and a reviewer. For small tasks, don't start pickle.
+- **Full process.** `how` explains the code, `architect` sketches the design, an implementer subagent writes it, `interrogate` reviews it, and `swarm` runs parallel workers when a plan needs them. For small tasks, don't start pickle.
 - **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
 - **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
 - **Before you start.** `/pickle:sharpen <task>` frames the task the way an expert would before doing it. `/pickle:in-your-own-words` plays back your goal and problem so you can correct it.

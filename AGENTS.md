@@ -25,7 +25,7 @@ Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 ## Status and build order
 
-In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Loading evals pass on Haiku, Sonnet and Opus. Evals came before content:
+In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Loading evals passed on Haiku, Sonnet and Opus before plan 2 renamed the tools to `how`, `architect`, `interrogate` and `swarm`. They have not run on the renamed set yet. Evals came before content:
 
 1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
 2. Build `pickle-mode`, all 19 playbooks, all 14 principles, the tools and the agents.
@@ -33,7 +33,7 @@ In progress. `pickle-mode`, all playbooks and principles, the tools, the agents 
 4. Build `setup`, which writes the profile with the project's verify commands and conventions.
 5. Then outcome evals and token evals. Grow only where evals show gaps.
 
-The working plan lives in `.scratch/plan.md`. `.scratch/` is excluded through `.git/info/exclude` and never committed. If it is missing, ask the user for it.
+The working plans live in `.scratch/plan.md` (plan 1) and `.scratch/plan-2.md` (tools, upstream, next skills). `.scratch/` is excluded through `.git/info/exclude` and never committed. If it is missing, ask the user for it.
 
 ## Layout
 
@@ -43,10 +43,10 @@ Current:
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, dash check
 skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14)
-skills/explore/ design-options/ review/   tools, context: fork
+skills/how/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
-agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
+agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
 scripts/                      check-refs.sh (CI), upstream-diff.sh (maintainer)
@@ -66,9 +66,8 @@ skills/
   setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
     scripts/detect-stack.sh
     profiles/*.md
-  explore/ design-options/ review/          context: fork
-  bakeoff/ adversarial-review/               opt-in only
-agents/                       pickle-explorer (haiku), pickle-implementer (sonnet), pickle-reviewer (opus)
+  how/ architect/ interrogate/ swarm/      context: fork, run as pickle-lead
+agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer
 hooks/                        mod: hooks.json plus register.tsx
 tests/                        *.test.ts for the mod
 types/index.d.ts              mod state contract, if the mod keeps $.state values
@@ -213,11 +212,11 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
 | Conventions | pickle ships no language rules. Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Shipped language rules go stale and fight project choices |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
-| Heavy tools | `bakeoff` and `adversarial-review` only when the user names them |
+| Tools | `how`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
 
-`pickle-mode` flow: read the profile and load its conventions, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and convention paths to subagents, run `explore`, `design-options`, implementer subagent and `review` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
+`pickle-mode` flow: read the profile and load its conventions, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and convention paths to subagents, run `how`, `architect`, implementer subagent, `interrogate` and `swarm` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
 
 ## References
 
