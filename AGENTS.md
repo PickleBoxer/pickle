@@ -19,7 +19,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. pickle ships no language rules: each project lists its own conventions in the profile. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. pickle's language rules are defaults only: each project lists its own conventions in the profile, and `/pickle:setup` adds pickle's language skill for the stack after them. Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
@@ -47,6 +47,7 @@ skills/how/ why/ architect/ interrogate/ swarm/   tools, context: fork, lead plu
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
 skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/ show-me-your-work/ blast-radius/ figure-it-out/   inline skills ported from pstack (deslop from cursor-team-kit)
+skills/typescript-best-practices/   language skill, a default convention for TypeScript stacks
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, pickle-historian, comment-sicko
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
@@ -212,7 +213,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
 | Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
-| Conventions | pickle ships no language rules. Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Shipped language rules go stale and fight project choices |
+| Conventions | Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. pickle ships language skills (`typescript-best-practices` first) only as defaults: `/pickle:setup` appends the one for the detected stack after the project's own conventions, so the project wins. No `paths`: plugin skills ignore it |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
 | Tools | `how`, `why`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `why` forks as `pickle-historian` instead, which has no tools list so it can reach MCP sources. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |

@@ -7,7 +7,7 @@ What pickle takes from pstack:
 - Playbooks copied into the todo list, with a reason for every skipped step.
 - Naming the data shape before writing code.
 - Verifying on the real surface, not a proxy.
-- Engineering principles, merged and rewritten language-agnostic. Language rules come from each project's conventions.
+- Engineering principles, merged and rewritten language-agnostic. Language rules come from each project's conventions, with `typescript-best-practices` ported from pstack as a default below them.
 
 [UPSTREAM.md](UPSTREAM.md) maps each pickle file to its pstack source and records the pstack version it was last compared against. pickle does not track pstack's wording. Differences are deliberate: one full process with playbooks and principles loaded only when the task needs them, a project profile with the project's own conventions, and Claude Code native skills and agents.
 

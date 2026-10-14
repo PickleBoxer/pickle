@@ -56,7 +56,11 @@ _Avoid_: reference, link
 
 **Convention**:
 A rule for how one project writes code: its language idioms, frameworks, tools and traps. A skill name or a file path in the project, listed in the profile and read before work starts. Conventions win over pickle's defaults.
-_Avoid_: pack, style guide, language skill
+_Avoid_: pack, style guide
+
+**Language skill**:
+A pickle skill with default idioms for one language or framework, such as typescript-best-practices. Listed in the profile as a convention after the project's own, so the project wins.
+_Avoid_: language pack, rules pack
 
 ## Project
 
