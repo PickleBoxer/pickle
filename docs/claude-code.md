@@ -55,7 +55,7 @@ Frontmatter (read; unknown keys ignored):
 | `disable-model-invocation` | `true`: user only. Description not in context. Blocks Skill tool, subagent preload and scheduled-task runs |
 | `user-invocable` | `false`: Claude only, hidden from `/`. Description stays in context |
 | `allowed-tools` | tools usable without asking during the invoking turn |
-| `disallowed-tools` | tools removed while active |
+| `disallowed-tools` | tools removed while active. **Not applied inside a `context: fork` subagent**: the fork still had Edit and Write (measured). Restrict a fork through its `agent`'s `tools` instead |
 | `model`, `effort` | override for the current turn |
 | `context: fork` | run as a new subagent of type `agent`, skill body as its prompt, no conversation history |
 | `agent` | subagent type for the fork, default `general-purpose` |

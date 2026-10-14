@@ -4,6 +4,7 @@ description: Read-only reviewer for pickle. Judges a diff for correctness bugs a
 tools: Read, Grep, Glob, LSP, Bash
 disallowedTools: Edit, Write, NotebookEdit
 model: opus
+effort: high
 color: purple
 ---
 

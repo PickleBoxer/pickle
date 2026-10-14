@@ -38,7 +38,8 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
 | skills/pickle-mode/SKILL.md | skill | skills/poteto-mode/SKILL.md | rewritten | 0.15.24 | entry skill |
-| skills/explore | skill | skills/how | rebuilt | 0.15.24 | one explorer, forked. Becomes `how` in plan 2 |
+| skills/how | skill | skills/how | rebuilt | 0.15.24 | forked lead, 1 to 3 explorers |
+| skills/explore | skill | skills/how | rebuilt | 0.15.24 | replaced by `how`, deleted in plan 2 task 2.6 |
 | skills/design-options | skill | skills/architect | rebuilt | 0.15.24 | one Plan subagent. Becomes `architect` in plan 2 |
 | skills/review | skill | skills/interrogate | rebuilt | 0.15.24 | one reviewer. Becomes `interrogate` in plan 2 |
 | skills/setup | skill | - | new | n/a | writes the profile |
@@ -123,6 +124,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
+| agents/pickle-lead.md | agent | - | new | n/a | read-only fork agent for `how`, `architect`, `interrogate` |
 | agents/pickle-explorer.md | agent | - | new | n/a | explorer role from `how` |
 | agents/pickle-implementer.md | agent | agents/poteto-agent.md | rewritten | 0.15.24 | |
 | agents/pickle-reviewer.md | agent | - | new | n/a | reviewer role from `interrogate` |

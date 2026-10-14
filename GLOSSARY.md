@@ -84,6 +84,10 @@ _Avoid_: advanced tool
 
 **Explorer**, **Implementer**, **Reviewer**:
 The three subagent roles pickle delegates to. The explorer reads, the implementer changes code, the reviewer judges the result.
+
+**Lead**:
+The read-only subagent a tool runs as. It picks the angles, starts explorers or reviewers, and writes the one answer the tool returns.
+_Avoid_: orchestrator, coordinator
 _Avoid_: worker, helper agent
 
 ## Evals
@@ -123,5 +127,5 @@ _Avoid_: cost test
 ## Not pickle terms
 
 **Effort level**:
-Not used in pickle. Claude Code's own effort setting is separate, and pickle never sets or reads it.
+Not a pickle concept: invoking pickle always means the full process. Claude Code's effort setting is separate. pickle sets it only per subagent role, in each agent's frontmatter, and never changes the session's effort.
 _Avoid_: low, medium, high as pickle levels

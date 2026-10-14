@@ -2,6 +2,7 @@
 name: pickle-implementer
 description: Implementer for pickle. Writes one scoped unit of change from a pickle playbook step, then verifies it. Use when a pickle playbook delegates implementation.
 model: sonnet
+effort: high
 color: green
 ---
 
