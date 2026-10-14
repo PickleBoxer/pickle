@@ -43,6 +43,7 @@ Current:
 .github/workflows/            CI: validate, dash check
 skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), packs/ (php, typescript, swift, template)
 skills/explore/ design-options/ review/   tools, context: fork
+skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 agents/                       pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 .claude/CLAUDE.md            imports AGENTS.md
