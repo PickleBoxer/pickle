@@ -1,6 +1,6 @@
 ---
 name: why
-description: Explains why code has its shape (design rationale, why one option was picked, regression history, the incident or ticket behind a guard, where a threshold came from) in a read-only subagent. Searches git and PRs plus every connected MCP source (tickets, docs, chat, error tracking, observability) in parallel and returns a cited, confidence-tiered answer. Use when a pickle playbook step names why, or for "why does X work this way" questions. For what code does, use how.
+description: Use for any question about why code is the way it is ("why does X do this", "why is this limit 100", "why did we pick Y", "what broke this", before raising or removing a limit or guard), and when a pickle playbook step names why. Run it instead of answering from the code: code shows what it does, not why, and a reason guessed from the code is the failure this prevents. A read-only subagent searches git, PRs and every connected MCP source (tickets, docs, chat, error tracking, observability) in parallel and returns a cited, confidence-tiered answer. For what code does, use how.
 argument-hint: "<question> [target path:lines] [principle and convention file paths]"
 context: fork
 agent: pickle:pickle-historian
