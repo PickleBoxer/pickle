@@ -1,0 +1,15 @@
+schema_version: "1.1"
+name: loading-skill-benchmark-checklist
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: calls-benchmark-checklist
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?benchmark-checklist"'
+  - name: skips-other-skills
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?(how|architect|interrogate|swarm|tdd)"'
+    min: 0
+    max: 0
