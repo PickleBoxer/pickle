@@ -14,7 +14,7 @@ You own the plan, not the code. The plan is the deliverable: a checklist someone
 6. Cut the work into PRs that each land on their own, leave the system working, and carry their own check (**principle-small-verified-steps**). Order them so each phase can be stopped or rolled back.
 7. The last phases move every caller to the new form and delete the old one. A plan that ends with both alive is not finished (**principle-finish-migrations**).
 8. Write the plan with the template below to the path the user names, else `.scratch/plans/<slug>.md`. If `.scratch/` is not ignored by git, add it to `.git/info/exclude` so the plan is never committed by accident. Keep every heading. Drop a block only by writing `None.` under it.
-9. Reread the plan against the template: every PR has every block, every box names its evidence, and the dependency order has no cycle.
+9. Reread the plan against the template: every PR has every block, every box names its evidence, and the dependency order has no cycle. Then run the **unslop** skill (Skill tool, `pickle:unslop`) on the plan file.
 10. Report the plan path, the PRs with their dependencies, and what is still unproven. Execution starts only when the user says so. End with the Loaded line.
 
 ## Template

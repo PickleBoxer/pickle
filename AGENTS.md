@@ -46,7 +46,7 @@ skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles
 skills/how/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
-skills/tdd/                   failing test before the fix, ported from pstack
+skills/tdd/ unslop/            failing test before the fix, AI writing patterns, ported from pstack
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
