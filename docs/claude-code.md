@@ -4,7 +4,7 @@ What Claude Code ships that a workflow plugin like pickle can build on: extensio
 
 Sources: the Claude Code docs at <https://code.claude.com/docs/en/> (skills, sub-agents, agent-teams, commands, tools-reference, hooks, plugins/components, plugins/manifest-reference, plugins/cli-reference, plugins/mods/overview, memory, output-styles, permission-modes, worktrees, scheduled-tasks, checkpointing, headless). Checked 2026-10-14 on Claude Code 2.1.296. Recheck after Claude Code updates.
 
-Marks: **read** = stated in the docs. **unverified** = the docs are silent or unclear. **inferred** = our conclusion.
+Marks: **read** = stated in the docs. **measured** = probed with a throwaway plugin (2026-10-14, Claude Code 2.1.299, Haiku, `claude -p`, `--setting-sources project,local`). **unverified** = the docs are silent or unclear. **inferred** = our conclusion.
 
 ## Contents
 
@@ -61,22 +61,24 @@ Frontmatter (read; unknown keys ignored):
 | `agent` | subagent type for the fork, default `general-purpose` |
 | `background` | with fork, `false` waits (2.1.218+). Forced to wait under `-p`, SDK, scheduled fires |
 | `hooks` | registered on invoke, kept for the session. `once: true` honoured only here |
-| `paths` | globs. Loads the skill automatically only when working with matching files. Plugin skills: unverified |
+| `paths` | globs. Gates the description listing, not the body: a project skill is listed only after a matching file is read, then Claude decides whether to invoke it (measured). **Ignored for plugin skills**: listed from the start (measured) |
 | `shell` | `bash` or `powershell` for `!` injection |
-| `metadata` | free-form map, ignored by Claude Code. Use for upstream source and version |
+| `metadata` | free-form map, ignored by Claude Code. Use for upstream source and version. Passes `validate --strict` (measured), but so does any unknown skill key: `--strict` does not check skill frontmatter |
 | `license`, `compatibility` | accepted, not acted on |
 
-Invocation matrix (read):
+Invocation matrix (read, measured where marked):
 
 | Frontmatter | User | Claude (Skill tool) | Description in context | Preload into subagent |
 |---|---|---|---|---|
 | default | yes | yes | yes | yes |
-| `disable-model-invocation: true` | yes | no | no | no |
-| `user-invocable: false` | no | yes | yes | unverified |
+| `disable-model-invocation: true` | yes | no: tool error that also says "do not replicate this skill's workflow by other means" (measured) | no | no: skipped silently, no error (measured) |
+| `user-invocable: false` | no | yes | yes | yes (measured) |
 
 Substitutions: `$ARGUMENTS` (appended as `ARGUMENTS: ...` if no placeholder), `$N` and `$ARGUMENTS[N]`, `$name`, `${CLAUDE_SKILL_DIR}`, `${CLAUDE_PROJECT_DIR}`, `${CLAUDE_PLUGIN_ROOT}` (changes on update), `${CLAUDE_PLUGIN_DATA}` (persists), `${CLAUDE_SESSION_ID}`, `${CLAUDE_EFFORT}`, `${user_config.KEY}`.
 
 `` !`command` `` injection: runs before Claude sees the skill. Exit 2 or higher aborts the invocation. Needs an allow rule or `allowed-tools`, else aborts outside auto mode. 2 min timeout. Fenced ` ```! ` runs each line.
+
+Skill tool names (measured): a skill body can call a sibling as `pickle:<name>` or by its bare name when it is unique. Both run.
 
 Locations: enterprise beats personal (`~/.claude/skills`) beats project (`.claude/skills`). Nested and `--add-dir` also load. Plugin skills are namespaced, so they never collide.
 
@@ -108,6 +110,13 @@ Model order: Agent call `model` parameter, then frontmatter, then `CLAUDE_CODE_S
 
 Nesting (read): "By default, a subagent can spawn subagents of its own, up to three layers below the main conversation." At the limit the Agent tool is withheld from every subagent except a fork. `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` disables nesting. "A fork can't spawn further forks."
 
+Nesting (measured):
+
+- Named agents only: main, then layers 1, 2, 3. The layer 3 agent has no Agent tool.
+- A `context: fork` skill invoked from the main thread does not use a layer. A `context: fork` skill invoked inside it does. Measured chain: fork, nested fork, agent, agent; the last one had no Agent tool.
+- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing.
+- Waiting: inside a fork, an Agent call without `run_in_background` launched async. The nested fork returned before its child replied, and the late completions surfaced on the main thread as extra turns. With `run_in_background: false` the fork waited and got the reports through SubagentHandback. Fan-out skills must set it explicitly.
+
 Fork vs named: a fork inherits the full conversation, tools and model and shares the prompt cache (`/subtask`, or Claude asks for the fork type). A named subagent starts fresh with only the prompt. A `context: fork` skill starts a subagent of the `agent` type with the skill as prompt (read), so it behaves like a named subagent, not a fork (inferred).
 
 Background: fork mode is the interactive default, so subagents run in the background. Permission prompts surface in the main session. `CLAUDE_CODE_DISABLE_BACKGROUND_TASKS=1` forces foreground.
@@ -138,8 +147,8 @@ Grouped. "Sub" = available to background subagents.
 | Group | Tool | Job | Permission | Sub | Notes |
 |---|---|---|---|---|---|
 | Files | Read, Write, Edit, NotebookEdit | read and change files | Write, Edit yes | yes | |
-| Search | Glob, Grep | find files, search content | no | yes | absent by default on macOS and Linux, Bash `find`/`grep` instead (read) |
-| Search | LSP | definitions, references, diagnostics | no | yes | needs a code-intelligence plugin |
+| Search | Glob, Grep | find files, search content | no | yes | absent by default on macOS and Linux, Bash `find`/`grep` instead (read). Present under `claude -p` on macOS, also in a plugin agent with `tools: Read, Grep, Glob, LSP` (measured). Interactive sessions: unverified |
+| Search | LSP | definitions, references, diagnostics | no | yes | needs a code-intelligence plugin. Without one it is silently absent, even when an agent's `tools` lists it (measured) |
 | Shell | Bash, PowerShell | commands, `run_in_background` | yes | yes | 2 min default, 10 min max |
 | Shell | Monitor | stream a background command's lines to Claude | yes | yes | 5 min default, 30 max, 10 under `-p`. Not on Bedrock, Vertex, Foundry |
 | Shell | TaskStop | stop a background task | no | yes | |
@@ -166,9 +175,9 @@ Grouped. "Sub" = available to background subagents.
 
 | Skill | Job | Spawns | Claude can invoke |
 |---|---|---|---|
-| `/batch <instruction>` | split a large change into 5 to 30 units, plan, run | one background subagent per unit, each in its own worktree | unverified |
-| `/simplify [target]` | cleanup review: reuse, simplicity, efficiency, abstraction. Not a bug hunt | 4 review agents in parallel | unverified |
-| `/code-review [effort] [--fix] [--comment] [--max-findings] [target]` (alias `/review`) | correctness review of a diff or PR. `ultra` runs a cloud review (`/ultrareview`) | forked subagent | unverified |
+| `/batch <instruction>` | split a large change into 5 to 30 units, plan, run | one background subagent per unit, each in its own worktree | **no**, `disable-model-invocation` (measured) |
+| `/simplify [target]` | cleanup review: reuse, simplicity, efficiency, abstraction. Not a bug hunt | 4 review agents in parallel | yes (measured) |
+| `/code-review [effort] [--fix] [--comment] [--max-findings] [target]` (alias `/review`) | correctness review of a diff or PR. `ultra` runs a cloud review (`/ultrareview`) | forked subagent | yes (measured) |
 | `/loop [interval] [prompt]` | repeat a prompt while the session is open. Self-paced without interval. Default prompt from `.claude/loop.md` | ScheduleWakeup | unverified |
 | `/debug [description]` | debug logging and log analysis | unverified | unverified |
 | `/verify` | build, run and observe the app | unverified | **no**, user only |
@@ -182,7 +191,7 @@ Grouped. "Sub" = available to background subagents.
 | `/dataviz`, `/design`, `/design-sync`, `/slides`, `/artifact-capabilities`, `/artifact-diagramming`, `/claude-in-chrome` | design, charts, artifacts, browser | unverified | unverified |
 | `/deep-research <question>` (workflow) | cited multi-search report | background subagents | no, user only |
 
-`/security-review` is a built-in command, not a skill: reviews the branch diff against origin's default branch.
+`/security-review` reviews the branch diff against origin's default branch. Claude can call it with the Skill tool (measured). Its `` !`git diff origin/HEAD...` `` injection aborts the call in a repo without `origin/HEAD`.
 
 ## Built-in commands
 
@@ -280,12 +289,9 @@ CLI: `claude plugin init | install | uninstall | enable | disable | update | lis
 
 ## Unverified
 
-The docs do not settle these. Test each with a throwaway skill under `claude --plugin-dir` before pickle relies on it, then move the answer into the section above.
+Open items. Test each with a throwaway skill under `claude --plugin-dir` before pickle relies on it, then move the answer into the section above.
 
-1. A skill body can call `pickle:<name>` with the Skill tool.
-2. A `context: fork` skill can spawn subagents, and a skill invoked inside a fork can fork again (depth counting).
-3. `paths` loads a plugin skill automatically.
-4. Skill `metadata` and manifest `metadata` pass `validate --strict`.
-5. Bundled skills (`/code-review`, `/batch`, `/simplify`) can be invoked by Claude with the Skill tool.
-6. `user-invocable: false` skills can be preloaded with `skills:`.
-7. `pickle-explorer` (no Bash) can still search on macOS, or needs read-only Bash.
+1. Glob and Grep in interactive sessions (measured present only under `claude -p`).
+2. Haiku calling a skill from a long skill body as reliably as from the short probe bodies.
+
+Resolved on 2026-10-14 (measured, see the sections above): Skill tool calls between plugin skills, nesting depth and forks, `paths` on plugin skills, `metadata` under `--strict`, bundled skills through the Skill tool, preloading `user-invocable: false` skills, `pickle-explorer` search on macOS.

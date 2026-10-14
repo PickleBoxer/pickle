@@ -119,7 +119,7 @@ Verified against the docs on 2026-10-13, Claude Code 2.1.296.
 | `model`, `effort` | per-turn override |
 | `context: fork` + `agent` | run the skill in a subagent (`Explore`, `Plan` or a custom agent) |
 | `background` | with `context: fork`, `false` waits for the result |
-| `paths` | globs. Loads automatically only when working with matching files |
+| `paths` | globs. Lists a project skill only after a matching file is read. Ignored for plugin skills (measured, `docs/claude-code.md`) |
 | `hooks` | hooks registered when the skill is invoked |
 
 Outside Claude Code (claude.ai uploads, the Skills API) only `name`, `description`, `license`, `compatibility`, `metadata` and `allowed-tools` are accepted. Other keys fail the upload. pickle targets Claude Code, so it uses the full set.
