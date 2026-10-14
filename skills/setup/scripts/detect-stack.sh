@@ -188,22 +188,28 @@ lsp_json="[$(IFS=,; printf '%s' "${lsp[*]+"${lsp[*]}"}")]"
 
 # Language skills per stack, in precedence order. pickle ships its own; third-party ones
 # are never copied, only detected where Claude Code loads them: the project, then personal.
-skill_entry() { # name source install
-  local where=null
-  if [ "$2" = pickle ]; then where='"pickle"'
-  elif [ -f ".claude/skills/$1/SKILL.md" ]; then where='"project"'
-  elif [ -f "$config_dir/skills/$1/SKILL.md" ]; then where='"personal"'; fi
-  printf '{"name":%s,"source":%s,"installed":%s,"install":%s}' "$(q "$1")" "$(q "$2")" "$where" "$(q "$3")"
+skill_entry() { # name source url install-options...
+  local name="$1" src="$2" url="$3" where=null; shift 3
+  if [ "$src" = pickle ]; then where='"pickle"'
+  elif [ -f ".claude/skills/$name/SKILL.md" ]; then where='"project"'
+  elif [ -f "$config_dir/skills/$name/SKILL.md" ]; then where='"personal"'; fi
+  printf '{"name":%s,"source":%s,"url":%s,"installed":%s,"install":%s}' \
+    "$(q "$name")" "$(q "$src")" "$(q "$url")" "$where" "$(list "$@")"
 }
 skills=() seen_skills=" "
 add_skill() { [[ "$seen_skills" == *" $1 "* ]] && return; seen_skills="$seen_skills$1 "; skills+=("$(skill_entry "$@")"); }
+boost_skill=https://github.com/laravel/boost/tree/main/.ai/laravel/skill/laravel-best-practices
+react_skill=https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices
 for s in "${stacks[@]+"${stacks[@]}"}"; do
   case "$s" in
-    laravel) add_skill laravel-best-practices laravel/boost 'composer require laravel/boost --dev && php artisan boost:install' ;;
+    laravel) add_skill laravel-best-practices laravel/boost "$boost_skill" \
+      'composer require laravel/boost --dev && php artisan boost:install' \
+      "npx skills add $boost_skill -a claude-code" ;;
     typescript-node) add_skill typescript-best-practices pickle '' ;;
     typescript-react)
       add_skill typescript-best-practices pickle ''
-      add_skill vercel-react-best-practices vercel-labs/agent-skills 'npx skills add vercel-labs/agent-skills --skill vercel-react-best-practices -a claude-code' ;;
+      add_skill vercel-react-best-practices vercel-labs/agent-skills "$react_skill" \
+        "npx skills add $react_skill -a claude-code" ;;
   esac
 done
 skills_json="[$(IFS=,; printf '%s' "${skills[*]+"${skills[*]}"}")]"
