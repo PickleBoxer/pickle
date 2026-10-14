@@ -1,8 +1,8 @@
 # Claude Code native features
 
-What Claude Code ships that a workflow plugin like pickle can build on: extension points, skills, subagents, tools, bundled skills, commands, hooks, background work and the plugin manifest. The last column of some tables says where pickle uses a feature. [pstack.md](pstack.md) maps pstack's skills onto these features.
+What Claude Code ships that a workflow plugin like pickle can build on: extension points, skills, subagents, tools, bundled skills, commands, hooks, MCP, background work and the plugin manifest. The last column of some tables says where pickle uses a feature. [pstack.md](pstack.md) maps pstack's skills onto these features.
 
-Sources: the Claude Code docs at <https://code.claude.com/docs/en/> (skills, sub-agents, agent-teams, commands, tools-reference, hooks, plugins/components, plugins/manifest-reference, plugins/cli-reference, plugins/mods/overview, memory, output-styles, permission-modes, worktrees, scheduled-tasks, checkpointing, headless). Checked 2026-10-14 on Claude Code 2.1.296. Recheck after Claude Code updates.
+Sources: the Claude Code docs at <https://code.claude.com/docs/en/> (skills, sub-agents, agent-teams, commands, tools-reference, hooks, plugins/components, plugins/manifest-reference, plugins/cli-reference, plugins/mods/overview, memory, output-styles, permission-modes, worktrees, scheduled-tasks, checkpointing, headless, mcp, mcp-quickstart, permissions, settings-reference, plugin-evals). Checked 2026-10-14 on Claude Code 2.1.296. The MCP section was read through the Claude Code Docs MCP server on 2026-10-14. Recheck after Claude Code updates.
 
 Marks: **read** = stated in the docs. **measured** = probed with a throwaway plugin (2026-10-14, Claude Code 2.1.299, Haiku, `claude -p`, `--setting-sources project,local`). **unverified** = the docs are silent or unclear. **inferred** = our conclusion.
 
@@ -16,6 +16,7 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 - Bundled skills
 - Built-in commands
 - Hooks
+- MCP
 - Background, scheduling and parallel work
 - Plugin manifest and CLI
 - Project instructions and modes
@@ -30,7 +31,7 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 | Agent | `agents/*.md`, subfolders join with `:` | description always, body when spawned | description | yes: explorer, implementer, reviewer |
 | Hook | `hooks/hooks.json`, skill or agent frontmatter, settings | on event | 0 | not yet |
 | Mod | `hooks/hooks.json` `modules` plus `register.tsx` | JS/TS handlers in process, 2.1.287+ | 0 | planned (observability) |
-| MCP server | `.mcp.json` | tools deferred behind ToolSearch | tool names | no |
+| MCP server | plugin root `.mcp.json` or `plugin.json` `mcpServers` | starts when the plugin is enabled, tools deferred behind ToolSearch | tool names | no. See MCP |
 | LSP server | `.lsp.json`, binary on user PATH | on matching files | 0 | no |
 | Output style | `output-styles/*.md`, used as `<plugin>:<name>` | when selected | 0 | no (reply style is the user's) |
 | Monitor | `monitors/monitors.json` via `experimental.monitors`, `when: always` or `on-skill-invoke:<skill>` | interactive sessions only | 0 | candidate for `babysit` |
@@ -251,6 +252,54 @@ Defined in: user, project and local settings, managed policy, plugin `hooks/hook
 | SessionEnd | no | |
 
 Mods (2.1.287+): JS/TS handlers in process, events like `skill.prompt`, `tool.call`, `agent.spawn`, `prompt.submit`, `session.compact`, `command.run`, `ui.render`. Draw only in the terminal and the desktop Code tab, run everywhere. Not sandboxed. Built-in mods: `cc-plugin-agents-md`, `cc-plugin-diff`, `cc-plugin-plugin-authoring`, `cc-plugin-sec-default`, `cc-plugin-telemetry`, `cc-plugin-you-should-know`.
+
+## MCP
+
+All **read** unless marked. The served `mcp` page stops partway through: it lacks the sections on tool search, resources, prompts, elicitation and output limits. Facts on those come from other pages.
+
+### Config and scopes
+
+- Transports: `http`, `sse`, `stdio` (command after `--`), `ws` (only through `.mcp.json` or `claude mcp add-json`, header auth only).
+- Scopes: local (the default, in `~/.claude.json` under the project path, not `.claude/settings.local.json`), project (`.mcp.json` at the repo root, shared), user (`~/.claude.json`, every project).
+- Precedence, whole entry wins: managed, then local, project, user, plugin servers, claude.ai connectors. Scopes match duplicates by name, plugins and connectors by URL or command.
+- `.mcp.json` takes `{"mcpServers": {...}}`. An entry with a `url` but no `type` is read as stdio and fails. `${VAR}` and `${VAR:-default}` expand. Credential variables such as `ANTHROPIC_API_KEY` read as empty in remote URLs and headers.
+- Project `.mcp.json` servers need approval in interactive sessions. Under `claude -p`, the SDK and cloud sessions they load without a prompt. `disabledMcpjsonServers`, `--setting-sources` or `--strict-mcp-config` block them.
+- Reserved names, skipped at load: `workspace`, `claude-in-chrome`, `computer-use`, `Claude Preview`, `Claude Browser`.
+
+### Tool names and loading
+
+- Name: `mcp__<server>__<tool>`. claude.ai connectors: `mcp__claude_ai_<server>__<tool>`. Plugin servers: `mcp__plugin_<plugin>_<server>__<tool>`, with characters outside `A-Za-z0-9_-` turned into `_`. A plugin server registers as `plugin:<plugin>:<server>`.
+- Tool search is on by default: only names sit in context, schemas load through ToolSearch. `alwaysLoad: true` on a server skips deferral. Off with `ENABLE_TOOL_SEARCH=false` or a third-party `ANTHROPIC_BASE_URL`.
+- Failed servers are reported to Claude only through tool search. Without it, Claude does not learn that a server failed.
+- Output: a warning above 10,000 tokens, a cap of 25,000 (`MAX_MCP_OUTPUT_TOKENS`). Text over 50,000 characters is saved to a file.
+- Timeouts: `MCP_TIMEOUT` for startup, a per-server `timeout` in ms as a hard wall-clock limit, idle timeout 5 minutes for remote servers and 30 for stdio.
+- A main-thread MCP call still running after 2 minutes becomes a background task. Subagent calls never do.
+
+### Subagents, skills and permissions
+
+- Subagents inherit the main conversation's MCP tools, and background subagents keep all of them. A `tools` allowlist without MCP names gives no MCP tools. `tools` and `disallowedTools` accept `mcp__<server>`, `mcp__<server>__*`.
+- Agent `mcpServers` frontmatter (a name, or an inline server that connects only for the subagent) is ignored for plugin agents.
+- Skill `allowed-tools` pre-approves MCP tools for the invoking turn by full name. It does not restrict which tools exist.
+- Permission rules: `mcp__<server>`, `mcp__<server>__*`, `mcp__<server>__<tool>`. An allow rule `mcp__*` is skipped with a warning, deny and ask accept it. Rules with arguments in parentheses are skipped.
+- Hook matchers need the tool part: `mcp__memory__.*` matches, `mcp__memory` matches nothing. Plugin servers: `mcp__plugin_<plugin>_<server>__.*`.
+
+### Plugins and evals
+
+- A plugin ships servers in `.mcp.json` at its root or in `plugin.json` `mcpServers`. `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}` and `${CLAUDE_PROJECT_DIR}` expand. `claude plugin validate` checks `.mcp.json`. Plugin servers start on enable and leave only on uninstall.
+- `claude plugin eval` never loads personal MCP servers or any `.mcp.json`. Under the default `--mocks record`, plugin servers do not start: a tool with a mock in `evals/mocks/<server>/<tool>.md` works, one without is unavailable. `--allow-real-servers` starts real ones, which also need `--allow-tools "mcp__plugin_<plugin>_<server>__*"`.
+
+### What this means for pickle
+
+Inferred from the facts above.
+
+- pickle ships no MCP server. Never add a root `.mcp.json` to this repo: it would ship to every user. Maintainer servers go in local or user scope.
+- `pickle-lead`, `pickle-explorer` and `pickle-reviewer` list `tools` without MCP names, so they get no MCP tools. A port that needs history, issues or logs from an MCP server (`why`, forensics) either names `mcp__<server>__*` in the agent's `tools` or runs the query on the main thread.
+- Playbooks cannot know the user's server names. They describe the job ("the issue tracker"), and the profile names the server.
+- An eval case that needs an MCP tool needs a mock, since personal servers never load in a run.
+
+### Claude Code Docs server
+
+`https://code.claude.com/docs/mcp`, HTTP, no auth. Tools: `search_claude_code_docs` (search, returns page paths) and `query_docs_filesystem_claude_code_docs` (read-only `ls`, `cat`, `grep`, `sed -n` over the pages, as `/en/<page>.mdx`). Added to this repo at local scope with `claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp`, so its tools are `mcp__claude-code-docs__*`. Not the claude.ai "Claude Docs" connector, which edits shareable documents.
 
 ## Background, scheduling and parallel work
 

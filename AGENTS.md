@@ -81,6 +81,7 @@ types/index.d.ts              mod state contract, if the mod keeps $.state value
 - GitHub: run `gh auth switch -u PickleBoxer` before any `gh` call for this repo. The SSH remote uses the host alias `github-PickleBoxer.com`.
 - Never run an eval without asking first. See Evals.
 - Ask before assuming intent or architecture. Flag uncertainty and say whether a claim is measured, inferred or a guess.
+- Claude Code facts come from the `claude-code-docs` MCP server, never from memory or WebFetch: search with `mcp__claude-code-docs__search_claude_code_docs`, then read the page with `mcp__claude-code-docs__query_docs_filesystem_claude_code_docs` (`/en/<page>.mdx`). Pass the same instruction to subagents that research docs. If the server is missing, ask the user to run `claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp`, never at project scope (a root `.mcp.json` ships with the plugin). The claude.ai "Claude Docs" connector is a different product: it edits shareable documents.
 - Before writing mod code, load the `plugin-authoring` skill. It writes this build's mod types. Write the mod in this repo, not in the dev-mods folder that skill names.
 
 ## Checks
@@ -155,7 +156,7 @@ From Anthropic's skill authoring guide. Apply to every skill, playbook and princ
 - Workflows as checklists Claude copies into its todo list. Feedback loops: run, fix, rerun.
 - One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, playbook and principle, and never use a word it lists under _Avoid_ to name that concept.
 - No time-sensitive statements. No hardcoded model names in prose; models live in agent frontmatter.
-- Forward slashes in paths. Fully qualified MCP tool names (`Server:tool`).
+- Forward slashes in paths. Fully qualified MCP tool names: `mcp__<server>__<tool>` in Claude Code (`Server:tool` is the Skills API form).
 - Evals before content. Test on Haiku, Sonnet and Opus.
 - Watch how Claude navigates the skill in real runs. Files never read are badly signposted or unneeded.
 
