@@ -89,6 +89,10 @@ The three subagent roles pickle delegates to. The explorer reads, the implemente
 The user approving an architect sketch before implementation starts. Opt-in: only when the task asks for it.
 _Avoid_: checkpoint, approval step
 
+**Panel**:
+An interrogate run with two reviewers, each on its own lens (correctness, design) and model tier. Opt-in: only when the arguments name it.
+_Avoid_: multi-model review
+
 **Lead**:
 The read-only subagent a tool runs as. It picks the angles, starts explorers or reviewers, and writes the one answer the tool returns.
 _Avoid_: orchestrator, coordinator

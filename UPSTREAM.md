@@ -42,7 +42,8 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/explore | skill | skills/how | rebuilt | 0.15.24 | replaced by `how`, deleted in plan 2 task 2.6 |
 | skills/architect | skill | skills/architect | rebuilt | 0.15.24 | forked lead, grounds with `how`, two angled Plan runners, no arena. Implement and scrap phases run on the main thread |
 | skills/design-options | skill | skills/architect | rebuilt | 0.15.24 | replaced by `architect`, deleted in plan 2 task 2.6 |
-| skills/review | skill | skills/interrogate | rebuilt | 0.15.24 | one reviewer. Becomes `interrogate` in plan 2 |
+| skills/interrogate | skill | skills/interrogate | rebuilt | 0.15.24 | forked lead, one reviewer, `panel` adds a second lens on another tier. One merged reviewer brief |
+| skills/review | skill | skills/interrogate | rebuilt | 0.15.24 | replaced by `interrogate`, deleted in plan 2 task 2.6 |
 | skills/setup | skill | - | new | n/a | writes the profile |
 | skills/sharpen | skill | skills/sharpen | ported | 0.15.24 | user-only |
 | skills/in-your-own-words | skill | skills/in-your-own-words | ported | 0.15.24 | user-only |
