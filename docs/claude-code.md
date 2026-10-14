@@ -114,7 +114,7 @@ Nesting (measured):
 
 - Named agents only: main, then layers 1, 2, 3. The layer 3 agent has no Agent tool.
 - A `context: fork` skill invoked from the main thread does not use a layer. A `context: fork` skill invoked inside it does. Measured chain: fork, nested fork, agent, agent; the last one had no Agent tool.
-- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing.
+- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing. With pickle's skills: `architect` under depth 1 still started both Plan runners, and the nested `how` followed its fallback, reading the code itself and saying so under Not checked.
 - Waiting: inside a fork, an Agent call without `run_in_background` launched async. The nested fork returned before its child replied, and the late completions surfaced on the main thread as extra turns. With `run_in_background: false` the fork waited and got the reports through SubagentHandback. Fan-out skills must set it explicitly.
 
 Fork vs named: a fork inherits the full conversation, tools and model and shares the prompt cache (`/subtask`, or Claude asks for the fork type). A named subagent starts fresh with only the prompt. A `context: fork` skill starts a subagent of the `agent` type with the skill as prompt (read), so it behaves like a named subagent, not a fork (inferred).
