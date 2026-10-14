@@ -31,7 +31,7 @@ pickle compares against upstream pstack, not the port. pstack source paths below
 - `pending`: planned port, the pickle file does not exist yet.
 - `dropped`: not coming. The row stays so an upstream change to it is noticed and ignored on purpose.
 
-A pstack source starting with `port:` exists only in the Claude port, not upstream. A pickle item `-` means no pickle file.
+A pstack source starting with `port:` exists only in the Claude port, not upstream. A source starting with `kit:` is in `cursor-team-kit/` of cursor/plugins, not in pstack, and its version is the kit's. A pickle item `-` means no pickle file.
 
 ## Skills
 
@@ -49,6 +49,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | skills/tdd | skill | skills/tdd | rewritten | 0.15.24 | model-invocable, red step alone when a playbook delegates the fix |
 | skills/unslop | skill | skills/unslop | ported | 0.15.24 | model-invocable, apply steps added, rule 13 allows parentheses |
 | skills/no-comments | skill | skills/no-comments | pending | 0.15.24 | with `comment-sicko` |
+| skills/deslop | skill | kit:skills/deslop | pending | 1.2.0 | from cursor-team-kit, called by pstack before every commit |
 | skills/technical-writing | skill | skills/technical-writing | pending | 0.15.24 | |
 | skills/benchmark-checklist | skill | skills/benchmark-checklist | pending | 0.15.24 | |
 | skills/show-me-your-work | skill | skills/show-me-your-work | pending | 0.15.24 | with `scripts/log.sh` |
