@@ -287,10 +287,10 @@ Every deployment needs a rollback plan before it happens:
 ```
 ## See Also
 
-- For the project-wide Definition of Done that every change must clear before this checklist, see `references/definition-of-done.md`
-- For security pre-launch checks, see `references/security-checklist.md`
-- For performance pre-launch checklist, see `references/performance-checklist.md`
-- For accessibility verification before launch, see `references/accessibility-checklist.md`
+- For the project-wide Definition of Done that every change must clear before this checklist, see `${CLAUDE_PLUGIN_ROOT}/references/definition-of-done.md`
+- For security pre-launch checks, see `${CLAUDE_PLUGIN_ROOT}/references/security-checklist.md`
+- For performance pre-launch checklist, see `${CLAUDE_PLUGIN_ROOT}/references/performance-checklist.md`
+- For accessibility verification before launch, see `${CLAUDE_PLUGIN_ROOT}/references/accessibility-checklist.md`
 - For the alerting rules and SLO-tied thresholds, see `observability-and-instrumentation`
 
 ## Common Rationalizations
