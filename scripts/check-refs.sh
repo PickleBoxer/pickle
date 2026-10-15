@@ -84,7 +84,7 @@ for f in agents/*.md; do
 done
 
 # UPSTREAM.md rows: item | kind | source | relation | version | notes
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|script|mod|automation) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|eval|script|mod|automation) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
 [ -n "$rows" ] || err "UPSTREAM.md: no rows found"
 # agent-skills syncs as one: every vendored row has the Baseline version.

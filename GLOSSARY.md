@@ -22,6 +22,10 @@ _Avoid_: language pack, rules pack
 An eval that checks only which workflow skills the agent invoked for a task. No code changes.
 _Avoid_: routing eval
 
+**Firing eval**:
+An eval that checks whether a workflow skill fires on its own description, without pickle-mode, and what it adds to the reply. Scored with and without pickle.
+_Avoid_: trigger eval
+
 **Case**:
 One task in the eval suite, with its prompt, fixture and graders.
 _Avoid_: test, scenario

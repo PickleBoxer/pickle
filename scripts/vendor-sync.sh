@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
-# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents), copied to its
+# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents, eval cases), copied to its
 # pickle path. Shared root references are copied into each skill that links them,
 # metadata.upstream is added to skills, and names and paths are rewritten for
 # pickle: agent-skills:<x> and the vendored /command names become pickle:<x>, and repo-relative

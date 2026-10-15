@@ -137,7 +137,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 ## Agent skills
 
-From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`) and agents. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands and agents) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>` and vendored `/command` names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Agent names stay bare, as upstream calls them, so a project or user agent with the same name overrides pickle's. Every `vendored` row has the Baseline version.
+From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`), agents and the `claude plugin eval` cases (`evals/plugin/`, not the `run-evals.js` tiers). `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands and agents) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>` and vendored `/command` names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Agent names stay bare, as upstream calls them, so a project or user agent with the same name overrides pickle's. Every `vendored` row has the Baseline version.
 
 | pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
@@ -179,6 +179,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | |
 | agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | |
 | agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | |
+| evals/firing | eval | as:evals/plugin | vendored | 0.6.13 | firing evals: each skill fires on its own description, scored with and without pickle |
 
 ## Scripts, mod and automations
 

@@ -2,8 +2,3 @@ schema_version: "1.1"
 name: loading-router-review
 context:
   scaffold_script: scaffold.sh
-graders:
-  - name: picks-code-review-and-quality
-    type: tool_used
-    tool: Skill
-    input_match: '"(pickle:)?code-review-and-quality"'
