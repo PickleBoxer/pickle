@@ -19,9 +19,9 @@ user → code-reviewer → report → user
 **Use when:** the work is one perspective on one artifact and you can describe it in one sentence.
 
 **Examples:**
-- "Review this PR" → `pickle:code-reviewer`
-- "Find security issues in `auth.ts`" → `pickle:security-auditor`
-- "What tests are missing for the checkout flow?" → `pickle:test-engineer`
+- "Review this PR" → `code-reviewer`
+- "Find security issues in `auth.ts`" → `security-auditor`
+- "What tests are missing for the checkout flow?" → `test-engineer`
 
 **Cost:** one round trip. The baseline you should always compare orchestrated patterns against.
 
@@ -163,7 +163,7 @@ Don't redefine these. Layer your specialist personas (code-reviewer, security-au
 
 Plugin subagents do **not** support the `hooks`, `mcpServers`, or `permissionMode` frontmatter fields, these are silently ignored. If a future persona needs any of those, the user must copy the file into `.claude/agents/` or `~/.claude/agents/` instead.
 
-The fields that DO work in plugin agents are: `name`, `description`, `tools`, `disallowedTools`, `model`, `maxTurns`, `skills`, `memory`, `background`, `effort`, `isolation`, `color`, `initialPrompt`. Use `model` per-persona if you want to optimize cost (e.g. Haiku for `pickle:test-engineer` coverage scans, Sonnet for `pickle:code-reviewer`, Opus for `pickle:security-auditor`).
+The fields that DO work in plugin agents are: `name`, `description`, `tools`, `disallowedTools`, `model`, `maxTurns`, `skills`, `memory`, `background`, `effort`, `isolation`, `color`, `initialPrompt`. Use `model` per-persona if you want to optimize cost (e.g. Haiku for `test-engineer` coverage scans, Sonnet for `code-reviewer`, Opus for `security-auditor`).
 
 ### Spawning multiple subagents in parallel
 
@@ -244,8 +244,8 @@ The lead spawns three teammates referencing the existing persona names. The pers
 1. Each teammate runs in its own context window, exploring the codebase from its own lens.
 2. Teammates use `message` to send findings to each other directly. The lead doesn't have to relay.
 3. The shared task list shows who's investigating what, visible at any time with `Ctrl+T` (in-process mode) or in a tmux pane (split mode).
-4. When `pickle:code-reviewer` finds a `Promise.all` that should be sequential, it messages `pickle:security-auditor` to confirm the auth call isn't part of the race. `pickle:security-auditor` checks and replies, either confirming the race is the real issue or producing counter-evidence.
-5. `pickle:test-engineer` proposes a focused integration test for whichever theory is winning, which the team uses to verify before declaring consensus.
+4. When `code-reviewer` finds a `Promise.all` that should be sequential, it messages `security-auditor` to confirm the auth call isn't part of the race. `security-auditor` checks and replies, either confirming the race is the real issue or producing counter-evidence.
+5. `test-engineer` proposes a focused integration test for whichever theory is winning, which the team uses to verify before declaring consensus.
 6. The lead synthesizes the converged finding and presents it to you.
 
 You can interrupt at any teammate by cycling with `Shift+Down` and typing, useful for redirecting an investigator who's gone down a wrong path.
@@ -301,7 +301,7 @@ A persona whose job is to decide which other persona to call.
 
 ### B. Persona that calls another persona
 
-A `pickle:code-reviewer` that internally invokes `pickle:security-auditor` when it sees auth code.
+A `code-reviewer` that internally invokes `security-auditor` when it sees auth code.
 
 **Why it fails:**
 - Personas were designed to produce a single perspective; chaining them defeats that
@@ -329,7 +329,7 @@ An agent that calls `/pickle:spec`, then `/pickle:plan`, then `/pickle:build`, e
 
 ### D. Deep persona trees
 
-`/pickle:ship` calls a `pre-ship-coordinator` that calls a `quality-coordinator` that calls `pickle:code-reviewer`.
+`/pickle:ship` calls a `pre-ship-coordinator` that calls a `quality-coordinator` that calls `code-reviewer`.
 
 **Why it fails:**
 - Each layer adds latency and tokens with no decision value

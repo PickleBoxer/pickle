@@ -91,5 +91,5 @@ When analyzing test coverage:
 ## Composition
 
 - **Invoke directly when:** the user asks for test design, coverage analysis, or a Prove-It test for a specific bug.
-- **Invoke via:** `/pickle:ship` (parallel fan-out for coverage gap analysis alongside `pickle:code-reviewer` and `pickle:security-auditor`). `/pickle:test` runs the `test-driven-development` skill in the main session and does not spawn this persona.
+- **Invoke via:** `/pickle:ship` (parallel fan-out for coverage gap analysis alongside `code-reviewer` and `security-auditor`). `/pickle:test` runs the `test-driven-development` skill in the main session and does not spawn this persona.
 - **Do not invoke from another persona.** Recommendations to add tests belong in your report; the user or a slash command decides when to act on them. See [docs/agents.md](../docs/agents.md).
