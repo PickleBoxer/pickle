@@ -5,7 +5,7 @@ A Claude Code plugin that runs a coding task through agent-skills' workflow skil
 ## Process
 
 **pickle-mode**:
-The skill a user starts to run a task through pickle. It is agent-skills' `using-agent-skills`, renamed: it maps the task to workflow skills and sets the operating rules they share.
+The skill a user starts to run a task through pickle. It is agent-skills' `using-agent-skills`, renamed and user-only: it maps the task to workflow skills and sets the operating rules they share.
 _Avoid_: work, entry point
 
 **Workflow skill**:
@@ -39,15 +39,9 @@ The three router cases (bug fix, review, perf) used for quick, cheap checks.
 _Avoid_: quick suite
 
 **Outcome eval**:
-An eval that checks whether the change itself is correct. Planned after loading evals.
+An eval that checks whether the change itself is correct. Planned.
 _Avoid_: correctness test
 
 **Token eval**:
-An eval that compares cost and token use with and without pickle. Planned after outcome evals.
+An eval that compares cost and token use with and without pickle. Planned.
 _Avoid_: cost test
-
-## Not pickle terms
-
-**Effort level**:
-Not a pickle concept: invoking pickle always means the full process. Claude Code's effort setting is separate. pickle sets it only per subagent role, in each agent's frontmatter, and never changes the session's effort.
-_Avoid_: low, medium, high as pickle levels

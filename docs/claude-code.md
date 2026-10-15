@@ -19,6 +19,7 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 - MCP
 - Background, scheduling and parallel work
 - Plugin manifest and CLI
+- Mods
 - Project instructions and modes
 - Unverified
 
@@ -26,7 +27,7 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 
 | Point | Where | Loaded | Cost until used | pickle uses |
 |---|---|---|---|---|
-| Skill | `skills/<name>/SKILL.md` | description always (unless `disable-model-invocation`), body on invoke | description, max 1,536 chars | yes: `pickle-mode`, tools, `setup` |
+| Skill | `skills/<name>/SKILL.md` | description always (unless `disable-model-invocation`), body on invoke | description, max 1,536 chars | yes: `pickle-mode`, the vendored skills |
 | Command | `commands/*.md` | flat markdown, docs prefer skills | description | no |
 | Agent | `agents/*.md`, subfolders join with `:` | description always, body when spawned | description | yes: explorer, implementer, reviewer |
 | Hook | `hooks/hooks.json`, skill or agent frontmatter, settings | on event | 0 | not yet |
@@ -117,7 +118,7 @@ Nesting (measured):
 
 - Named agents only: main, then layers 1, 2, 3. The layer 3 agent has no Agent tool.
 - A `context: fork` skill invoked from the main thread does not use a layer. A `context: fork` skill invoked inside it does. Measured chain: fork, nested fork, agent, agent; the last one had no Agent tool.
-- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing. With pickle's skills: `architect` under depth 1 still started both Plan runners, and the nested `how` followed its fallback, reading the code itself and saying so under Not checked.
+- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing. With pickle's former skills: `architect` under depth 1 still started both Plan runners, and the nested `how` followed its fallback, reading the code itself and saying so under Not checked.
 - Waiting: inside a fork, an Agent call without `run_in_background` launched async. The nested fork returned before its child replied, and the late completions surfaced on the main thread as extra turns. With `run_in_background: false` the fork waited and got the reports through SubagentHandback. Fan-out skills must set it explicitly.
 
 Fork vs named: a fork inherits the full conversation, tools and model and shares the prompt cache (`/subtask`, or Claude asks for the fork type). A named subagent starts fresh with only the prompt. A `context: fork` skill starts a subagent of the `agent` type with the skill as prompt (read), so it behaves like a named subagent, not a fork (inferred).
@@ -231,7 +232,7 @@ Defined in: user, project and local settings, managed policy, plugin `hooks/hook
 | SessionStart | no | |
 | Setup | no | |
 | UserPromptSubmit, UserPromptExpansion | yes | |
-| PreToolUse | yes | gate actions from the profile |
+| PreToolUse | yes | gate actions (none shipped) |
 | PermissionRequest | yes (JSON) | |
 | PermissionDenied | no | |
 | PostToolUse | no, can feed back | comment lint, load log |
@@ -295,8 +296,8 @@ All **read** unless marked. The served `mcp` page stops partway through: it lack
 Inferred from the facts above.
 
 - pickle ships no MCP server. Never add a root `.mcp.json` to this repo: it would ship to every user. Maintainer servers go in local or user scope.
-- `pickle-lead`, `pickle-explorer` and `pickle-reviewer` list `tools` without MCP names, so they get no MCP tools. A port that needs history, issues or logs from an MCP server (`why`, forensics) either names `mcp__<server>__*` in the agent's `tools` or runs the query on the main thread.
-- Playbooks cannot know the user's server names. They describe the job ("the issue tracker"), and the profile names the server.
+- An agent that lists `tools` without MCP names gets no MCP tools. A skill that needs history, issues or logs from an MCP server either names `mcp__<server>__*` in the agent's `tools` or runs the query on the main thread.
+- Skills cannot know the user's server names. They describe the job ("the issue tracker").
 - An eval case that needs an MCP tool needs a mock, since personal servers never load in a run.
 
 ### Claude Code Docs server
@@ -327,6 +328,29 @@ Inferred from the facts above.
 
 CLI: `claude plugin init | install | uninstall | enable | disable | update | list | details | configure | prune | tag | validate [--strict] | test | eval | eval init | marketplace ...`.
 
+Plugin facts (learned while porting pstack, recheck after updates):
+
+- `.claude-plugin/plugin.json` alone makes a folder a valid plugin. Skills load from `skills/<folder>/SKILL.md`, agents from `agents/*.md` as `pickle:<name>`.
+- A skill named like its plugin becomes `/pickle:pickle`, which is why the entry skill is `pickle-mode`.
+- A skill that must load a `disable-model-invocation` skill has to Read its `SKILL.md`.
+- `skillOverrides` in settings does not apply to plugin skills.
+- `npx skills add PickleBoxer/pickle --skill '*'` installs skill files only: no agents, mod or `userConfig`. Skills must work without them.
+- Version is semver in `plugin.json`. Claude Code updates users when it changes. Tag each release `v<version>`.
+
+## Mods
+
+A plugin with function hooks. Claude Code 2.1.287+ (verified on 2.1.296), early access, moves between releases. The generated types are the authority. Load the `plugin-authoring` skill before writing mod code, and write it in this repo.
+
+- Files: `hooks/hooks.json` (`{ "modules": ["./register.tsx"] }`) and `hooks/register.tsx` exporting `register: Register` from `'claude-code'`. `$.state` keys go in `types/index.d.ts` under `interface PluginState`, named in `plugin.json` as `"types"`; `validate` checks them.
+- Every hook is `($, e, next)`. `next(e)` continues, returning without it answers alone, `next({ ...e, x })` rewrites.
+- No DOM, no Node, everything through `$`. Only static `import` of the plugin's own files and `'claude-code'`.
+- UI: `$.ui.resolve(e)` gives `Box`, `Text`, `Button`. Panes via `$.ui.open` plus a `ui.render` hook on `Pane`, bands via `AbovePrompt`. Draws only in the terminal and the desktop Code tab. Hooks still run under `claude -p`.
+- Slash commands: `$.command.register` in `session.start`, answered by `command.run`.
+- Guards (`tool.call`, `prompt.submit`, `command.run`, ...) are skipped if they throw, unless `.catch` answers: `on(...).catch(($, e, next) => next.called ? next(e) : { deny: 'why' })`.
+- Types: the engine writes the gitignored `.claude-plugin/types/` when it loads the mod from a watched folder. `tsc -p .` type-checks. `claude --debug` shows skipped hooks.
+- Tests: `*.test.ts` importing `test`, `expect`, `mock` from `claude-code/testing`, run by `claude plugin test .`, which needs at least one test. Loop UI tests over `['terminal', 'desktop'] as const`.
+- Events pstack's mod used: `skill.prompt`, `tool.call`, `agent.spawn`, `prompt.submit`, `prompt.compose`, `session.compact`, `command.run`, `command.describe`, `ui.render`.
+
 ## Project instructions and modes
 
 | Feature | Summary |
@@ -345,4 +369,4 @@ Open items. Test each with a throwaway skill under `claude --plugin-dir` before 
 1. Glob and Grep in interactive sessions (measured present only under `claude -p`).
 2. Haiku calling a skill from a long skill body as reliably as from the short probe bodies.
 
-Resolved on 2026-10-14 (measured, see the sections above): Skill tool calls between plugin skills, nesting depth and forks, `paths` on plugin skills, `metadata` under `--strict`, bundled skills through the Skill tool, preloading `user-invocable: false` skills, `pickle-explorer` search on macOS.
+Resolved on 2026-10-14 (measured, see the sections above): Skill tool calls between plugin skills, nesting depth and forks, `paths` on plugin skills, `metadata` under `--strict`, bundled skills through the Skill tool, preloading `user-invocable: false` skills, `pickle-explorer` search on macOS (since removed).

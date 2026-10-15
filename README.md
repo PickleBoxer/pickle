@@ -11,7 +11,7 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
 /pickle:pickle-mode extract the payment gateway behind an interface
 ```
 
-- **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, renamed: a decision tree that maps the task to the workflow skills, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
+- **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, renamed and started only by you: a decision tree that maps the task to the workflow skills, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
 - **Engineering skills.** 25 skills from [agent-skills](https://github.com/addyosmani/agent-skills), from spec and planning to review, security and shipping. pickle-mode picks from them, and they also load on their own when a task matches. Its commands come along (`/pickle:spec`, `/pickle:plan`, `/pickle:build`, `/pickle:test`, `/pickle:review`, `/pickle:ship` and more), with the `code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor` agents.
 - **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
 
