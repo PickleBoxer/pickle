@@ -137,7 +137,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 ## Agent skills
 
-From addyosmani/agent-skills, MIT. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, long dashes replaced, the upstream `LICENSE` added and `metadata.upstream` set. Every `vendored` row has the Baseline version.
+From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`) and agents. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, long dashes replaced, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands and agents) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>`, vendored `/command` names and backticked agent names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Every `vendored` row has the Baseline version.
 
 | pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
@@ -166,6 +166,19 @@ From addyosmani/agent-skills, MIT. `scripts/vendor-sync.sh` copies each `vendore
 | skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | |
 | skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | |
 | skills/using-agent-skills | skill | as:skills/using-agent-skills | vendored | 0.6.13 | |
+| commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | |
+| commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | |
+| commands/constraints.md | command | as:.claude/commands/constraints.md | vendored | 0.6.13 | |
+| commands/plan.md | command | as:.claude/commands/plan.md | vendored | 0.6.13 | |
+| commands/review.md | command | as:.claude/commands/review.md | vendored | 0.6.13 | |
+| commands/ship.md | command | as:.claude/commands/ship.md | vendored | 0.6.13 | |
+| commands/spec.md | command | as:.claude/commands/spec.md | vendored | 0.6.13 | |
+| commands/test.md | command | as:.claude/commands/test.md | vendored | 0.6.13 | |
+| commands/webperf.md | command | as:.claude/commands/webperf.md | vendored | 0.6.13 | |
+| agents/code-reviewer.md | agent | as:agents/code-reviewer.md | vendored | 0.6.13 | |
+| agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | |
+| agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | |
+| agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | |
 
 ## Scripts, mod and automations
 

@@ -22,7 +22,7 @@ sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|1
 cursor-team-kit|$plugins|cursor-team-kit|kit:|.cursor-plugin/plugin.json|0
 agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1"
 
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|playbook|principle|agent|script|mod|automation) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|script|mod|automation) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5}' UPSTREAM.md)
 
 while IFS='|' read -r name repo dir prefix manifest whole; do
@@ -82,7 +82,7 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   if [ "$whole" = 1 ]; then
     echo
     echo "## Upstream files no row covers"
-    g diff --name-only --diff-filter=A "$base" "$new" -- "${pre}skills" "${pre}agents" | while read -r f; do
+    g diff --name-only --diff-filter=A "$base" "$new" -- "${pre}skills" "${pre}agents" "${pre}.claude/commands" | while read -r f; do
       c=0
       for s in $sources; do case "$f" in "$s"|"$s"/*) c=1; break;; esac; done
       [ "$c" = 1 ] || echo "$f"

@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
-# `vendored` row with an `as:` source in UPSTREAM.md, copied to its pickle path. Shared root
-# references are copied into each skill that links them, long dashes are replaced and
-# metadata.upstream is added. Stages the result in a worktree of the vendor branch and prints the
+# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents), copied to its
+# pickle path. Shared root references are copied into each skill that links them, long dashes
+# are replaced, metadata.upstream is added to skills, and names and paths are rewritten for
+# pickle: agent-skills:<x> and the vendored /command and `agent` names become pickle:<x>, and
+# repo-relative paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Stages the result in a worktree of the vendor branch and prints the
 # commit and merge commands. Commits nothing, touches no other branch.
 #
 # Usage: bash scripts/vendor-sync.sh [ref]     ref defaults to upstream origin/HEAD
@@ -95,16 +97,45 @@ while IFS='|' read -r item path; do
   fi
 done <<< "$rows"
 
+# Commands and agents have no folder for a LICENSE, so one copy covers them.
+if echo "$rows" | grep -qE '^(commands|agents)/'; then
+  mkdir -p "$wt/LICENSES"
+  cp "$src/LICENSE" "$wt/LICENSES/agent-skills.txt"
+fi
+
+# Names pickle now ships: vendored commands and agents, as regex alternations.
+vnames() { echo "$rows" | cut -d'|' -f1 | sed -nE "s#^$1/([a-z0-9-]+)\.md\$#\1#p" | paste -sd'|' -; }
+export VCMDS=$(vnames commands) VAGENTS=$(vnames agents)
+# Root reference name=the first skill copy of it, for commands and agents to point at.
+REFMAP=""
+for r in $(ls "$src/references"); do
+  own=$(cd "$wt" && ls skills/*/references/"$r" 2>/dev/null | head -1 || true)
+  [ -z "$own" ] || REFMAP="$REFMAP $r=$own"
+done
+export REFMAP
+find "$wt" -name '*.md' -type f ! -path '*/.git/*' | while read -r f; do
+  perl -CSD -i -pe '
+    BEGIN { %ref = map { split /=/ } grep { length } split / /, $ENV{REFMAP}; $c = $ENV{VCMDS}; $ag = $ENV{VAGENTS} }
+    s/\bagent-skills:([a-z0-9-]+)/pickle:$1/g;
+    s{(?<![\w./:-])/($c)(?![\w-])}{/pickle:$1}g if length $c;
+    s/`($ag)`/`pickle:$1`/g if length $ag;
+    s{(?<![\w./\}-])skills/([a-z0-9-]+)/SKILL\.md}{\$\{CLAUDE_PLUGIN_ROOT\}/skills/$1/SKILL.md}g;
+    s{(?<![\w./\}-])references/([a-z0-9-]+\.md)}{exists $ref{$1} ? "\$\{CLAUDE_PLUGIN_ROOT\}/$ref{$1}" : "references/$1"}ge
+      if $ARGV !~ m{/skills/};
+  ' "$f"
+done
+
 git -C "$wt" add -A
 
 # Upstream commands (/name) and agents pickle does not ship, still mentioned in the vendored
-# skills on main. Customize these mentions away; the list shrinks as you do.
+# files on main. Customize these mentions away, or vendor them; the list shrinks as you do.
 echo "Upstream-only commands and agents still mentioned on main:"
 cmds=$(g ls-tree --name-only "$sha" .claude/commands/ | sed -E 's#.*/##; s#\.md$##' | tr '\n' ' ')
 agents=$(g ls-tree --name-only "$sha" agents/ | sed -E 's#.*/##; s#\.md$##' | tr '\n' ' ')
 items=$(echo "$rows" | cut -d'|' -f1)
 for n in $cmds $agents; do
-  case " $cmds " in *" $n "*) re="(^|[^a-zA-Z0-9_./-])/$n([^a-z-]|\$)";; *) re="(^|[^a-z-])$n([^a-z-]|\$)";; esac
+  case "|$VCMDS|$VAGENTS|" in *"|$n|"*) continue;; esac
+  case " $cmds " in *" $n "*) re="(^|[^a-zA-Z0-9_./:-])/$n([^a-z-]|\$)";; *) re="(^|[^a-z:-])$n([^a-z-]|\$)";; esac
   hits=$(for i in $items; do [ -e "$i" ] && grep -rlE "$re" "$i" || true; done | sed -E 's#^skills/([^/]+)/.*#\1#' | sort -u | tr '\n' ' ')
   [ -z "$hits" ] || echo "  $n: $hits"
 done

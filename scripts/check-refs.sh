@@ -17,10 +17,11 @@ fm_key() { fm "$1" | awk -v k="$2" -F': *' '$1==k {sub(/^[^:]*: */, ""); gsub(/^
 fm_meta() { fm "$1" | awk -v k="$2" '/^metadata:/{m=1; next} m && /^[^ ]/{m=0} m {sub(/^ +/, ""); split($0, a, /: */); if (a[1]==k) {sub(/^[^:]*: */, ""); print; exit}}'; }
 user_only() { [ "$(fm_key "skills/$1/SKILL.md" disable-model-invocation)" = "true" ]; }
 
-shipped=$(find skills agents -name '*.md' -type f | sort; ls README.md GLOSSARY.md 2>/dev/null)
+shipped=$(find skills agents commands -name '*.md' -type f | sort; ls README.md GLOSSARY.md 2>/dev/null)
 
 # Frontmatter keys
-for f in skills/*/SKILL.md; do
+for f in skills/*/SKILL.md commands/*.md; do
+  [ -e "$f" ] || continue
   for k in $(fm "$f" | grep -oE '^[A-Za-z_-]+:' | tr -d ':'); do
     case "$SKILL_KEYS" in *" $k "*) ;; *) err "$f: unknown skill frontmatter key '$k'";; esac
   done
@@ -34,7 +35,7 @@ done
 # /pickle:<skill>: the user runs it, or prose names it. Must exist.
 while IFS=: read -r f l m; do
   n=${m#/pickle:}
-  [ -f "skills/$n/SKILL.md" ] || err "$f:$l: /pickle:$n has no skills/$n/SKILL.md"
+  [ -f "skills/$n/SKILL.md" ] || [ -f "commands/$n.md" ] || err "$f:$l: /pickle:$n has no skills/$n/SKILL.md or commands/$n.md"
 done < <(grep -noE '/pickle:[a-z0-9-]+' $shipped)
 
 # pickle:<name> without a slash: the agent calls a skill (Skill tool) or an agent (subagent_type).
@@ -66,7 +67,7 @@ while IFS=: read -r f l m; do
 done < <(grep -noE '\*\*principle-[a-z0-9-]+\*\*' $shipped)
 
 # Relative Markdown links and `references/...` paths in skill files resolve from the linking
-# file (anchors ignored).
+# file, ${CLAUDE_PLUGIN_ROOT}/ paths anywhere from the repo root (anchors ignored).
 while IFS= read -r f; do
   while IFS=: read -r l t; do
     t=${t#](}; t=${t%)}; t=${t#\`}; t=${t%\`}; t=${t%%#*}
@@ -74,6 +75,10 @@ while IFS= read -r f; do
     [ -e "$(dirname "$f")/$t" ] || err "$f:$l: link $t does not resolve"
   done < <(grep -noE '\]\([^) ]+\)|`references/[^` ]+`' "$f")
 done < <(find skills -name '*.md' -type f)
+while IFS=: read -r f l t; do
+  t=${t#'${CLAUDE_PLUGIN_ROOT}/'}; t=${t%%#*}
+  [ -e "$t" ] || err "$f:$l: \${CLAUDE_PLUGIN_ROOT}/$t does not resolve"
+done < <(grep -noE '\$\{CLAUDE_PLUGIN_ROOT\}/[A-Za-z0-9_./-]+[A-Za-z0-9_-]' $shipped)
 
 # Agent skills: preload lists. A user-only skill there is skipped silently.
 for f in agents/*.md; do
@@ -85,7 +90,7 @@ for f in agents/*.md; do
 done
 
 # UPSTREAM.md rows: item | kind | source | relation | version | notes
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|playbook|principle|agent|script|mod|automation) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|script|mod|automation) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
 [ -n "$rows" ] || err "UPSTREAM.md: no rows found"
 # agent-skills syncs as one: every vendored row has the Baseline version.
@@ -126,7 +131,7 @@ for f in skills/*/SKILL.md; do
   d=${f%/SKILL.md}
   has_row "$d" || has_row "$f" || err "$f: no UPSTREAM.md row"
 done
-for f in skills/pickle-mode/playbooks/*.md skills/pickle-mode/principles/*.md skills/pickle-mode/scripts/* agents/*.md; do
+for f in skills/pickle-mode/playbooks/*.md skills/pickle-mode/principles/*.md skills/pickle-mode/scripts/* agents/*.md commands/*.md; do
   [ -e "$f" ] || continue
   has_row "$f" || err "$f: no UPSTREAM.md row"
 done
