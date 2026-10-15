@@ -199,7 +199,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 
 | Topic | Decision |
 |---|---|
-| Entry skill | `pickle-mode` is the vendored `using-agent-skills`, renamed with `name: pickle-mode` on `main` (the UPSTREAM row maps `skills/pickle-mode` to `as:skills/using-agent-skills`, so the sync keeps it there). Upstream text, model-invocable as upstream ships it. `/pickle:pickle-mode <task>` starts it |
+| Entry skill | `pickle-mode` is the vendored `using-agent-skills`, renamed with `name: pickle-mode` on `main` (the UPSTREAM row maps `skills/pickle-mode` to `as:skills/using-agent-skills`, so the sync keeps it there). Upstream text, made user-only on `main` (`disable-model-invocation: true`): only `/pickle:pickle-mode <task>` starts it, and its description costs no context in other sessions |
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
 | Workflow skills | The vendored agent-skills skills, picked by the `pickle-mode` decision tree. pstack playbooks, principles and tools are `pending` in `UPSTREAM.md`, re-added only for a gap the vendored skills leave |
 | Language skills | Defaults only. pickle ships `typescript-best-practices`. Laravel and React use third-party skills the user installs (`laravel-best-practices` from Laravel Boost, `vercel-react-best-practices` from Vercel), never copied. The profile and `setup` that listed them are `pending`. No `paths`: plugin skills ignore it |
