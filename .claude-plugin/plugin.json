@@ -9,6 +9,9 @@
   "homepage": "https://github.com/PickleBoxer/pickle",
   "repository": "https://github.com/PickleBoxer/pickle",
   "license": "MIT",
+  "experimental": {
+    "evals": "evals/plugin"
+  },
   "keywords": [
     "pickle",
     "skills",

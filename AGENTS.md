@@ -8,7 +8,7 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 
 ## Next
 
-1. Run the `router-*` loading evals and the firing evals, with the user's go-ahead, until `pickle-mode` picks the right skills and the skills fire on their own.
+1. Run the firing evals, with the user's go-ahead, until the skills fire on their own. Then write loading evals for `pickle-mode`.
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Re-add `pending` pieces one at a time, for a measured gap.
 4. Outcome evals, token evals, then the Haiku, Sonnet and Opus pass before a release.
@@ -26,8 +26,7 @@ skills/typescript-best-practices/   default TypeScript idioms
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for vendored commands and agents
-evals/loading/                router-* cases plus _fixture
-evals/firing/                 5 vendored firing cases (agent-skills evals/plugin)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (5 firing cases)
 docs/                         claude-code.md (native features, plugin and mod notes), pstack.md (historical pstack map)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
 UPSTREAM.md                   upstream source and version per pickle file
@@ -73,12 +72,11 @@ From Anthropic's skill authoring guide. Skill mechanics (frontmatter, context, c
 
 ## Evals
 
-`claude plugin eval`. A case is `prompt.md` plus one grader per file in `graders/`, and a `case.yaml` only for `context` (the scaffold). Reports go to `evals/results/`, which is ignored. Docs: https://code.claude.com/docs/en/plugin-evals.md
+`claude plugin eval`. `experimental.evals` in `plugin.json` points it at `evals/plugin/`. A case is `prompt.md` plus one grader per file in `graders/`, and a `case.yaml` only for `context` (a scaffold). Reports go to `evals/plugin/results/`, which is ignored. `evals/README.md` is upstream's guide: its Tier 1 to 3 and `run-evals.js` are not in pickle. Docs: https://code.claude.com/docs/en/plugin-evals.md
 
 - Always pass `--no-publish` (reports publish to claude.ai by default) and `--max-cost-usd`.
-- Loading cases are dry runs: the agent stops after it invokes the skills. Run them with `--ablation none` (a no-plugin arm has nothing to load), `--scaffold`, `--runs 1` while iterating and 3 for decisions.
-- Firing cases need both arms: run them with the default ablation, no `--scaffold`, and read the Δ, since a skill fires in some runs and not others. A `tool_used: Skill` grader is left out of the score in two-arm runs, so each case pairs it with a grader on the reply.
-- Iterate with `--tag smoke --model haiku`, about $0.01 per case.
+- Firing cases need both arms: run them with the default ablation, `--runs 1` while iterating and 3 for decisions, and read the Δ, since a skill fires in some runs and not others. A `tool_used: Skill` grader is left out of the score in two-arm runs, so each case pairs it with a grader on the reply.
+- Iterate with `--model haiku`.
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. For test results, have Claude write them to a file and grade the file.
 - Tools listed in a case's `allowed_tools` are granted if read-only. Edit, Write and Bash need `--allow-tools`.
 - No `.claude/` config loads inside a run.
