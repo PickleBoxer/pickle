@@ -18,7 +18,7 @@ description: Run a web performance audit via the web-performance-auditor persona
 
 ## Run the audit
 
-Spawn the `pickle:web-performance-auditor` subagent. Pass it explicitly:
+Spawn the `web-performance-auditor` subagent. Pass it explicitly:
 
 - The files, components, or diff under review
 - Any artifact paths (Lighthouse JSON, PSI JSON, CrUX response, trace) or pasted JSON content
