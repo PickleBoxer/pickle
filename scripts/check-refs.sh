@@ -65,6 +65,16 @@ while IFS=: read -r f l m; do
   [ -f "skills/pickle-mode/principles/$n.md" ] || err "$f:$l: **principle-$n** has no skills/pickle-mode/principles/$n.md"
 done < <(grep -noE '\*\*principle-[a-z0-9-]+\*\*' $shipped)
 
+# Relative Markdown links and `references/...` paths in skill files resolve from the linking
+# file (anchors ignored).
+while IFS= read -r f; do
+  while IFS=: read -r l t; do
+    t=${t#](}; t=${t%)}; t=${t#\`}; t=${t%\`}; t=${t%%#*}
+    case "$t" in ""|*://*|mailto:*) continue;; esac
+    [ -e "$(dirname "$f")/$t" ] || err "$f:$l: link $t does not resolve"
+  done < <(grep -noE '\]\([^) ]+\)|`references/[^` ]+`' "$f")
+done < <(find skills -name '*.md' -type f)
+
 # Agent skills: preload lists. A user-only skill there is skipped silently.
 for f in agents/*.md; do
   for s in $(fm "$f" | awk '/^skills:/{m=1; sub(/^skills: */, ""); gsub(/[][,]/, " "); print; next} m && /^ *- /{sub(/^ *- */, ""); print; next} m{m=0}'); do

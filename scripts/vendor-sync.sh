@@ -96,12 +96,26 @@ while IFS='|' read -r item path; do
 done <<< "$rows"
 
 git -C "$wt" add -A
+
+# Upstream commands (/name) and agents pickle does not ship, still mentioned in the vendored
+# skills on main. Customize these mentions away; the list shrinks as you do.
+echo "Upstream-only commands and agents still mentioned on main:"
+cmds=$(g ls-tree --name-only "$sha" .claude/commands/ | sed -E 's#.*/##; s#\.md$##' | tr '\n' ' ')
+agents=$(g ls-tree --name-only "$sha" agents/ | sed -E 's#.*/##; s#\.md$##' | tr '\n' ' ')
+items=$(echo "$rows" | cut -d'|' -f1)
+for n in $cmds $agents; do
+  case " $cmds " in *" $n "*) re="(^|[^a-zA-Z0-9_./-])/$n([^a-z-]|\$)";; *) re="(^|[^a-z-])$n([^a-z-]|\$)";; esac
+  hits=$(for i in $items; do [ -e "$i" ] && grep -rlE "$re" "$i" || true; done | sed -E 's#^skills/([^/]+)/.*#\1#' | sort -u | tr '\n' ' ')
+  [ -z "$hits" ] || echo "  $n: $hits"
+done
+echo
 if git -C "$wt" diff --cached --quiet; then
   echo "vendor-sync: $branch already matches agent-skills $version (${sha:0:7}). Nothing to commit."
   exit 0
 fi
 
 git -C "$wt" diff --cached --stat | tail -1
+
 first=""; git rev-parse -q --verify "refs/heads/$branch" >/dev/null || first=" --allow-unrelated-histories"
 cat <<EOF
 
