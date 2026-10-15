@@ -19,9 +19,9 @@ user → code-reviewer → report → user
 **Use when:** the work is one perspective on one artifact and you can describe it in one sentence.
 
 **Examples:**
-- "Review this PR" → `code-reviewer`
-- "Find security issues in `auth.ts`" → `security-auditor`
-- "What tests are missing for the checkout flow?" → `test-engineer`
+- "Review this PR" → `pickle:code-reviewer`
+- "Find security issues in `auth.ts`" → `pickle:security-auditor`
+- "What tests are missing for the checkout flow?" → `pickle:test-engineer`
 
 **Cost:** one round trip. The baseline you should always compare orchestrated patterns against.
 
@@ -32,12 +32,12 @@ user → code-reviewer → report → user
 A slash command that wraps one persona with the project's skills. Saves the user from re-explaining the workflow every time.
 
 ```
-/review → code-reviewer (with code-review-and-quality skill) → report
+/pickle:review → code-reviewer (with code-review-and-quality skill) → report
 ```
 
 **Use when:** the same single-persona invocation happens repeatedly with the same setup.
 
-**Examples in this repo:** `/review`, `/test`, `/code-simplify`.
+**Examples in this repo:** `/pickle:review`, `/pickle:test`, `/pickle:code-simplify`.
 
 **Cost:** same as direct invocation. The slash command is just a saved prompt.
 
@@ -51,7 +51,7 @@ Multiple personas operate on the same input concurrently, each producing an inde
 
 ```
                     ┌─→ code-reviewer    ─┐
-/ship → fan out  ───┼─→ security-auditor ─┤→ merge → go/no-go + rollback
+/pickle:ship → fan out  ───┼─→ security-auditor ─┤→ merge → go/no-go + rollback
                     └─→ test-engineer    ─┘
 ```
 
@@ -61,7 +61,7 @@ Multiple personas operate on the same input concurrently, each producing an inde
 - The merge step is small enough to stay in the main context
 - Wall-clock latency matters
 
-**Examples in this repo:** `/ship`.
+**Examples in this repo:** `/pickle:ship`.
 
 **Cost:** N parallel sub-agent contexts + one merge turn. Higher than direct invocation, but faster wall-clock and produces better reports because each sub-agent stays focused on its single perspective.
 
@@ -80,7 +80,7 @@ If any answer is "no," fall back to direct invocation or a single-persona comman
 The user runs slash commands in a defined order, carrying context (or commit history) between them. There is no orchestrator agent, the user IS the orchestrator.
 
 ```
-user runs:  /spec  →  /plan  →  /build  →  /test  →  /review  →  /ship
+user runs:  /pickle:spec  →  /pickle:plan  →  /pickle:build  →  /pickle:test  →  /pickle:review  →  /pickle:ship
 ```
 
 **Use when:** the workflow has dependencies (each step needs the previous step's output) and human judgment between steps adds value.
@@ -134,7 +134,7 @@ Claude Code has two parallelism primitives. Pattern 3 (parallel fan-out with mer
 | Status | Stable | Experimental, requires `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | Cost | Lower | Higher, each teammate is a separate Claude instance |
 
-**The personas in this repo work in both modes.** When spawned as subagents (e.g. by `/ship`), they report findings to the main session. When spawned as teammates (`Spawn a teammate using the security-auditor agent type…`), they can challenge each other's findings directly. The persona definition is the same; only the spawning context changes.
+**The personas in this repo work in both modes.** When spawned as subagents (e.g. by `/pickle:ship`), they report findings to the main session. When spawned as teammates (`Spawn a teammate using the security-auditor agent type…`), they can challenge each other's findings directly. The persona definition is the same; only the spawning context changes.
 
 One subtlety: the `skills` and `mcpServers` frontmatter fields in a persona are honored when it runs as a subagent but **ignored when it runs as a teammate**: teammates load skills and MCP servers from your project and user settings, the same as a regular session. If a persona depends on a specific skill or MCP server being loaded, configure it at the session level so it's available in both modes.
 
@@ -163,17 +163,17 @@ Don't redefine these. Layer your specialist personas (code-reviewer, security-au
 
 Plugin subagents do **not** support the `hooks`, `mcpServers`, or `permissionMode` frontmatter fields, these are silently ignored. If a future persona needs any of those, the user must copy the file into `.claude/agents/` or `~/.claude/agents/` instead.
 
-The fields that DO work in plugin agents are: `name`, `description`, `tools`, `disallowedTools`, `model`, `maxTurns`, `skills`, `memory`, `background`, `effort`, `isolation`, `color`, `initialPrompt`. Use `model` per-persona if you want to optimize cost (e.g. Haiku for `test-engineer` coverage scans, Sonnet for `code-reviewer`, Opus for `security-auditor`).
+The fields that DO work in plugin agents are: `name`, `description`, `tools`, `disallowedTools`, `model`, `maxTurns`, `skills`, `memory`, `background`, `effort`, `isolation`, `color`, `initialPrompt`. Use `model` per-persona if you want to optimize cost (e.g. Haiku for `pickle:test-engineer` coverage scans, Sonnet for `pickle:code-reviewer`, Opus for `pickle:security-auditor`).
 
 ### Spawning multiple subagents in parallel
 
-In Claude Code, parallel fan-out (Pattern 3) requires issuing **multiple Agent tool calls in a single assistant turn**. Sequential turns serialize execution. `/ship` calls this out explicitly. Any new orchestrator command should do the same.
+In Claude Code, parallel fan-out (Pattern 3) requires issuing **multiple Agent tool calls in a single assistant turn**. Sequential turns serialize execution. `/pickle:ship` calls this out explicitly. Any new orchestrator command should do the same.
 
 ---
 
 ## Worked example: Agent Teams for competing-hypothesis debugging
 
-This example shows when to reach for **Agent Teams** instead of `/ship`'s subagent fan-out. The two patterns look similar from a distance, both spawn the same three personas, but the value comes from a different place.
+This example shows when to reach for **Agent Teams** instead of `/pickle:ship`'s subagent fan-out. The two patterns look similar from a distance, both spawn the same three personas, but the value comes from a different place.
 
 ### The scenario
 
@@ -186,19 +186,19 @@ Plausible root causes (mutually exclusive, all fit the symptoms):
 3. A missing index on a query that scales with cart size
 4. A flaky third-party API where the SDK retries silently before timing out
 
-A single agent will pick the first plausible theory and stop investigating. A `/ship`-style subagent fan-out would have each persona report independently, but their reports never meet, so nothing rules out the wrong theories.
+A single agent will pick the first plausible theory and stop investigating. A `/pickle:ship`-style subagent fan-out would have each persona report independently, but their reports never meet, so nothing rules out the wrong theories.
 
 This is exactly the case the Agent Teams docs describe: *"With multiple independent investigators actively trying to disprove each other, the theory that survives is much more likely to be the actual root cause."*
 
-### Why this is *not* a `/ship` job
+### Why this is *not* a `/pickle:ship` job
 
-| | `/ship` (subagents) | Agent Teams |
+| | `/pickle:ship` (subagents) | Agent Teams |
 |--|--------------------|-------------|
 | Sub-agents see | The same diff, different lenses | A shared task list, each other's messages |
 | Output | Three independent reports → one merge | Adversarial debate → consensus root cause |
 | Right when | You want a verdict on a known artifact | You want to *find* the artifact among hypotheses |
 
-`/ship` is a verdict; Agent Teams is an investigation.
+`/pickle:ship` is a verdict; Agent Teams is an investigation.
 
 ### Setup (one-time, per-environment)
 
@@ -244,8 +244,8 @@ The lead spawns three teammates referencing the existing persona names. The pers
 1. Each teammate runs in its own context window, exploring the codebase from its own lens.
 2. Teammates use `message` to send findings to each other directly. The lead doesn't have to relay.
 3. The shared task list shows who's investigating what, visible at any time with `Ctrl+T` (in-process mode) or in a tmux pane (split mode).
-4. When `code-reviewer` finds a `Promise.all` that should be sequential, it messages `security-auditor` to confirm the auth call isn't part of the race. `security-auditor` checks and replies, either confirming the race is the real issue or producing counter-evidence.
-5. `test-engineer` proposes a focused integration test for whichever theory is winning, which the team uses to verify before declaring consensus.
+4. When `pickle:code-reviewer` finds a `Promise.all` that should be sequential, it messages `pickle:security-auditor` to confirm the auth call isn't part of the race. `pickle:security-auditor` checks and replies, either confirming the race is the real issue or producing counter-evidence.
+5. `pickle:test-engineer` proposes a focused integration test for whichever theory is winning, which the team uses to verify before declaring consensus.
 6. The lead synthesizes the converged finding and presents it to you.
 
 You can interrupt at any teammate by cycling with `Shift+Down` and typing, useful for redirecting an investigator who's gone down a wrong path.
@@ -262,7 +262,7 @@ Always cleanup through the lead, not a teammate (per the docs: teammates lack fu
 
 ### Cost expectation
 
-Three Sonnet teammates running for ~10-15 minutes of investigation costs noticeably more than the same three personas spawned as subagents by `/ship`. The justification is *quality of conclusion*, for production debugging where the wrong fix is expensive, the extra tokens are a bargain. For a routine PR review, stick with `/ship`.
+Three Sonnet teammates running for ~10-15 minutes of investigation costs noticeably more than the same three personas spawned as subagents by `/pickle:ship`. The justification is *quality of conclusion*, for production debugging where the wrong fix is expensive, the extra tokens are a bargain. For a routine PR review, stick with `/pickle:ship`.
 
 ### Anti-pattern in this scenario
 
@@ -270,7 +270,7 @@ Do **not** rebuild this as a `/debug` slash command that fans out subagents. Sub
 
 ### When *not* to use Agent Teams
 
-- Production-bound verdict on a known diff → use `/ship` (subagents).
+- Production-bound verdict on a known diff → use `/pickle:ship` (subagents).
 - One specialist perspective on one artifact → direct persona invocation.
 - Sequential lifecycle (spec → plan → build) → user-driven slash commands (Pattern 4).
 - Read-heavy research with a small digest → built-in `Explore` subagent.
@@ -292,7 +292,7 @@ A persona whose job is to decide which other persona to call.
 **Why it fails:**
 - Pure routing layer with no domain value
 - Adds two paraphrasing hops → information loss + roughly 2× token cost
-- The user already knew they wanted a review; they could have called `/review` directly
+- The user already knew they wanted a review; they could have called `/pickle:review` directly
 - Replicates the work that slash commands and intent mapping in `AGENTS.md` already do
 
 **What to do instead:** add or refine slash commands. Document intent → command mapping in `AGENTS.md`.
@@ -301,7 +301,7 @@ A persona whose job is to decide which other persona to call.
 
 ### B. Persona that calls another persona
 
-A `code-reviewer` that internally invokes `security-auditor` when it sees auth code.
+A `pickle:code-reviewer` that internally invokes `pickle:security-auditor` when it sees auth code.
 
 **Why it fails:**
 - Personas were designed to produce a single perspective; chaining them defeats that
@@ -315,7 +315,7 @@ A `code-reviewer` that internally invokes `security-auditor` when it sees auth c
 
 ### C. Sequential orchestrator that paraphrases
 
-An agent that calls `/spec`, then `/plan`, then `/build`, etc. on the user's behalf.
+An agent that calls `/pickle:spec`, then `/pickle:plan`, then `/pickle:build`, etc. on the user's behalf.
 
 **Why it fails:**
 - Loses the human checkpoints that catch wrong-direction work
@@ -329,7 +329,7 @@ An agent that calls `/spec`, then `/plan`, then `/build`, etc. on the user's beh
 
 ### D. Deep persona trees
 
-`/ship` calls a `pre-ship-coordinator` that calls a `quality-coordinator` that calls `code-reviewer`.
+`/pickle:ship` calls a `pre-ship-coordinator` that calls a `quality-coordinator` that calls `pickle:code-reviewer`.
 
 **Why it fails:**
 - Each layer adds latency and tokens with no decision value
