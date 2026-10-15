@@ -137,7 +137,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 ## Agent skills
 
-From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`) and agents. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, long dashes replaced, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands and agents) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>`, vendored `/command` names and backticked agent names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Every `vendored` row has the Baseline version.
+From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`) and agents. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, long dashes replaced, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands and agents) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>` and vendored `/command` names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Agent names stay bare, as upstream calls them, so a project or user agent with the same name overrides pickle's. Every `vendored` row has the Baseline version.
 
 | pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|

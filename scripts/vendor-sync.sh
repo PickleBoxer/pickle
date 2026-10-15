@@ -3,8 +3,9 @@
 # `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents), copied to its
 # pickle path. Shared root references are copied into each skill that links them, long dashes
 # are replaced, metadata.upstream is added to skills, and names and paths are rewritten for
-# pickle: agent-skills:<x> and the vendored /command and `agent` names become pickle:<x>, and
-# repo-relative paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Stages the result in a worktree of the vendor branch and prints the
+# pickle: agent-skills:<x> and the vendored /command names become pickle:<x>, and repo-relative
+# paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Agent names stay bare, as
+# upstream calls them, so a project or user agent with the same name overrides pickle's. Stages the result in a worktree of the vendor branch and prints the
 # commit and merge commands. Commits nothing, touches no other branch.
 #
 # Usage: bash scripts/vendor-sync.sh [ref]     ref defaults to upstream origin/HEAD
@@ -117,10 +118,9 @@ done
 export REFMAP
 find "$wt" -name '*.md' -type f ! -path '*/.git/*' | while read -r f; do
   perl -CSD -i -pe '
-    BEGIN { %ref = map { split /=/ } grep { length } split / /, $ENV{REFMAP}; $c = $ENV{VCMDS}; $ag = $ENV{VAGENTS} }
+    BEGIN { %ref = map { split /=/ } grep { length } split / /, $ENV{REFMAP}; $c = $ENV{VCMDS} }
     s/\bagent-skills:([a-z0-9-]+)/pickle:$1/g;
     s{(?<![\w./:-])/($c)(?![\w-])}{/pickle:$1}g if length $c;
-    s/`($ag)`/`pickle:$1`/g if length $ag;
     s{(?<![\w./\}-])skills/([a-z0-9-]+)/SKILL\.md}{\$\{CLAUDE_PLUGIN_ROOT\}/skills/$1/SKILL.md}g;
     s{(?<![\w./\}-])references/([a-z0-9-]+\.md)}{exists $ref{$1} ? "\$\{CLAUDE_PLUGIN_ROOT\}/$ref{$1}" : "references/$1"}ge
       if $ARGV !~ m{/skills/};

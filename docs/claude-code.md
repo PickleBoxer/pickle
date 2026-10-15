@@ -109,6 +109,8 @@ Frontmatter (read):
 
 Model order: Agent call `model` parameter, then frontmatter, then `CLAUDE_CODE_SUBAGENT_MODEL`, then main model. A mod `agent.spawn` hook can override. `CLAUDE_CODE_SUBAGENT_MODEL_FORCE=1` makes the env var win.
 
+Same name (read): when several agents share a `name`, the higher-priority location wins: managed settings, then `--agents`, then project `.claude/agents/` (closest to the working directory first), then `~/.claude/agents/`, then a plugin's `agents/` (lowest). The winner replaces the whole definition, nothing merges. A plugin agent also answers to its scoped name `plugin:name`, which picks that exact agent. `claude --agent name` finds a plugin agent by bare name (read). That the Agent tool's `subagent_type` resolves a bare name by the same priority is inferred, not measured. So a caller that passes the bare `name` lets a project or user agent override pickle's, and one that passes `pickle:name` pins pickle's. pickle's own tools pin (`pickle:pickle-reviewer`). The vendored agent-skills personas (`code-reviewer`, `security-auditor`, `test-engineer`, `web-performance-auditor`) are called by bare name, as upstream does, so they are overridable.
+
 Nesting (read): "By default, a subagent can spawn subagents of its own, up to three layers below the main conversation." At the limit the Agent tool is withheld from every subagent except a fork. `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1` disables nesting. "A fork can't spawn further forks."
 
 Nesting (measured):
