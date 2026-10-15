@@ -41,7 +41,7 @@ Current:
 
 ```
 .claude-plugin/plugin.json    manifest
-.github/workflows/            CI: validate, dash check
+.github/workflows/            CI: validate, check-refs
 skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), scripts/ (pr-state, worktree-audit)
 skills/how/ why/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
 skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
@@ -82,7 +82,6 @@ types/index.d.ts              mod state contract, if the mod keeps $.state value
 
 - Never run `git commit`, `git push`, `gh repo create` or any other publishing command. Prepare the change, then hand the user the command and a commit message.
 - Commit messages: Conventional Commits, `type(scope): title`. Scope mandatory, imperative, lowercase, no period, about 50 chars. Body as `-` bullets when it makes more than one point. No AI attribution, no emojis.
-- Never use em dashes or en dashes in any file or message. Rephrase with periods, commas or parentheses. Hyphens in compound words are fine. CI fails on them.
 - GitHub: run `gh auth switch -u PickleBoxer` before any `gh` call for this repo. The SSH remote uses the host alias `github-PickleBoxer.com`.
 - Never run an eval without asking first. See Evals.
 - Ask before assuming intent or architecture. Flag uncertainty and say whether a claim is measured, inferred or a guess.
@@ -221,7 +220,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
 | Conventions | Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Language skills are defaults only: `/pickle:setup` appends the ones for each detected stack after the project's own conventions, so the project wins. pickle ships `typescript-best-practices`. Laravel and React use third-party skills the user installs (`laravel-best-practices` from Laravel Boost, `vercel-react-best-practices` from Vercel): pickle never copies them, `detect-stack.sh` reports whether they are installed, and setup gives the install command when they are not. No `paths`: plugin skills ignore it |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
-| Vendored skills | addyosmani/agent-skills skills, commands and agents ship as plain pickle skills, commands (`/pickle:<name>`) and agents (`pickle:<name>`), chosen per row in `UPSTREAM.md`. The sync rewrites upstream skill and command names into pickle's namespace and repo paths into `${CLAUDE_PLUGIN_ROOT}` paths, and `check-refs.sh` resolves both. Agent names stay bare so projects can override the personas. Upstream text lands on the `vendor/agent-skills` branch (only the chosen skills, at pickle paths, shared references copied into each skill, dashes replaced) and merges into `main`, so local edits survive updates. A skill that drifts far moves to `rewritten` |
+| Vendored skills | addyosmani/agent-skills skills, commands and agents ship as plain pickle skills, commands (`/pickle:<name>`) and agents (`pickle:<name>`), chosen per row in `UPSTREAM.md`. The sync rewrites upstream skill and command names into pickle's namespace and repo paths into `${CLAUDE_PLUGIN_ROOT}` paths, and `check-refs.sh` resolves both. Agent names stay bare so projects can override the personas. Upstream text lands on the `vendor/agent-skills` branch (only the chosen skills, at pickle paths, shared references copied into each skill) and merges into `main`, so local edits survive updates. A skill that drifts far moves to `rewritten` |
 | Tools | `how`, `why`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `why` forks as `pickle-historian` instead, which has no tools list so it can reach MCP sources. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |

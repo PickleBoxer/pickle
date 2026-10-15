@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
 # `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents), copied to its
-# pickle path. Shared root references are copied into each skill that links them, long dashes
-# are replaced, metadata.upstream is added to skills, and names and paths are rewritten for
+# pickle path. Shared root references are copied into each skill that links them,
+# metadata.upstream is added to skills, and names and paths are rewritten for
 # pickle: agent-skills:<x> and the vendored /command names become pickle:<x>, and repo-relative
 # paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Agent names stay bare, as
 # upstream calls them, so a project or user agent with the same name overrides pickle's. Stages the result in a worktree of the vendor branch and prints the
@@ -60,16 +60,9 @@ src=$(mktemp -d)
 trap 'rm -rf "$src"' EXIT
 g archive "$sha" | tar -x -C "$src"
 
-# Long dashes out (pickle CI rejects them): "**term** -- text" and "`term` -- text" take a
-# colon, other spaced dashes a comma, en dashes a hyphen. Then root reference links point at
-# the skill's own references/ folder.
+# Root reference links point at the skill's own references/ folder.
 fix() {
   perl -CSD -i -pe '
-    s/\|\s*\x{2014}\s*\|/| - |/g;
-    s/(\*\*|`)\s+\x{2014}\s+/$1: /g;
-    s/\s+\x{2014}\s+/, /g;
-    s/\x{2014}/, /g;
-    s/\x{2013}/-/g;
     s{(?:\.\./){3}references/}{}g if $ARGV =~ m{/references/[^/]+$};
     s{(?:\.\./){2}references/}{references/}g;
   ' "$1"

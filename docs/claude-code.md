@@ -234,7 +234,7 @@ Defined in: user, project and local settings, managed policy, plugin `hooks/hook
 | PreToolUse | yes | gate actions from the profile |
 | PermissionRequest | yes (JSON) | |
 | PermissionDenied | no | |
-| PostToolUse | no, can feed back | dash lint, comment lint, load log |
+| PostToolUse | no, can feed back | comment lint, load log |
 | PostToolUseFailure, PostToolBatch | batch: yes | |
 | Notification, MessageDisplay | no | |
 | SubagentStart | no | |
