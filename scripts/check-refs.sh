@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Fails when a skill, principle or agent mention does not resolve, when a called
+# Fails when a skill or agent mention does not resolve, when a called
 # skill is user-only, or when UPSTREAM.md disagrees with the files.
 # Run from anywhere: bash scripts/check-refs.sh
 set -uo pipefail
@@ -60,12 +60,6 @@ while IFS=: read -r f l m; do
   err "$f:$l: $m is the old form, write: the **name** skill (Skill tool, \`pickle:name\`)"
 done < <(grep -noE '\*\*[a-z0-9-]+\*\* \(/pickle:[a-z0-9-]+\)' $shipped)
 
-# **principle-<name>**: a principle file.
-while IFS=: read -r f l m; do
-  n=${m#\*\*principle-}; n=${n%\*\*}
-  [ -f "skills/pickle-mode/principles/$n.md" ] || err "$f:$l: **principle-$n** has no skills/pickle-mode/principles/$n.md"
-done < <(grep -noE '\*\*principle-[a-z0-9-]+\*\*' $shipped)
-
 # Relative Markdown links and `references/...` paths in skill files resolve from the linking
 # file, ${CLAUDE_PLUGIN_ROOT}/ paths anywhere from the repo root (anchors ignored).
 while IFS= read -r f; do
@@ -124,14 +118,14 @@ while IFS='|' read -r item kind src rel ver; do
   fi
 done <<< "$rows"
 
-# Every shipped skill, playbook, principle, script and agent has a row.
+# Every shipped skill, agent and command has a row.
 items=$(echo "$rows" | cut -d'|' -f1)
 has_row() { echo "$items" | grep -qxF "$1"; }
 for f in skills/*/SKILL.md; do
   d=${f%/SKILL.md}
   has_row "$d" || has_row "$f" || err "$f: no UPSTREAM.md row"
 done
-for f in skills/pickle-mode/playbooks/*.md skills/pickle-mode/principles/*.md skills/pickle-mode/scripts/* agents/*.md commands/*.md; do
+for f in agents/*.md commands/*.md; do
   [ -e "$f" ] || continue
   has_row "$f" || err "$f: no UPSTREAM.md row"
 done

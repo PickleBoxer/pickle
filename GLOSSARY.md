@@ -1,123 +1,25 @@
 # pickle
 
-A Claude Code plugin that runs a coding task through a fixed engineering process, loading only the playbooks and principles the task needs.
+A Claude Code plugin that runs a coding task through agent-skills' workflow skills, starting from one entry skill.
 
 ## Process
 
 **pickle-mode**:
-The skill a user starts to run a task through pickle. Starting it means the full process: there is no lighter level.
-_Avoid_: router, work, entry point
+The skill a user starts to run a task through pickle. It is agent-skills' `using-agent-skills`, renamed: it maps the task to workflow skills and sets the operating rules they share.
+_Avoid_: work, entry point
 
-**Playbook**:
-A step-by-step procedure for one kind of task, such as a feature, a bug fix or a refactor. The agent picks the playbooks that fit the task and reads only those.
-_Avoid_: workflow, mode, recipe
-
-**Core playbook**:
-A playbook rewritten for pickle and held to its loading eval.
-_Avoid_: main playbook
-
-**Extended playbook**:
-A playbook ported from pstack and marked experimental.
-_Avoid_: optional playbook, extra playbook
-
-**Playbook index**:
-The list in pickle-mode of every playbook with one line on when it applies.
-_Avoid_: menu, routing table
-
-**Non-negotiable**:
-A rule in pickle-mode that applies to every task, whatever the playbook.
-_Avoid_: global rule, always-on rule
-
-**Gate**:
-An action the project owner has marked as stop-and-ask, such as a deploy or a migration on a shared database.
-_Avoid_: checkpoint, approval step
-
-**Loaded line**:
-The last line of a pickle reply, naming the playbooks and principles used for the task.
-_Avoid_: load report, footer
-
-## Principles
-
-**Principle**:
-A language-agnostic engineering rule with a trigger, read only when a task reaches that trigger. Principles exist only inside pickle-mode.
-_Avoid_: rule, guideline, best practice
-
-**Trigger**:
-The situation that makes a principle apply, such as debugging or writing a test.
-_Avoid_: condition, when-clause
-
-**Principle index**:
-The list in pickle-mode of every principle with its trigger.
-_Avoid_: principle list, catalogue
-
-**Mention**:
-A principle named inline in a playbook step or a non-negotiable, at the point where it applies. A mention is what prompts the agent to load the principle.
-_Avoid_: reference, link
-
-**Convention**:
-A rule for how one project writes code: its language idioms, frameworks, tools and traps. A skill name or a file path in the project, listed in the profile and read before work starts. Conventions win over pickle's defaults.
-_Avoid_: pack, style guide
+**Workflow skill**:
+A skill from agent-skills that holds the steps for one phase of work, such as spec, implementation, debugging or review. pickle-mode picks the ones that fit the task.
+_Avoid_: playbook, mode, recipe
 
 **Language skill**:
-A skill with default idioms for one language or framework: pickle's own (typescript-best-practices) or a third-party one the user installs (laravel-best-practices from Laravel Boost, vercel-react-best-practices from Vercel). Listed in the profile as a convention after the project's own, so the project wins.
+A skill with default idioms for one language or framework: pickle's own (typescript-best-practices) or a third-party one the user installs. The project's own rules win over it.
 _Avoid_: language pack, rules pack
-
-## Project
-
-**Profile**:
-A short description of one project for pickle: its stack, conventions, verify commands and gates.
-_Avoid_: config, settings, project file
-
-**Verify command**:
-A command from the profile that checks the work, named by its purpose (test, types, lint, UI) rather than by tool.
-_Avoid_: check, CI step
-
-**Setup**:
-The pickle step that detects a project's stack and writes its profile.
-_Avoid_: init, onboarding
-
-## Tools and roles
-
-**Tool**:
-A pickle skill that runs one stage of the process in its own subagent: how, why, architect, interrogate or swarm.
-_Avoid_: helper, sub-skill
-
-**Opt-in tool**:
-A heavy tool run that happens only when a playbook calls for it or the user names it: interrogate with a panel, or swarm.
-_Avoid_: advanced tool
-
-**Explorer**, **Implementer**, **Reviewer**:
-The three subagent roles pickle delegates to. The explorer reads, the implementer changes code, the reviewer judges the result.
-_Avoid_: helper agent
-
-**Historian**:
-The read-only subagent why runs as, both as lead and as investigators. It searches git, PRs and the session's MCP sources for the reasons behind code, and never changes anything in them.
-_Avoid_: archaeologist, synthesizer
-
-**Comment sicko**:
-The read-only subagent no-comments starts. It lists which comments in a diff die and which code a surprising comment hides, and never edits.
-_Avoid_: comment reviewer, comment linter
-
-**Worker**:
-An implementer started by swarm in its own git worktree, on one slice or one race arm. It reports PASS, ISSUES or BLOCKED with evidence.
-_Avoid_: cloud agent
-
-**Sign-off**:
-The user approving an architect sketch before implementation starts. Opt-in: only when the task asks for it.
-_Avoid_: checkpoint, approval step
-
-**Panel**:
-An interrogate run with two reviewers, each on its own lens (correctness, design) and model tier. Opt-in: only when the arguments name it.
-_Avoid_: multi-model review
-
-**Lead**:
-The read-only subagent a tool runs as. It picks the angles, starts explorers or reviewers, and writes the one answer the tool returns.
-_Avoid_: orchestrator, coordinator
 
 ## Evals
 
 **Loading eval**:
-An eval that checks only which playbooks the agent read and which principles it loaded for a task. No code changes.
+An eval that checks only which workflow skills the agent invoked for a task. No code changes.
 _Avoid_: routing eval
 
 **Case**:
@@ -129,16 +31,12 @@ The small purpose-built project a case runs in.
 _Avoid_: sandbox, test repo
 
 **Dry run**:
-A loading eval run where the agent stops right after loading principles.
+A loading eval run where the agent stops right after invoking the workflow skills.
 _Avoid_: plan-only run
 
 **Smoke set**:
-The three core cases (feature, bug fix, refactor) used for quick, cheap checks.
+The three router cases (bug fix, review, perf) used for quick, cheap checks.
 _Avoid_: quick suite
-
-**Ambiguous case**:
-A case where two playbooks fit, so either is accepted and only clearly wrong ones fail.
-_Avoid_: edge case
 
 **Outcome eval**:
 An eval that checks whether the change itself is correct. Planned after loading evals.

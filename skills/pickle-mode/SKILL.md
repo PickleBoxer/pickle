@@ -1,110 +1,195 @@
 ---
 name: pickle-mode
-description: Runs a coding task through the full pickle process, reading only the playbooks and loading only the principles the task needs. Use when the user runs /pickle:pickle-mode.
-argument-hint: "<task>"
-disable-model-invocation: true
+description: Discovers and invokes agent skills. Use when starting a session, or when you need to decide which skill or workflow applies to the piece of work at hand. This is the meta-skill that governs how all other skills are discovered and invoked.
 metadata:
-  upstream: pstack/skills/poteto-mode/SKILL.md
-  upstream-version: 0.15.24
+  upstream: agent-skills/skills/using-agent-skills
+  upstream-version: 0.6.13
 ---
 
-# pickle mode
+# Using Agent Skills
 
-Run the task through the full process below. Playbooks and principles are files next to this one, and paths below are relative to this file. Read a file only when the task needs it.
+## Overview
 
-Mentions in this skill, its playbooks and its principles:
+Agent Skills is a collection of engineering workflow skills organized by development phase. Each skill encodes a specific process that senior engineers follow. This meta-skill helps you discover and apply the right skill for your current task.
 
-- ``the **<name>** skill (Skill tool, `pickle:<name>`)``: call that skill with the Skill tool. When pickle is installed without the plugin, the name is `<name>`.
-- `**principle-<name>**`: the file `principles/<name>.md`. Read it with Read.
-- `pickle:<name>` as a subagent type: an agent. Start it with the Agent tool.
+## Skill Discovery
 
-## Process
+When a task arrives, identify the development phase and apply the corresponding skill:
 
-1. Read `.claude/pickle.md` in the project with Read. It holds the stack, the verify commands and the gates. If it is missing, use the project's obvious test and lint commands and suggest `/pickle:setup` once in the reply.
-   - Load every convention the profile lists under `conventions:` before step 2: read a file path with Read, invoke a skill name with the Skill tool. Always, also for tasks that write no code (investigating, reading a trace, planning): conventions name the project's tools, commands and failure modes those tasks rely on.
-   - A convention that cannot be loaded (the file is missing, or the skill is not installed or not available): go on without it, say so in the reply, and suggest `/pickle:setup`, which gives the install command for a missing language skill.
-2. Pick the playbooks that fit the task from the playbook index and read them. Usually one. Two when the task has two parts, for example feature, then opening-a-pr. If two playbooks fit equally and the choice changes the work, ask once with `AskUserQuestion`, recommended playbook first. Otherwise state the choice and go. If no playbook fits, or the work is a large cross-cutting migration the user will review after stepping away, run the **figure-it-out** skill (Skill tool, `pickle:figure-it-out`) instead of forcing one.
-3. Copy the playbook steps into the todo list, one todo per step. Mark a skipped step `skip: <reason>`, never drop it silently.
-4. Read principles.
-   - Every principle a chosen playbook names: always, right after reading the playbook, before its first step. Playbook mentions are not optional.
-   - Every principle a non-negotiable names, when the non-negotiable applies.
-   - Any other principle whose trigger in the principle index fits the task.
-5. Name the principle file, and the convention file or skill for code todos, in the todo items they shape. Before starting a todo, if a file it names is no longer in context (for example after compaction), read it again.
-6. Run the steps. Use the tools a playbook lists, in its order. A playbook may skip a tool, and says when.
-   - `how`: the **how** skill (Skill tool, `pickle:how`). Pass the question and why it matters.
-   - `why`: the **why** skill (Skill tool, `pickle:why`). Pass the question and the target. It searches git and every connected MCP source.
-   - `architect`: the **architect** skill (Skill tool, `pickle:architect`). Pass the design task, the constraints and the how findings. Add `with sign-off` when the user wants to approve the design before code.
-   - Implementer subagent: the `pickle:pickle-implementer` agent. Pass the files, the data shape, the success check and the verify commands.
-   - `interrogate`: the **interrogate** skill (Skill tool, `pickle:interrogate`). Pass what the change is for and the base branch. Add `panel` when the playbook says so or the user asks for it.
-   - `swarm`: the **swarm** skill (Skill tool, `pickle:swarm`). Pass the done predicate, N and the shape.
-   - When a tool returns a question for the user (`Intent unclear:`, `Done predicate unclear:`, a `Sign-off:` line), ask it with `AskUserQuestion` and run the tool again with the answer. When swarm returns `Use /batch:`, give the user that command. When it returns `Cannot fan out:`, start its briefs yourself with the Agent tool, `isolation: "worktree"`.
-   - If a tool or agent is not installed, use Claude Code's own: `Explore` for how, `general-purpose` told to change nothing for why, `Plan` for architect, `general-purpose` for the implementer and for interrogate.
-7. Tools and subagents do not see this conversation. Give each one everything it needs, including the absolute paths of the principle files and convention files that apply and the convention skills to load, and tell it to read them first.
-8. Verify with the profile's verify commands. Fix and rerun until they pass, or report exactly what still fails.
-9. End the reply with one line: `Loaded: <playbooks>, <principles>, <conventions>`. List every convention the profile names, in its order, and mark one that could not be loaded `<name> (not found)`.
+```
+Task arrives
+    │
+    ├── Don't know what you want yet? ──────→ interview-me
+    ├── Have a rough concept, need variants? → idea-refine
+    ├── New project/feature/change? ──→ spec-driven-development
+    ├── No quality bar written down? ──→ constraint-driven-development
+    ├── Have a spec, need tasks? ──────→ planning-and-task-breakdown
+    ├── Implementing code? ────────────→ incremental-implementation
+    │   ├── UI work? ─────────────────→ frontend-ui-engineering
+    │   ├── API work? ────────────────→ api-and-interface-design
+    │   ├── Need better context? ─────→ context-engineering
+    │   ├── Need doc-verified code? ───→ source-driven-development
+    │   └── Stakes high / unfamiliar code? ──→ doubt-driven-development
+    ├── Writing/running tests? ────────→ test-driven-development
+    │   └── Browser-based? ───────────→ browser-testing-with-devtools
+    ├── Something broke? ──────────────→ debugging-and-error-recovery
+    ├── Reviewing code? ───────────────→ code-review-and-quality
+    │   ├── Too complex? ─────────────→ code-simplification
+    │   ├── Security concerns? ───────→ security-and-hardening
+    │   └── Performance concerns? ────→ performance-optimization
+    ├── Committing/branching? ─────────→ git-workflow-and-versioning
+    ├── CI/CD pipeline work? ──────────→ ci-cd-and-automation
+    ├── Deprecating/migrating? ────────→ deprecation-and-migration
+    ├── Writing docs/ADRs? ───────────→ documentation-and-adrs
+    ├── Adding logs/metrics/alerts? ───→ observability-and-instrumentation
+    └── Deploying/launching? ─────────→ shipping-and-launch
+```
 
-## Non-negotiables
+## Core Operating Behaviors
 
-- Any code: name the data shape before writing logic, per **principle-model-the-domain**.
-- Before saying done, or reporting a number: show direct evidence, per **principle-prove-it-works**.
-- A gate in the profile means stop and ask before that action, even when the playbook says to proceed.
-- Apply each principle with the project's own language, framework and tools. The project defines them in `CLAUDE.md`, in its conventions and in its existing code. Follow those over any default you know. When the project says nothing, use the language's standard idioms and say which you chose.
-- The project's `CLAUDE.md`, its conventions and the user's instructions win over a playbook or principle when they conflict. Say which rule you followed.
-- `interrogate` with `panel`, and `swarm`, run only when a playbook calls for them or the user names them.
+These behaviors apply at all times, across all skills. They are non-negotiable.
 
-## Playbooks
+### 1. Surface Assumptions
 
-Core:
+Before implementing anything non-trivial, explicitly state your assumptions:
 
-- `playbooks/feature.md`: add or change behaviour a user or caller can observe.
-- `playbooks/bug-fix.md`: something is broken, the symptom is known, and the task is to fix it.
-- `playbooks/refactor.md`: change the structure, keep the behaviour identical.
-- `playbooks/investigate.md`: explain how or why something behaves, or recommend between options. Read-only: no code changes, even when the cause is a bug.
-- `playbooks/perf.md`: make a known slow or costly path faster or cheaper. A target number chased over many iterations is hillclimb.
-- `playbooks/prototype.md`: try one or more throwaway versions so the user can pick a direction. The real build afterwards is feature.
-- `playbooks/opening-a-pr.md`: turn the current branch into a reviewable pull request, alone or after another playbook.
-- `playbooks/session-pickup.md`: resume work an earlier session left behind, from a handoff note, a branch or a transcript.
-- `playbooks/pause-safely.md`: stop mid-task and leave the work resumable. Only when the user asks to stop. "Keep going" is not a pause.
+```
+ASSUMPTIONS I'M MAKING:
+1. [assumption about requirements]
+2. [assumption about architecture]
+3. [assumption about scope]
+→ Correct me now or I'll proceed with these.
+```
 
-Extended (experimental, ported from pstack):
+Don't silently fill in ambiguous requirements. The most common failure mode is making wrong assumptions and running with them unchecked. Surface uncertainty early — it's cheaper than rework.
 
-- `playbooks/hillclimb.md`: push a measurable number toward a target over many measured iterations, such as build time, test time, bundle size or memory: "bring X down to Y", "keep at it until it hits the target".
-- `playbooks/eval.md`: compare prompts, models or skills and judge which does better: "A or B?", "is the new version an improvement".
-- `playbooks/autonomous-run.md`: keep working unattended until a pass or fail condition is met: "carry on without me", "work until it's green", "no need to check in". Read it together with the playbook for the work itself, often bug-fix. A number pushed toward a target is hillclimb.
-- `playbooks/babysit.md`: get an open pull request to mergeable: red checks, failed builds or review comments on the PR.
-- `playbooks/multi-phase-plan.md`: plan a change that ships over several PRs or deploys, such as a schema or service migration with both versions live. The deliverable is the plan, not the change.
-- `playbooks/worktree-cleanup.md`: remove stale git worktrees and branches safely.
-- `playbooks/runtime-forensics.md`: diagnose a live process that misbehaves now: CPU, memory, hangs. Not a captured trace.
-- `playbooks/trace-forensics.md`: analyse a captured profile, trace or log file. Not a live process.
-- `playbooks/visual-parity.md`: change how a UI is built while the rendered result stays identical: a component or design-system migration, a CSS rewrite, a framework swap with no visible change.
-- `playbooks/authoring-a-skill.md`: write or change a skill, playbook or agent prompt.
+### 2. Manage Confusion Actively
 
-## Principles
+When you encounter inconsistencies, conflicting requirements, or unclear specifications:
 
-Read the file before applying a principle. In the reply, name each principle that changed a decision and how. Cite only principles read this session.
+1. **STOP.** Do not proceed with a guess.
+2. Name the specific confusion.
+3. Present the tradeoff or ask the clarifying question.
+4. Wait for resolution before continuing.
 
-Core:
+**Bad:** Silently picking one interpretation and hoping it's right.
+**Good:** "I see X in the spec but Y in the existing code. Which takes precedence?"
 
-- **principle-laziness** (`principles/laziness.md`): sizing or sequencing a change, or tempted to add an abstraction, layer, option or guard the task did not ask for.
-- **principle-model-the-domain** (`principles/model-the-domain.md`): stateful logic, a new branch in an if/else chain, or the same shape check repeated across files.
-- **principle-redesign-from-first-principles** (`principles/redesign-from-first-principles.md`): integrating a new requirement, provider or variant into an existing design, or a change that only fits with special cases.
-- **principle-minimize-reader-load** (`principles/minimize-reader-load.md`): code that is hard to follow, a new wrapper, adapter or piece of state, or prose another reader must read, such as a PR description or a skill.
+### 3. Push Back When Warranted
 
-Architecture:
+You are not a yes-machine. When an approach has clear problems:
 
-- **principle-boundaries** (`principles/boundaries.md`): framework code, controllers, adapters, third-party APIs, parsing input, or deciding where a check or error handler belongs.
-- **principle-types** (`principles/types.md`): designing types, signatures, enums or casts, or a runtime or null check that hints a type is too weak. Make illegal states unrepresentable.
-- **principle-idempotent-operations** (`principles/idempotent-operations.md`): jobs, commands, webhooks, migrations, retries, schedulers, startup or cleanup code, or anything that can crash or run twice. Also a symptom of something happening twice: duplicate rows, emails, payments or job runs.
-- **principle-finish-migrations** (`principles/finish-migrations.md`): a new API, type or format while old callers exist, or a planned rewrite or migration.
-- **principle-no-shared-writes** (`principles/no-shared-writes.md`): two processes, workers, apps, agents or branches that might write the same row, file or key, or a design that calls for a lock.
+- Point out the issue directly
+- Explain the concrete downside (quantify when possible — "this adds ~200ms latency" not "this might be slower")
+- Propose an alternative
+- Accept the human's decision if they override with full information
 
-Verification:
+Sycophancy is a failure mode. "Of course!" followed by implementing a bad idea helps no one. Honest technical disagreement is more valuable than false agreement.
 
-- **principle-prove-it-works** (`principles/prove-it-works.md`): before declaring done, or before trusting, reporting or acting on a number, benchmark or test result.
-- **principle-fix-root-causes** (`principles/fix-root-causes.md`): debugging, wrong behaviour or failing CI, or a fix about to hide a symptom with a guard, retry or workaround. Reproduce first, find the cause before the fix.
-- **principle-small-verified-steps** (`principles/small-verified-steps.md`): multi-step or multi-file work, sweeps, migrations, or planning commits and PRs.
-- **principle-test-behavior** (`principles/test-behavior.md`): writing, changing, reviewing or keeping a test, including a failing test that reproduces a bug.
+### 4. Enforce Simplicity
 
-Delegation:
+Your natural tendency is to overcomplicate. Actively resist it.
 
-- **principle-guard-the-context** (`principles/guard-the-context.md`): large files, logs, traces or transcripts, fan-out, resuming or pausing a session, or a filling context.
+Before finishing any implementation, ask:
+- Can this be done in fewer lines?
+- Are these abstractions earning their complexity?
+- Would a staff engineer look at this and say "why didn't you just..."?
+
+If you build 1000 lines and 100 would suffice, you have failed. Prefer the boring, obvious solution. Cleverness is expensive.
+
+### 5. Maintain Scope Discipline
+
+Touch only what you're asked to touch.
+
+Do NOT:
+- Remove comments you don't understand
+- "Clean up" code orthogonal to the task
+- Refactor adjacent systems as a side effect
+- Delete code that seems unused without explicit approval
+- Add features not in the spec because they "seem useful"
+
+Your job is surgical precision, not unsolicited renovation.
+
+### 6. Verify, Don't Assume
+
+Every skill includes a verification step. A task is not complete until verification passes. "Seems right" is never sufficient — there must be evidence (passing tests, build output, runtime data).
+
+Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: tests pass, no regressions, behavior verified at runtime, docs updated. See `references/definition-of-done.md`. It complements each task's acceptance criteria rather than replacing them.
+
+## Failure Modes to Avoid
+
+These are the subtle errors that look like productivity but create problems:
+
+1. Making wrong assumptions without checking
+2. Not managing your own confusion — plowing ahead when lost
+3. Not surfacing inconsistencies you notice
+4. Not presenting tradeoffs on non-obvious decisions
+5. Being sycophantic ("Of course!") to approaches with clear problems
+6. Overcomplicating code and APIs
+7. Modifying code or comments orthogonal to the task
+8. Removing things you don't fully understand
+9. Building without a spec because "it's obvious"
+10. Skipping verification because "it looks right"
+
+## Skill Rules
+
+1. **Check for an applicable skill before starting work.** Skills encode processes that prevent common mistakes.
+
+2. **Skills are workflows, not suggestions.** Follow the steps in order. Don't skip verification steps.
+
+3. **Multiple skills can apply.** A feature implementation might involve `idea-refine` → `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` → `test-driven-development` → `code-review-and-quality` → `code-simplification` → `shipping-and-launch` in sequence.
+
+4. **When in doubt, start with a spec.** If the task is non-trivial and there's no spec, begin with `spec-driven-development`.
+
+## Lifecycle Sequence
+
+For a complete feature, the typical skill sequence is:
+
+```
+1.  interview-me                → Extract what the user actually wants
+2.  idea-refine                 → Refine vague ideas
+3.  spec-driven-development     → Define what we're building
+4.  planning-and-task-breakdown → Break into verifiable chunks
+5.  context-engineering         → Load the right context
+6.  source-driven-development   → Verify against official docs
+7.  incremental-implementation  → Build slice by slice
+8.  observability-and-instrumentation → Instrument as you build (runs parallel with 7-9, not after)
+9.  doubt-driven-development    → Cross-examine non-trivial decisions in-flight
+10. test-driven-development     → Prove each slice works
+11. code-review-and-quality     → Review before merge
+12. code-simplification         → Reduce unnecessary complexity while preserving behavior
+13. git-workflow-and-versioning → Clean commit history
+14. documentation-and-adrs      → Document decisions
+15. deprecation-and-migration   → Retire old systems and move users safely when needed
+16. shipping-and-launch         → Deploy safely
+```
+
+Not every task needs every skill. A bug fix might only need: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`.
+
+## Quick Reference
+
+| Phase | Skill | One-Line Summary |
+|-------|-------|-----------------|
+| Define | interview-me | Surface what the user actually wants before any plan, spec, or code exists |
+| Define | idea-refine | Refine ideas through structured divergent and convergent thinking |
+| Define | spec-driven-development | Requirements and acceptance criteria before code |
+| Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
+| Build | incremental-implementation | Thin vertical slices, test each before expanding |
+| Build | source-driven-development | Verify against official docs before implementing |
+| Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
+| Build | context-engineering | Right context at the right time |
+| Build | frontend-ui-engineering | Production-quality UI with accessibility |
+| Build | api-and-interface-design | Stable interfaces with clear contracts |
+| Verify | test-driven-development | Failing test first, then make it pass |
+| Verify | browser-testing-with-devtools | Chrome DevTools MCP for runtime verification |
+| Verify | debugging-and-error-recovery | Reproduce → localize → fix → guard |
+| Review | code-review-and-quality | Five-axis review with quality gates |
+| Review | code-simplification | Preserve behavior while reducing unnecessary complexity |
+| Review | security-and-hardening | OWASP prevention, input validation, least privilege |
+| Review | performance-optimization | Measure first, optimize only what matters |
+| Ship | git-workflow-and-versioning | Atomic commits, clean history |
+| Ship | ci-cd-and-automation | Automated quality gates on every change |
+| Ship | deprecation-and-migration | Remove old systems and migrate users safely |
+| Ship | documentation-and-adrs | Document the why, not just the what |
+| Ship | observability-and-instrumentation | Structured logs, RED metrics, traces, symptom-based alerts |
+| Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |

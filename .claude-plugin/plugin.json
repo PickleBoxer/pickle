@@ -1,8 +1,8 @@
 {
   "name": "pickle",
   "displayName": "pickle",
-  "version": "0.2.0",
-  "description": "Language-agnostic engineering playbooks and principles for Claude Code, loaded on demand per task and extendable per project",
+  "version": "0.3.0",
+  "description": "Engineering workflow skills for Claude Code, built on agent-skills and picked per task by one entry skill",
   "author": {
     "name": "PickleBoxer"
   },
@@ -12,10 +12,8 @@
   "keywords": [
     "pickle",
     "skills",
-    "mod",
+    "agent-skills",
     "workflow",
-    "playbooks",
-    "principles",
     "subagents",
     "verification",
     "language-agnostic"

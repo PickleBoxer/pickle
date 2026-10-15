@@ -1,0 +1,9 @@
+schema_version: "1.1"
+name: loading-router-perf
+context:
+  scaffold_script: scaffold.sh
+graders:
+  - name: picks-performance-optimization
+    type: tool_used
+    tool: Skill
+    input_match: '"(pickle:)?performance-optimization"'

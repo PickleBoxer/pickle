@@ -1,6 +1,6 @@
 # TypeScript patterns
 
-Code examples for each rule in `SKILL.md`. The principles behind them are language-agnostic: `../pickle-mode/principles/types.md` and `../pickle-mode/principles/boundaries.md`, relative to this skill.
+Code examples for each rule in `SKILL.md`.
 
 ## Contents
 
