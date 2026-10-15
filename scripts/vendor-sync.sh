@@ -38,7 +38,9 @@ rows=$(awk -F'|' 'NF>=8 {for (i=2; i<=6; i++) gsub(/^ +| +$/, "", $i)}
   NF>=8 && $5 == "vendored" && $4 ~ /^as:/ {sub(/^as:/, "", $4); print $2 "|" $4}' UPSTREAM.md)
 [ -n "$rows" ] || { echo "vendor-sync: no vendored as: rows in UPSTREAM.md" >&2; exit 1; }
 
-# Vendor branch worktree: reuse, check out, or start the orphan branch.
+# Vendor branch worktree: reuse, check out, or start the orphan branch. Prune first: macOS
+# clears $TMPDIR, which leaves a stale worktree entry that blocks `worktree add`.
+git worktree prune
 if [ -d "$wt" ]; then
   [ "$(git -C "$wt" branch --show-current 2>/dev/null)" = "$branch" ] \
     || { echo "vendor-sync: $wt exists and is not a $branch worktree" >&2; exit 1; }
