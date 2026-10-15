@@ -1,5 +1,5 @@
 ---
-description: Start spec-driven development, write a structured specification before writing code
+description: Start spec-driven development — write a structured specification before writing code
 ---
 
 Invoke the pickle:spec-driven-development skill.

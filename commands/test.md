@@ -1,5 +1,5 @@
 ---
-description: Run TDD workflow, write failing tests, implement, verify. For bugs, use the Prove-It pattern.
+description: Run TDD workflow — write failing tests, implement, verify. For bugs, use the Prove-It pattern.
 ---
 
 Invoke the pickle:test-driven-development skill.
