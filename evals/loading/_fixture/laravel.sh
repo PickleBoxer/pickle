@@ -3,7 +3,7 @@
 # Files only, no vendor/ and no working app.
 
 base_files() {
-mkdir -p app/Models app/Http/Controllers app/Jobs database/migrations tests/Feature .claude
+mkdir -p app/Models app/Http/Controllers app/Jobs database/migrations tests/Feature
 
 cat > composer.json <<'EOF'
 {
@@ -124,18 +124,6 @@ cat > docs/conventions.md <<'EOF'
 - Status columns are backed enums, cast on the model.
 - Jobs that write orders implement ShouldBeUnique.
 - Read the real error in storage/logs/laravel.log before changing code.
-EOF
-
-cat > .claude/pickle.md <<'EOF'
----
-stack: laravel
-conventions: [docs/conventions.md]
-gates: [migrations on shared DBs, deploy]
----
-## Verify
-- test: php artisan test
-- types: vendor/bin/phpstan analyse
-- lint: vendor/bin/pint --test
 EOF
 }
 
