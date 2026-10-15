@@ -1,8 +1,8 @@
 # pickle
 
-Language-agnostic engineering playbooks and principles for Claude Code. Start it on a task that deserves the full process. pickle picks the playbook, loads only the principles it needs, and reads how your project tests, runs and writes code from a small profile.
+Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills). Start a task with `/pickle:pickle-mode` and it picks the workflow skills that fit, from spec and planning to review and shipping.
 
-> Early. The repo is being bootstrapped: evals first, skills next. Nothing installable yet.
+> Early. agent-skills is the baseline, and pickle's own pieces are added back one at a time when evals or real use show a gap. Nothing installable yet.
 
 ## How it will work
 
@@ -11,17 +11,9 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 /pickle:pickle-mode extract the payment gateway behind an interface
 ```
 
-- **Full process.** `how` explains the code, `why` finds the reasons behind it, `architect` sketches the design, an implementer subagent writes it, `interrogate` reviews it, and `swarm` runs parallel workers when a plan needs them. For small tasks, don't start pickle.
-- **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
-- **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
-- **Before you start.** `/pickle:sharpen <task>` frames the task the way an expert would before doing it. `/pickle:in-your-own-words` plays back your goal and problem so you can correct it.
-- **Engineering skills.** 25 skills from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), from spec and planning to review, security and shipping. They load on their own when a task matches, also outside pickle-mode. Its commands come along (`/pickle:spec`, `/pickle:plan`, `/pickle:build`, `/pickle:test`, `/pickle:review`, `/pickle:ship` and more), with the `code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor` agents.
-- **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands and your conventions.
-- **Your conventions.** Your project defines its language rules, and they win over pickle's defaults. `/pickle:setup` also adds a language skill for your stack after yours as a fallback: pickle's `typescript-best-practices` for TypeScript, and for Laravel and React the installed `laravel-best-practices` (Laravel Boost) and `vercel-react-best-practices` (Vercel). pickle does not ship those two. If one is missing, setup tells you how to install it. List them under `conventions:` in the profile, as skill names or paths to files in your repo. pickle reads every one before it starts, also for tasks that write no code.
-
-## Writing a conventions file
-
-A conventions file tells pickle how your project applies the principles in its own language and framework. Keep it short, one line per rule, with concrete names and commands: your test framework and how tests assert, how input is validated at the edges, how jobs and scheduled tasks avoid running twice, where the real error log lives, and the traps your stack has bitten you with. Skip what `CLAUDE.md` already says, since it is in context anyway. Then list the file in the profile, for example `conventions: [docs/conventions.md]`.
+- **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, renamed: a decision tree that maps the task to the workflow skills, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
+- **Engineering skills.** 25 skills from [agent-skills](https://github.com/addyosmani/agent-skills), from spec and planning to review, security and shipping. pickle-mode picks from them, and they also load on their own when a task matches. Its commands come along (`/pickle:spec`, `/pickle:plan`, `/pickle:build`, `/pickle:test`, `/pickle:review`, `/pickle:ship` and more), with the `code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor` agents.
+- **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
 
 ## Install
 
@@ -32,7 +24,7 @@ Once the first release lands:
 /plugin install pickle@pickleboxer
 ```
 
-Skills only, without the agents and the mod:
+Skills only, without the agents:
 
 ```bash
 npx skills add PickleBoxer/pickle --skill '*'

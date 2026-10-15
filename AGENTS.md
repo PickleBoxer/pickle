@@ -19,19 +19,18 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin with language-agnostic engineering playbooks and principles. The user starts one skill, `/pickle:pickle-mode <task>`. From the task, the agent decides which playbooks to read and which principles to load. Playbooks and principles are plain files inside `pickle-mode`, read only when the task needs them. pickle's language rules are defaults only: each project lists its own conventions in the profile, and `/pickle:setup` adds the language skills for the stack after them (pickle's own, or third-party ones the user has installed). Invoking pickle means the full process: there are no effort levels, and small tasks simply don't use pickle. A project profile at `.claude/pickle.md` tells pickle how that project tests, lints and runs. pickle ships as a plugin with a mod, and its skills also install on their own with `npx skills add`.
+A Claude Code plugin with engineering workflow skills, built on addyosmani/agent-skills as the baseline. The user starts one skill, `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed, which maps the task to the workflow skills and sets the operating rules they share. Everything from pstack except `typescript-best-practices` was removed for a clean baseline (playbooks, principles, tools, the profile and `setup`), and comes back one at a time when evals or real use show a gap: those rows in `UPSTREAM.md` are `pending`. Small tasks simply don't use pickle. pickle ships as a plugin, and its skills also install on their own with `npx skills add`.
 
 Origin: a rework of pstack's `poteto-mode`. See `CREDITS.md`.
 
 ## Status and build order
 
-In progress. `pickle-mode`, all playbooks and principles, the tools, the agents and `setup` exist. Plan 2 renamed the tools to `how`, `architect`, `interrogate` and `swarm`. Loading evals pass on the renamed set on Haiku, Sonnet and Opus. Evals came before content:
+In progress. The baseline is the 25 vendored agent-skills skills (one of them renamed to `pickle-mode`), their commands and agents, plus `typescript-best-practices`. Build order from here:
 
-1. Loading eval cases for all 19 playbooks plus ambiguous cases (`evals/loading/`), each with a small fixture.
-2. Build `pickle-mode`, all 19 playbooks, all 14 principles, the tools and the agents.
-3. Run the loading evals, with the user's go-ahead, until the agent reads the right playbooks and loads the right principles for each task.
-4. Build `setup`, which writes the profile with the project's verify commands and conventions.
-5. Then outcome evals and token evals. Grow only where evals show gaps.
+1. Run the loading evals (`router-*`), with the user's go-ahead, until `pickle-mode` picks the right workflow skills.
+2. Trim vendored skills on `main` where evals show they are too long or their descriptions overlap.
+3. Re-add a `pending` pstack piece only when an eval or real use shows the gap it fills.
+4. Then outcome evals and token evals.
 
 The working plans live in `.scratch/plan.md` (plan 1) and `.scratch/plan-2.md` (tools, upstream, next skills). `.scratch/` is excluded through `.git/info/exclude` and never committed. If it is missing, ask the user for it.
 
@@ -42,15 +41,11 @@ Current:
 ```
 .claude-plugin/plugin.json    manifest
 .github/workflows/            CI: validate, check-refs
-skills/pickle-mode/           entry skill: SKILL.md, playbooks/ (19), principles/ (14), scripts/ (pr-state, worktree-audit)
-skills/how/ why/ architect/ interrogate/ swarm/   tools, context: fork, lead plus references/
-skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ (5)
-skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
-skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/ show-me-your-work/ blast-radius/ figure-it-out/   inline skills ported from pstack (deslop from cursor-team-kit)
-skills/typescript-best-practices/   language skill, a default convention for TypeScript stacks
-skills/<agent-skills name>/   25 skills vendored from addyosmani/agent-skills, merged from the vendor/agent-skills branch
+skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed on main
+skills/typescript-best-practices/   language skill, default TypeScript idioms
+skills/<agent-skills name>/   24 more skills vendored from addyosmani/agent-skills, merged from the vendor/agent-skills branch
 commands/                     9 commands vendored from agent-skills (/pickle:build, /pickle:ship, ...)
-agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, pickle-historian, comment-sicko, plus code-reviewer, security-auditor, test-engineer, web-performance-auditor from agent-skills
+agents/                       code-reviewer, security-auditor, test-engineer, web-performance-auditor from agent-skills
 LICENSES/                     agent-skills.txt, for the vendored commands and agents
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
@@ -63,16 +58,6 @@ AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
 Planned:
 
 ```
-skills/
-  pickle-mode/                entry skill, user-invoked only
-    SKILL.md                  process, non-negotiables, playbook and principle indexes
-    playbooks/*.md            plain files, read on demand
-    principles/*.md           plain files, read on demand
-  setup/                      /pickle:setup, detects stack, writes .claude/pickle.md
-    scripts/detect-stack.sh
-    profiles/*.md
-  how/ why/ architect/ interrogate/ swarm/  context: fork, run as pickle-lead (why as pickle-historian)
-agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer
 hooks/                        mod: hooks.json plus register.tsx
 tests/                        *.test.ts for the mod
 types/index.d.ts              mod state contract, if the mod keeps $.state values
@@ -97,7 +82,7 @@ claude plugin test .
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream changes since each baseline in `UPSTREAM.md`: pstack, cursor-team-kit for `kit:` rows and agent-skills for `as:` rows.
+`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream changes since each baseline in `UPSTREAM.md`: pstack, cursor-team-kit for `kit:` rows and agent-skills for `as:` rows.
 
 `scripts/vendor-sync.sh [ref]` (maintainer only) stages the `vendored` rows (skills, commands, agents) from addyosmani/agent-skills on the `vendor/agent-skills` branch and prints the commit and merge commands. Customize vendored skills on `main`. The merge keeps those edits. After the merge, set the agent-skills Baseline row and every `vendored` row to the new version. To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
 
@@ -140,7 +125,7 @@ Outside Claude Code (claude.ai uploads, the Skills API) only `name`, `descriptio
 
 - `$ARGUMENTS`, `$0`, `$name`. If no placeholder takes the arguments, Claude Code appends `ARGUMENTS: <value>`.
 - `${CLAUDE_SKILL_DIR}`, `${CLAUDE_PROJECT_DIR}`, `${CLAUDE_PLUGIN_ROOT}`, `${CLAUDE_PLUGIN_DATA}`, `${CLAUDE_SESSION_ID}`, `${CLAUDE_EFFORT}`.
-- `` !`command` `` runs before Claude sees the skill and inlines its output. A failing command aborts the whole invocation, so guard it: `` !`cat .claude/pickle.md 2>/dev/null || echo NO_PROFILE` ``. The command needs a permission rule or an `allowed-tools` entry. If Bash is denied, the permission check fails and the skill aborts with zero turns, guard or not (measured in an eval run). pickle reads its profile with Read instead.
+- `` !`command` `` runs before Claude sees the skill and inlines its output. A failing command aborts the whole invocation, so guard it: `` !`cat .claude/pickle.md 2>/dev/null || echo NO_PROFILE` ``. The command needs a permission rule or an `allowed-tools` entry. If Bash is denied, the permission check fails and the skill aborts with zero turns, guard or not (measured in an eval run). Read a file with Read instead where you can.
 
 ### Locations and names
 
@@ -150,7 +135,7 @@ Outside Claude Code (claude.ai uploads, the Skills API) only `name`, `descriptio
 
 ## Skill authoring best practices
 
-From Anthropic's skill authoring guide. Apply to every skill, playbook and principle.
+From Anthropic's skill authoring guide. Apply to every skill and reference file.
 
 - Concise. Claude is already smart. Every line must justify its token cost.
 - `SKILL.md` body under 500 lines. Split into reference files before that.
@@ -160,7 +145,7 @@ From Anthropic's skill authoring guide. Apply to every skill, playbook and princ
 - Match freedom to fragility. Exact commands and scripts for fragile steps, prose for judgment.
 - Scripts for deterministic work. Say whether Claude runs a script or reads it.
 - Workflows as checklists Claude copies into its todo list. Feedback loops: run, fix, rerun.
-- One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, playbook and principle, and never use a word it lists under _Avoid_ to name that concept.
+- One term per concept, defined in `GLOSSARY.md` at the repo root. Use its terms in every skill, and never use a word it lists under _Avoid_ to name that concept.
 - No time-sensitive statements. No hardcoded model names in prose; models live in agent frontmatter.
 - Forward slashes in paths. Fully qualified MCP tool names: `mcp__<server>__<tool>` in Claude Code (`Server:tool` is the Skills API form).
 - Evals before content. Test on Haiku, Sonnet and Opus.
@@ -203,7 +188,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 - Default is 3 runs per case, with and without the plugin. Use `--runs 1` while iterating, 3 for decisions.
 - Loading evals run with `--ablation none`: a no-plugin arm has nothing to load, and in a two-arm run `Skill` graders are reported but not scored.
 - Read-only tools are granted when listed in `allowed_tools`. Edit, Write and Bash need `--allow-tools`. Loading cases don't need them.
-- Loading cases are dry runs: `append_system_prompt` stops the agent after it reads principles, `allowed_tools: [Read, Glob, Grep]`, `max_turns: 12`. Use `--tag smoke` (three cases) and `--model haiku` while iterating, about $0.01 per pass.
+- Loading cases are dry runs: `append_system_prompt` stops the agent after it invokes the workflow skills, `allowed_tools: [Read, Glob, Grep, Skill]`, `max_turns: 12`. Use `--tag smoke` (the three `router-*` cases) and `--model haiku` while iterating, about $0.01 per pass.
 - Narrow with `--case` and `--tag`. Override with `--model`. LLM graders default to Haiku (`--judge-model`).
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. There is no tests-pass grader: have Claude write the result to a file and grade that file.
 - Fixtures are tiny purpose-built repos created by a `scaffold_script` in the case directory, which needs `--scaffold`. No `.claude/` config loads inside a run, but files there can still be read.
@@ -214,18 +199,14 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 
 | Topic | Decision |
 |---|---|
-| Entry skill | `pickle-mode`, user-invoked only, `/pickle:pickle-mode <task>`. Like pstack's `poteto-mode`: the user starts the skill, the agent decides from the task which playbooks to read and which principles to load |
+| Entry skill | `pickle-mode` is the vendored `using-agent-skills`, renamed with `name: pickle-mode` on `main` (the UPSTREAM row maps `skills/pickle-mode` to `as:skills/using-agent-skills`, so the sync keeps it there). Upstream text, model-invocable as upstream ships it. `/pickle:pickle-mode <task>` starts it |
 | Effort | No levels. Invoking pickle means the full process. Claude Code's own `/effort` is separate and untouched |
-| Playbooks | 19 plain files under `pickle-mode`, read only when the task needs them. Steps copied into todos so they survive compaction |
-| Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
-| Conventions | Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Language skills are defaults only: `/pickle:setup` appends the ones for each detected stack after the project's own conventions, so the project wins. pickle ships `typescript-best-practices`. Laravel and React use third-party skills the user installs (`laravel-best-practices` from Laravel Boost, `vercel-react-best-practices` from Vercel): pickle never copies them, `detect-stack.sh` reports whether they are installed, and setup gives the install command when they are not. No `paths`: plugin skills ignore it |
-| Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
+| Workflow skills | The vendored agent-skills skills, picked by the `pickle-mode` decision tree. pstack playbooks, principles and tools are `pending` in `UPSTREAM.md`, re-added only for a gap the vendored skills leave |
+| Language skills | Defaults only. pickle ships `typescript-best-practices`. Laravel and React use third-party skills the user installs (`laravel-best-practices` from Laravel Boost, `vercel-react-best-practices` from Vercel), never copied. The profile and `setup` that listed them are `pending`. No `paths`: plugin skills ignore it |
 | Vendored skills | addyosmani/agent-skills skills, commands and agents ship as plain pickle skills, commands (`/pickle:<name>`) and agents (`pickle:<name>`), chosen per row in `UPSTREAM.md`. The sync rewrites upstream skill and command names into pickle's namespace and repo paths into `${CLAUDE_PLUGIN_ROOT}` paths, and `check-refs.sh` resolves both. Agent names stay bare so projects can override the personas. Upstream text lands on the `vendor/agent-skills` branch (only the chosen skills, at pickle paths, shared references copied into each skill) and merges into `main`, so local edits survive updates. A skill that drifts far moves to `rewritten` |
-| Tools | `how`, `why`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `why` forks as `pickle-historian` instead, which has no tools list so it can reach MCP sources. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
+| Tools | None shipped. `how`, `why`, `architect`, `interrogate`, `swarm` and their agents are `pending`. `arena` (bakeoff) dropped: one model family |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
-| Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
-
-`pickle-mode` flow: read the profile and load its conventions, read the playbooks the task needs (ask once if unclear), copy the steps into todos, read principle files where the playbook steps or the `pickle-mode` Principles index name them, pass principle and convention paths to subagents, run `how`, `architect`, implementer subagent, `interrogate` and `swarm` as the playbook lists them, verify against the profile, end with the `Loaded:` line.
+| Observability | Skill calls in the transcript, optional mod pane |
 
 ## References
 

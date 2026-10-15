@@ -2,6 +2,8 @@
 
 What pstack ships and where each piece lands in pickle: skills, principles, playbooks, agents, scripts and the mod, each mapped to the Claude Code feature that replaces or overlaps it. [claude-code.md](claude-code.md) lists those features.
 
+Historical map. pickle now builds on agent-skills and ships only `typescript-best-practices` from pstack, and `pickle-mode` is now the vendored `using-agent-skills`. Every other pstack piece is `pending` in [UPSTREAM.md](../UPSTREAM.md).
+
 Source: pstack 0.15.21 in [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) at commit `997ffc7`, and its Claude Code port [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack). Checked 2026-10-14. Word counts are SKILL.md plus references.
 
 ## Contents
