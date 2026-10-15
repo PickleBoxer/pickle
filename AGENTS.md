@@ -23,9 +23,10 @@ Old working plans are in `.scratch/` (excluded via `.git/info/exclude`, never co
 skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed and user-only on main
 skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
+references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
-LICENSES/                     agent-skills.txt, for vendored commands, agents and docs
+LICENSES/                     agent-skills.txt, for every vendored file outside skills/
 evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (5 firing cases)
 docs/                         claude-code.md (native features, plugin and mod notes), pstack.md (historical pstack map),
                               agents.md and adoption-guide.md (vendored)

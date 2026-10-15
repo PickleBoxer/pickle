@@ -24,12 +24,6 @@ Once the first release lands:
 /plugin install pickle@pickleboxer
 ```
 
-Skills only, without the agents:
-
-```bash
-npx skills add PickleBoxer/pickle --skill '*'
-```
-
 ## Credits
 
 Built on ideas from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), with skills from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills). See [CREDITS.md](CREDITS.md).

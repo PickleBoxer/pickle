@@ -17,7 +17,7 @@ fm_key() { fm "$1" | awk -v k="$2" -F': *' '$1==k {sub(/^[^:]*: */, ""); gsub(/^
 fm_meta() { fm "$1" | awk -v k="$2" '/^metadata:/{m=1; next} m && /^[^ ]/{m=0} m {sub(/^ +/, ""); split($0, a, /: */); if (a[1]==k) {sub(/^[^:]*: */, ""); print; exit}}'; }
 user_only() { [ "$(fm_key "skills/$1/SKILL.md" disable-model-invocation)" = "true" ]; }
 
-shipped=$(find skills agents commands -name '*.md' -type f | sort; ls README.md GLOSSARY.md 2>/dev/null)
+shipped=$(find skills agents commands references -name '*.md' -type f 2>/dev/null | sort; ls README.md GLOSSARY.md 2>/dev/null)
 
 # Frontmatter keys
 for f in skills/*/SKILL.md commands/*.md; do
@@ -60,15 +60,17 @@ while IFS=: read -r f l m; do
   err "$f:$l: $m is the old form, write: the **name** skill (Skill tool, \`pickle:name\`)"
 done < <(grep -noE '\*\*[a-z0-9-]+\*\* \(/pickle:[a-z0-9-]+\)' $shipped)
 
-# Relative Markdown links and `references/...` paths in skill files resolve from the linking
-# file, ${CLAUDE_PLUGIN_ROOT}/ paths anywhere from the repo root (anchors ignored).
+# Relative Markdown links in skill, reference and doc files, and `references/...` paths in skill
+# files, resolve from the linking file. ${CLAUDE_PLUGIN_ROOT}/ paths anywhere resolve from the repo
+# root (anchors ignored).
 while IFS= read -r f; do
+  re='\]\([^) ]+\)'; case "$f" in skills/*) re="$re|\`references/[^\` ]+\`";; esac
   while IFS=: read -r l t; do
     t=${t#](}; t=${t%)}; t=${t#\`}; t=${t%\`}; t=${t%%#*}
-    case "$t" in ""|*://*|mailto:*) continue;; esac
+    case "$t" in ""|*://*|mailto:*|'${CLAUDE_PLUGIN_ROOT}/'*) continue;; esac
     [ -e "$(dirname "$f")/$t" ] || err "$f:$l: link $t does not resolve"
-  done < <(grep -noE '\]\([^) ]+\)|`references/[^` ]+`' "$f")
-done < <(find skills -name '*.md' -type f)
+  done < <(grep -noE "$re" "$f")
+done < <(find skills references docs -name '*.md' -type f 2>/dev/null)
 while IFS=: read -r f l t; do
   t=${t#'${CLAUDE_PLUGIN_ROOT}/'}; t=${t%%#*}
   [ -e "$t" ] || err "$f:$l: \${CLAUDE_PLUGIN_ROOT}/$t does not resolve"
@@ -84,7 +86,7 @@ for f in agents/*.md; do
 done
 
 # UPSTREAM.md rows: item | kind | source | relation | version | notes
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|doc|eval|script|mod|automation) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|reference|doc|eval|script|mod|automation) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
 [ -n "$rows" ] || err "UPSTREAM.md: no rows found"
 # agent-skills syncs as one: every vendored row has the Baseline version.

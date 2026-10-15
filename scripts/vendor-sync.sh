@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
-# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents, eval cases, docs), copied to its
-# pickle path. Shared root references are copied into each skill that links them,
-# metadata.upstream is added to skills, and names and paths are rewritten for
-# pickle: agent-skills:<x> and the vendored /command names become pickle:<x>, and repo-relative
-# paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Root reference paths in docs
-# become repo paths to a skill's copy. Agent names stay bare, as
+# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents, shared references,
+# eval cases, docs), copied to its pickle path. metadata.upstream is added to skills, and names and
+# paths are rewritten for pickle: agent-skills:<x> and the vendored /command names become
+# pickle:<x>, and shared reference paths in SKILL.md files, and repo-relative paths in commands and
+# agents, become ${CLAUDE_PLUGIN_ROOT} paths. Other files keep upstream's relative paths, which
+# match pickle's layout. Agent names stay bare, as
 # upstream calls them, so a project or user agent with the same name overrides pickle's. Stages the result in a worktree of the vendor branch and prints the
 # commit and merge commands. Commits nothing, touches no other branch.
 #
@@ -61,41 +61,23 @@ src=$(mktemp -d)
 trap 'rm -rf "$src"' EXIT
 g archive "$sha" | tar -x -C "$src"
 
-# Root reference links point at the skill's own references/ folder.
-fix() {
-  perl -CSD -i -pe '
-    s{(?:\.\./){3}references/}{}g if $ARGV =~ m{/references/[^/]+$};
-    s{(?:\.\./){2}references/}{references/}g;
-  ' "$1"
-}
-
 while IFS='|' read -r item path; do
   [ -e "$src/$path" ] || { echo "vendor-sync: $path does not exist upstream at ${sha:0:7}" >&2; exit 1; }
   mkdir -p "$wt/$(dirname "$item")"
   cp -R "$src/$path" "$wt/$item"
-  if [ -d "$wt/$item" ]; then
-    # Shared root references this skill links, from any of its files
-    for r in $(grep -rhoE '(\.\./){2,3}references/[a-z0-9-]+\.md' "$wt/$item" | sed 's#.*/##' | sort -u); do
-      mkdir -p "$wt/$item/references"
-      cp "$src/references/$r" "$wt/$item/references/$r"
-    done
+  sk="$wt/$item/SKILL.md"
+  if [ -f "$sk" ]; then
     cp "$src/LICENSE" "$wt/$item/LICENSE"
-    find "$wt/$item" -name '*.md' -type f | while read -r f; do fix "$f"; done
-    sk="$wt/$item/SKILL.md"
-    if [ -f "$sk" ]; then
-      awk '/^---$/{n++} n<2 && /^metadata:/{f=1} END{exit !f}' "$sk" \
-        && { echo "vendor-sync: $path/SKILL.md has its own metadata now, update this script" >&2; exit 1; }
-      awk -v up="agent-skills/$path" -v v="$version" '
-        /^---$/ {n++; if (n == 2) print "metadata:\n  upstream: " up "\n  upstream-version: " v}
-        {print}' "$sk" > "$sk.tmp" && mv "$sk.tmp" "$sk"
-    fi
-  else
-    case "$item" in *.md) fix "$wt/$item";; esac
+    awk '/^---$/{n++} n<2 && /^metadata:/{f=1} END{exit !f}' "$sk" \
+      && { echo "vendor-sync: $path/SKILL.md has its own metadata now, update this script" >&2; exit 1; }
+    awk -v up="agent-skills/$path" -v v="$version" '
+      /^---$/ {n++; if (n == 2) print "metadata:\n  upstream: " up "\n  upstream-version: " v}
+      {print}' "$sk" > "$sk.tmp" && mv "$sk.tmp" "$sk"
   fi
 done <<< "$rows"
 
-# Commands, agents and docs have no folder for a LICENSE, so one copy covers them.
-if echo "$rows" | grep -qE '^(commands|agents|docs)/'; then
+# Everything but skills has no folder of its own for a LICENSE, so one copy covers it.
+if echo "$rows" | grep -qvE '^skills/'; then
   mkdir -p "$wt/LICENSES"
   cp "$src/LICENSE" "$wt/LICENSES/agent-skills.txt"
 fi
@@ -103,25 +85,17 @@ fi
 # Names pickle now ships: vendored commands and agents, as regex alternations.
 vnames() { echo "$rows" | cut -d'|' -f1 | sed -nE "s#^$1/([a-z0-9-]+)\.md\$#\1#p" | paste -sd'|' -; }
 export VCMDS=$(vnames commands) VAGENTS=$(vnames agents)
-# Root reference name=the first skill copy of it, for commands and agents to point at.
-REFMAP=""
-for r in $(ls "$src/references"); do
-  own=$(cd "$wt" && ls skills/*/references/"$r" 2>/dev/null | head -1 || true)
-  [ -z "$own" ] || REFMAP="$REFMAP $r=$own"
-done
-export REFMAP
 find "$wt" -name '*.md' -type f ! -path '*/.git/*' | while read -r f; do
   perl -CSD -i -pe '
-    BEGIN { %ref = map { split /=/ } grep { length } split / /, $ENV{REFMAP}; $c = $ENV{VCMDS} }
+    BEGIN { $c = $ENV{VCMDS} }
+    # Docs are read by people, so they keep repo paths, not ${CLAUDE_PLUGIN_ROOT}.
     $doc = $ARGV =~ m{/docs/[^/]+$};
     s/\bagent-skills:([a-z0-9-]+)/pickle:$1/g;
     s{(?<![\w./:-])/($c)(?![\w-])}{/pickle:$1}g if length $c;
+    s{(?:\.\./){2}references/}{\$\{CLAUDE_PLUGIN_ROOT\}/references/}g if $ARGV =~ m{/skills/[^/]+/SKILL\.md$};
     s{(?<![\w./\}-])skills/([a-z0-9-]+)/SKILL\.md}{\$\{CLAUDE_PLUGIN_ROOT\}/skills/$1/SKILL.md}g unless $doc;
-    s{(?<![\w./\}-])references/([a-z0-9-]+\.md)}{exists $ref{$1} ? "\$\{CLAUDE_PLUGIN_ROOT\}/$ref{$1}" : "references/$1"}ge
-      if $ARGV !~ m{/skills/} && !$doc;
-    # Docs are read by people, so they get repo paths, not ${CLAUDE_PLUGIN_ROOT}.
-    s{(?<![\w./\}-])((?:\.\./)?)references/([a-z0-9-]+\.md)}{exists $ref{$2} ? "$1$ref{$2}" : "$1references/$2"}ge
-      if $doc;
+    s{(?<![\w./\}-])references/([a-z0-9-]+\.md)}{\$\{CLAUDE_PLUGIN_ROOT\}/references/$1}g
+      if $ARGV =~ m{/(commands|agents)/[^/]+$};
   ' "$f"
 done
 

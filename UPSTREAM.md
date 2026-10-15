@@ -137,7 +137,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 
 ## Agent skills
 
-From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`), agents, two host-neutral `docs/` files, and from `evals/` the `claude plugin eval` cases in `plugin/` plus the two top-level files (not the `run-evals.js` `cases/` and `fixtures/`). `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for commands, agents and docs) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>` and vendored `/command` names to pickle's namespace, and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Root reference links in docs point at a skill's copy. Agent names stay bare, as upstream calls them, so a project or user agent with the same name overrides pickle's. Every `vendored` row has the Baseline version.
+From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`, not the Gemini `commands/*.toml`), agents, the shared `references/` folder, two host-neutral `docs/` files, and from `evals/` the `claude plugin eval` cases in `plugin/` plus the two top-level files (not the `run-evals.js` `cases/` and `fixtures/`). `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the upstream `LICENSE` added (per skill, and `LICENSES/agent-skills.txt` for the rest) and `metadata.upstream` set on skills. It rewrites `agent-skills:<x>` and vendored `/command` names to pickle's namespace, and shared reference paths in `SKILL.md` files and repo paths in commands and agents to `${CLAUDE_PLUGIN_ROOT}` paths. Other files keep upstream's relative paths. Agent names stay bare, as upstream calls them, so a project or user agent with the same name overrides pickle's. Every `vendored` row has the Baseline version.
 
 | pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
@@ -179,6 +179,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | |
 | agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | |
 | agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | |
+| references | reference | as:references | vendored | 0.6.13 | checklists and patterns shared by several skills, commands and agents |
 | docs/agents.md | doc | as:docs/agents.md | vendored | 0.6.13 | persona orchestration rules, linked from the vendored agents |
 | docs/adoption-guide.md | doc | as:docs/adoption-guide.md | vendored | 0.6.13 | greenfield and brownfield rollout |
 | evals/README.md | eval | as:evals/README.md | vendored | 0.6.13 | upstream's eval guide. Its Tier 1 to 3 and `run-evals.js` parts are not in pickle |
