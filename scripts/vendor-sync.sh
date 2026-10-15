@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
-# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents, eval cases), copied to its
+# `vendored` row with an `as:` source in UPSTREAM.md (skills, commands, agents, eval cases, docs), copied to its
 # pickle path. Shared root references are copied into each skill that links them,
 # metadata.upstream is added to skills, and names and paths are rewritten for
 # pickle: agent-skills:<x> and the vendored /command names become pickle:<x>, and repo-relative
-# paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Agent names stay bare, as
+# paths in commands and agents become ${CLAUDE_PLUGIN_ROOT} paths. Root reference paths in docs
+# become repo paths to a skill's copy. Agent names stay bare, as
 # upstream calls them, so a project or user agent with the same name overrides pickle's. Stages the result in a worktree of the vendor branch and prints the
 # commit and merge commands. Commits nothing, touches no other branch.
 #
@@ -93,8 +94,8 @@ while IFS='|' read -r item path; do
   fi
 done <<< "$rows"
 
-# Commands and agents have no folder for a LICENSE, so one copy covers them.
-if echo "$rows" | grep -qE '^(commands|agents)/'; then
+# Commands, agents and docs have no folder for a LICENSE, so one copy covers them.
+if echo "$rows" | grep -qE '^(commands|agents|docs)/'; then
   mkdir -p "$wt/LICENSES"
   cp "$src/LICENSE" "$wt/LICENSES/agent-skills.txt"
 fi
@@ -112,11 +113,15 @@ export REFMAP
 find "$wt" -name '*.md' -type f ! -path '*/.git/*' | while read -r f; do
   perl -CSD -i -pe '
     BEGIN { %ref = map { split /=/ } grep { length } split / /, $ENV{REFMAP}; $c = $ENV{VCMDS} }
+    $doc = $ARGV =~ m{/docs/[^/]+$};
     s/\bagent-skills:([a-z0-9-]+)/pickle:$1/g;
     s{(?<![\w./:-])/($c)(?![\w-])}{/pickle:$1}g if length $c;
-    s{(?<![\w./\}-])skills/([a-z0-9-]+)/SKILL\.md}{\$\{CLAUDE_PLUGIN_ROOT\}/skills/$1/SKILL.md}g;
+    s{(?<![\w./\}-])skills/([a-z0-9-]+)/SKILL\.md}{\$\{CLAUDE_PLUGIN_ROOT\}/skills/$1/SKILL.md}g unless $doc;
     s{(?<![\w./\}-])references/([a-z0-9-]+\.md)}{exists $ref{$1} ? "\$\{CLAUDE_PLUGIN_ROOT\}/$ref{$1}" : "references/$1"}ge
-      if $ARGV !~ m{/skills/};
+      if $ARGV !~ m{/skills/} && !$doc;
+    # Docs are read by people, so they get repo paths, not ${CLAUDE_PLUGIN_ROOT}.
+    s{(?<![\w./\}-])((?:\.\./)?)references/([a-z0-9-]+\.md)}{exists $ref{$2} ? "$1$ref{$2}" : "$1references/$2"}ge
+      if $doc;
   ' "$f"
 done
 

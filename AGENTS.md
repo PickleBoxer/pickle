@@ -25,9 +25,10 @@ skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
-LICENSES/                     agent-skills.txt, for vendored commands and agents
+LICENSES/                     agent-skills.txt, for vendored commands, agents and docs
 evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (5 firing cases)
-docs/                         claude-code.md (native features, plugin and mod notes), pstack.md (historical pstack map)
+docs/                         claude-code.md (native features, plugin and mod notes), pstack.md (historical pstack map),
+                              agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
 UPSTREAM.md                   upstream source and version per pickle file
 ```
