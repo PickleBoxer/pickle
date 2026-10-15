@@ -78,9 +78,11 @@ done
 rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|playbook|principle|agent|script|mod|automation) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
 [ -n "$rows" ] || err "UPSTREAM.md: no rows found"
+# agent-skills syncs as one: every vendored row has the Baseline version.
+as_ver=$(awk -F'|' '$2 == " agent-skills " {gsub(/ /, "", $4); print $4}' UPSTREAM.md)
 
 while IFS='|' read -r item kind src rel ver; do
-  case "$rel" in ported|rewritten|rebuilt|merged|new|pending|dropped) ;; *) err "UPSTREAM.md: $item: unknown relation '$rel'";; esac
+  case "$rel" in ported|rewritten|rebuilt|merged|vendored|new|pending|dropped) ;; *) err "UPSTREAM.md: $item: unknown relation '$rel'";; esac
   if [ "$item" = "-" ]; then
     [ "$rel" = "dropped" ] || err "UPSTREAM.md: row for $src has no pickle item but is $rel"
     continue
@@ -90,13 +92,17 @@ while IFS='|' read -r item kind src rel ver; do
     continue
   fi
   [ -e "$item" ] || { err "UPSTREAM.md: $item does not exist"; continue; }
+  if [ "$rel" = "vendored" ]; then
+    case "$src" in as:*) ;; *) err "UPSTREAM.md: $item is vendored, but only as: sources sync";; esac
+    [ "$ver" = "$as_ver" ] || err "UPSTREAM.md: $item is vendored at $ver, agent-skills Baseline is $as_ver"
+  fi
   if [ "$kind" = "skill" ]; then
     sk=$item; [ -d "$sk" ] && sk="$sk/SKILL.md"
     up=$(fm_meta "$sk" upstream); upv=$(fm_meta "$sk" upstream-version)
     if [ "$rel" = "new" ]; then
       [ -z "$up" ] || err "$sk: metadata upstream '$up' on a new skill"
     else
-      case "$src" in kit:*) exp="cursor-team-kit/${src#kit:}";; *) exp="pstack/$src";; esac
+      case "$src" in kit:*) exp="cursor-team-kit/${src#kit:}";; as:*) exp="agent-skills/${src#as:}";; *) exp="pstack/$src";; esac
       [ "$up" = "$exp" ] || err "$sk: metadata upstream '$up', UPSTREAM.md says '$exp'"
       [ "$upv" = "$ver" ] || err "$sk: metadata upstream-version '$upv', UPSTREAM.md says '$ver'"
     fi

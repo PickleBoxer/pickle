@@ -15,6 +15,7 @@ Language-agnostic engineering playbooks and principles for Claude Code. Start it
 - **Playbooks.** feature, bug fix, refactor, investigate, perf, prototype and more. Read only when matched.
 - **Principles.** Short engineering rules, read only when a playbook step or a trigger needs one. They cost nothing outside pickle.
 - **Before you start.** `/pickle:sharpen <task>` frames the task the way an expert would before doing it. `/pickle:in-your-own-words` plays back your goal and problem so you can correct it.
+- **Engineering skills.** 25 skills from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), from spec and planning to review, security and shipping. They load on their own when a task matches, also outside pickle-mode.
 - **Project profile.** `/pickle:setup` detects your stack and writes `.claude/pickle.md` with your test, type and lint commands and your conventions.
 - **Your conventions.** Your project defines its language rules, and they win over pickle's defaults. `/pickle:setup` also adds a language skill for your stack after yours as a fallback: pickle's `typescript-best-practices` for TypeScript, and for Laravel and React the installed `laravel-best-practices` (Laravel Boost) and `vercel-react-best-practices` (Vercel). pickle does not ship those two. If one is missing, setup tells you how to install it. List them under `conventions:` in the profile, as skill names or paths to files in your repo. pickle reads every one before it starts, also for tasks that write no code.
 
@@ -39,7 +40,7 @@ npx skills add PickleBoxer/pickle --skill '*'
 
 ## Credits
 
-Built on ideas from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
+Built on ideas from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), with skills from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills). See [CREDITS.md](CREDITS.md).
 
 ## License
 

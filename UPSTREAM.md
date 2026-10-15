@@ -1,6 +1,6 @@
 # Upstream
 
-Where each pickle file comes from in pstack, and the pstack version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline.
+Where each pickle file comes from upstream (pstack, cursor-team-kit, agent-skills), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
@@ -10,6 +10,7 @@ Where each pickle file comes from in pstack, and the pstack version it was last 
 - Playbooks
 - Principles
 - Agents
+- Agent skills
 - Scripts, mod and automations
 
 ## Baseline
@@ -19,6 +20,7 @@ Where each pickle file comes from in pstack, and the pstack version it was last 
 | pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.24 | 1e5c90a | 2026-10-14 |
 | pstack Claude port | [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack) | 0.15.15+claude.7, merges 0.15.21 | fc2375c | 2026-10-14 |
 | cursor-team-kit | [cursor/plugins](https://github.com/cursor/plugins/tree/main/cursor-team-kit) (`cursor-team-kit/`) | 1.2.0 | 1e5c90a | 2026-10-14 |
+| agent-skills | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 0.6.13 | aeac41d | 2026-10-15 |
 
 pickle compares against upstream pstack, not the port. pstack source paths below are relative to `pstack/` in cursor/plugins. The port is listed only for the few `port:` rows.
 
@@ -28,11 +30,12 @@ pickle compares against upstream pstack, not the port. pstack source paths below
 - `rewritten`: same job, new text.
 - `rebuilt`: same job, new mechanics.
 - `merged`: several pstack sources in one pickle file.
+- `vendored`: upstream text, merged from the `vendor/agent-skills` branch. Local edits stay on `main` and survive each merge. Change a row to `rewritten` to stop syncing it, then keep your copy in the next merge.
 - `new`: no pstack source.
 - `pending`: planned port, the pickle file does not exist yet.
 - `dropped`: not coming. The row stays so an upstream change to it is noticed and ignored on purpose.
 
-A pstack source starting with `port:` exists only in the Claude port, not upstream. A source starting with `kit:` is in `cursor-team-kit/` of cursor/plugins, not in pstack, and its version is the kit's. A pickle item `-` means no pickle file.
+A pstack source starting with `port:` exists only in the Claude port, not upstream. A source starting with `kit:` is in `cursor-team-kit/` of cursor/plugins, not in pstack, and its version is the kit's. A source starting with `as:` is in addyosmani/agent-skills, and its version is that repo's. A pickle item `-` means no pickle file.
 
 ## Skills
 
@@ -132,6 +135,38 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | agents/pickle-historian.md | agent | - | new | n/a | lead and investigators for `why`. No tools list so it inherits MCP tools, denies Edit, Write, NotebookEdit |
 | agents/comment-sicko.md | agent | agents/comment-sicko.md | rewritten | 0.15.24 | read-only, report only, plain voice, git history instead of `how` and `why` |
 
+## Agent skills
+
+From addyosmani/agent-skills, MIT. `scripts/vendor-sync.sh` copies each `vendored` row to the `vendor/agent-skills` branch, with the shared root `references/` files a skill links copied into its own `references/` folder, long dashes replaced, the upstream `LICENSE` added and `metadata.upstream` set. Every `vendored` row has the Baseline version.
+
+| pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/api-and-interface-design | skill | as:skills/api-and-interface-design | vendored | 0.6.13 | |
+| skills/browser-testing-with-devtools | skill | as:skills/browser-testing-with-devtools | vendored | 0.6.13 | |
+| skills/ci-cd-and-automation | skill | as:skills/ci-cd-and-automation | vendored | 0.6.13 | |
+| skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | |
+| skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | |
+| skills/constraint-driven-development | skill | as:skills/constraint-driven-development | vendored | 0.6.13 | |
+| skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | |
+| skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | |
+| skills/deprecation-and-migration | skill | as:skills/deprecation-and-migration | vendored | 0.6.13 | |
+| skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | |
+| skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | |
+| skills/frontend-ui-engineering | skill | as:skills/frontend-ui-engineering | vendored | 0.6.13 | |
+| skills/git-workflow-and-versioning | skill | as:skills/git-workflow-and-versioning | vendored | 0.6.13 | |
+| skills/idea-refine | skill | as:skills/idea-refine | vendored | 0.6.13 | |
+| skills/incremental-implementation | skill | as:skills/incremental-implementation | vendored | 0.6.13 | |
+| skills/interview-me | skill | as:skills/interview-me | vendored | 0.6.13 | |
+| skills/observability-and-instrumentation | skill | as:skills/observability-and-instrumentation | vendored | 0.6.13 | |
+| skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | |
+| skills/planning-and-task-breakdown | skill | as:skills/planning-and-task-breakdown | vendored | 0.6.13 | |
+| skills/security-and-hardening | skill | as:skills/security-and-hardening | vendored | 0.6.13 | |
+| skills/shipping-and-launch | skill | as:skills/shipping-and-launch | vendored | 0.6.13 | |
+| skills/source-driven-development | skill | as:skills/source-driven-development | vendored | 0.6.13 | |
+| skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | |
+| skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | |
+| skills/using-agent-skills | skill | as:skills/using-agent-skills | vendored | 0.6.13 | |
+
 ## Scripts, mod and automations
 
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
@@ -142,6 +177,7 @@ A pstack source starting with `port:` exists only in the Claude port, not upstre
 | - | script | skills/poteto-mode/scripts/check-plan.mjs | dropped | 0.15.24 | playbook reread step covers it |
 | - | script | skills/poteto-mode/scripts/bootstrap.ts | dropped | 0.15.24 | no Bun tools left |
 | scripts/upstream-diff.sh | script | port:scripts/sync-upstream.sh | rewritten | n/a | maintainer only |
+| scripts/vendor-sync.sh | script | - | new | n/a | maintainer only, refreshes `vendor/agent-skills` |
 | - | script | port:scripts/principle-reads.ts | dropped | n/a | `claude plugin eval` |
 | - | mod | port:hooks | dropped | n/a | translation layer. pickle's planned mod keeps only observability |
 | - | automation | automations/benny | dropped | 0.15.24 | Cursor automations |

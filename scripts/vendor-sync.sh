@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# Maintainer only. Refreshes the vendor/agent-skills branch from addyosmani/agent-skills: every
+# `vendored` row with an `as:` source in UPSTREAM.md, copied to its pickle path. Shared root
+# references are copied into each skill that links them, long dashes are replaced and
+# metadata.upstream is added. Stages the result in a worktree of the vendor branch and prints the
+# commit and merge commands. Commits nothing, touches no other branch.
+#
+# Usage: bash scripts/vendor-sync.sh [ref]     ref defaults to upstream origin/HEAD
+# Env:   AGENT_SKILLS_UPSTREAM_DIR, a clone of https://github.com/addyosmani/agent-skills
+#        (default ~/dev/code/agent-skills)
+#        VENDOR_WORKTREE, where the vendor branch is checked out
+#        (default $TMPDIR/pickle-vendor-agent-skills)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+branch=vendor/agent-skills
+repo=${AGENT_SKILLS_UPSTREAM_DIR:-$HOME/dev/code/agent-skills}
+tmp=${TMPDIR:-/tmp}
+wt=${VENDOR_WORKTREE:-${tmp%/}/pickle-vendor-agent-skills}
+wt=${wt%/}
+
+if ! git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
+  echo "vendor-sync: no agent-skills clone at $repo. Clone it once:" >&2
+  echo "  git clone --filter=blob:none https://github.com/addyosmani/agent-skills.git $repo" >&2
+  exit 1
+fi
+g() { git -C "$repo" "$@"; }
+
+g fetch -q --tags origin
+sha=$(g rev-parse "${1:-origin/HEAD}^{commit}")
+version=$(g show "$sha:.claude-plugin/plugin.json" | sed -nE 's/.*"version": *"([^"]+)".*/\1/p')
+[ -n "$version" ] || { echo "vendor-sync: no version in .claude-plugin/plugin.json at $sha" >&2; exit 1; }
+
+# item|source for every vendored as: row
+rows=$(awk -F'|' 'NF>=8 {for (i=2; i<=6; i++) gsub(/^ +| +$/, "", $i)}
+  NF>=8 && $5 == "vendored" && $4 ~ /^as:/ {sub(/^as:/, "", $4); print $2 "|" $4}' UPSTREAM.md)
+[ -n "$rows" ] || { echo "vendor-sync: no vendored as: rows in UPSTREAM.md" >&2; exit 1; }
+
+# Vendor branch worktree: reuse, check out, or start the orphan branch.
+if [ -d "$wt" ]; then
+  [ "$(git -C "$wt" branch --show-current 2>/dev/null)" = "$branch" ] \
+    || { echo "vendor-sync: $wt exists and is not a $branch worktree" >&2; exit 1; }
+  [ -z "$(git -C "$wt" status --porcelain)" ] \
+    || { echo "vendor-sync: $wt has uncommitted changes. Commit or discard them first" >&2; exit 1; }
+elif git rev-parse -q --verify "refs/heads/$branch" >/dev/null; then
+  git worktree add -q "$wt" "$branch"
+else
+  git worktree add -q --detach "$wt"
+  git -C "$wt" checkout -q --orphan "$branch"
+fi
+git -C "$wt" rm -rq --cached --ignore-unmatch . >/dev/null
+find "$wt" -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+
+src=$(mktemp -d)
+trap 'rm -rf "$src"' EXIT
+g archive "$sha" | tar -x -C "$src"
+
+# Long dashes out (pickle CI rejects them): "**term** -- text" and "`term` -- text" take a
+# colon, other spaced dashes a comma, en dashes a hyphen. Then root reference links point at
+# the skill's own references/ folder.
+fix() {
+  perl -CSD -i -pe '
+    s/\|\s*\x{2014}\s*\|/| - |/g;
+    s/(\*\*|`)\s+\x{2014}\s+/$1: /g;
+    s/\s+\x{2014}\s+/, /g;
+    s/\x{2014}/, /g;
+    s/\x{2013}/-/g;
+    s{(?:\.\./){3}references/}{}g if $ARGV =~ m{/references/[^/]+$};
+    s{(?:\.\./){2}references/}{references/}g;
+  ' "$1"
+}
+
+while IFS='|' read -r item path; do
+  [ -e "$src/$path" ] || { echo "vendor-sync: $path does not exist upstream at ${sha:0:7}" >&2; exit 1; }
+  mkdir -p "$wt/$(dirname "$item")"
+  cp -R "$src/$path" "$wt/$item"
+  if [ -d "$wt/$item" ]; then
+    # Shared root references this skill links, from any of its files
+    for r in $(grep -rhoE '(\.\./){2,3}references/[a-z0-9-]+\.md' "$wt/$item" | sed 's#.*/##' | sort -u); do
+      mkdir -p "$wt/$item/references"
+      cp "$src/references/$r" "$wt/$item/references/$r"
+    done
+    cp "$src/LICENSE" "$wt/$item/LICENSE"
+    find "$wt/$item" -name '*.md' -type f | while read -r f; do fix "$f"; done
+    sk="$wt/$item/SKILL.md"
+    if [ -f "$sk" ]; then
+      awk '/^---$/{n++} n<2 && /^metadata:/{f=1} END{exit !f}' "$sk" \
+        && { echo "vendor-sync: $path/SKILL.md has its own metadata now, update this script" >&2; exit 1; }
+      awk -v up="agent-skills/$path" -v v="$version" '
+        /^---$/ {n++; if (n == 2) print "metadata:\n  upstream: " up "\n  upstream-version: " v}
+        {print}' "$sk" > "$sk.tmp" && mv "$sk.tmp" "$sk"
+    fi
+  else
+    case "$item" in *.md) fix "$wt/$item";; esac
+  fi
+done <<< "$rows"
+
+git -C "$wt" add -A
+if git -C "$wt" diff --cached --quiet; then
+  echo "vendor-sync: $branch already matches agent-skills $version (${sha:0:7}). Nothing to commit."
+  exit 0
+fi
+
+git -C "$wt" diff --cached --stat | tail -1
+first=""; git rev-parse -q --verify "refs/heads/$branch" >/dev/null || first=" --allow-unrelated-histories"
+cat <<EOF
+
+Staged agent-skills $version (${sha:0:7}) on $branch in $wt. Next:
+
+  git -C $wt commit -m "chore(vendor): sync agent-skills $version" -m "Upstream: addyosmani/agent-skills@${sha:0:7}"
+  git merge$first --no-ff $branch
+  # resolve conflicts, keep your customizations, then set the agent-skills Baseline row in
+  # UPSTREAM.md to $version | ${sha:0:7} and every vendored row's Upstream version to $version
+  bash scripts/check-refs.sh
+EOF

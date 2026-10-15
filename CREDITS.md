@@ -11,4 +11,6 @@ What pickle takes from pstack:
 
 [UPSTREAM.md](UPSTREAM.md) maps each pickle file to its pstack source and records the pstack version it was last compared against. pickle does not track pstack's wording. Differences are deliberate: one full process with playbooks and principles loaded only when the task needs them, a project profile with the project's own conventions, and Claude Code native skills and agents.
 
+pickle also ships skills from [agent-skills](https://github.com/addyosmani/agent-skills) by Addy Osmani, under the MIT license. They are vendored: upstream text with local edits, synced by `scripts/vendor-sync.sh`. Each vendored skill folder carries the upstream `LICENSE`, and [UPSTREAM.md](UPSTREAM.md) records the agent-skills version pickle is on.
+
 The Claude Code port of pstack is [PickleBoxer/pstack](https://github.com/PickleBoxer/pstack).

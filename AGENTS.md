@@ -48,11 +48,12 @@ skills/setup/                 /pickle:setup: scripts/detect-stack.sh, profiles/ 
 skills/sharpen/ in-your-own-words/   user-only prompts, ported from pstack
 skills/tdd/ unslop/ technical-writing/ no-comments/ deslop/ benchmark-checklist/ show-me-your-work/ blast-radius/ figure-it-out/   inline skills ported from pstack (deslop from cursor-team-kit)
 skills/typescript-best-practices/   language skill, a default convention for TypeScript stacks
+skills/<agent-skills name>/   25 skills vendored from addyosmani/agent-skills, merged from the vendor/agent-skills branch
 agents/                       pickle-lead, pickle-explorer, pickle-implementer, pickle-reviewer, pickle-historian, comment-sicko
 evals/                        eval cases (results/ is ignored)
 docs/                         claude-code.md (native features), pstack.md (pstack map)
-scripts/                      check-refs.sh (CI), upstream-diff.sh (maintainer)
-UPSTREAM.md                   pstack source and version per pickle file
+scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
+UPSTREAM.md                   upstream source and version per pickle file
 .claude/CLAUDE.md            imports AGENTS.md
 AGENTS.md  GLOSSARY.md  README.md  CREDITS.md  LICENSE
 ```
@@ -95,7 +96,9 @@ claude plugin test .
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream changes since each baseline in `UPSTREAM.md`: pstack, and cursor-team-kit for `kit:` rows.
+`check-refs.sh` fails when a skill, principle or agent mention does not resolve, a called skill is user-only, or `UPSTREAM.md` disagrees with the files. `validate --strict` does not check skill frontmatter, so this script does. `scripts/upstream-diff.sh` (maintainer only) lists upstream changes since each baseline in `UPSTREAM.md`: pstack, cursor-team-kit for `kit:` rows and agent-skills for `as:` rows.
+
+`scripts/vendor-sync.sh [ref]` (maintainer only) stages the `vendored` rows from addyosmani/agent-skills on the `vendor/agent-skills` branch and prints the commit and merge commands. Customize vendored skills on `main`. The merge keeps those edits. After the merge, set the agent-skills Baseline row and every `vendored` row to the new version. To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
 
 `plugin test` runs every `*.test.ts` under the folder against the engine. It needs at least one test, so it joins CI with the first mod code.
 
@@ -215,6 +218,7 @@ Tool: `claude plugin eval` (built in). Cases are `evals/**/case.yaml` or `prompt
 | Principles | 14 plain files under `pickle-mode`, merged from pstack's 24, rewritten language-agnostic. Named throughout, as in pstack: a trigger index in `pickle-mode` and inline mentions in playbook steps (`**principle-fix-root-causes**` is `principles/fix-root-causes.md`). The agent reads one when a mention applies. Not skills, so they cost nothing outside pickle and never load in ordinary sessions. Todos name the principle file, so it can be reread after compaction |
 | Conventions | Principles stay language-agnostic, and each project lists its conventions in the profile as skill names or file paths. `pickle-mode` loads every one in step 1, also for tasks that write no code, and they win over pickle's defaults. Language skills are defaults only: `/pickle:setup` appends the ones for each detected stack after the project's own conventions, so the project wins. pickle ships `typescript-best-practices`. Laravel and React use third-party skills the user installs (`laravel-best-practices` from Laravel Boost, `vercel-react-best-practices` from Vercel): pickle never copies them, `detect-stack.sh` reports whether they are installed, and setup gives the install command when they are not. No `paths`: plugin skills ignore it |
 | Profile | `.claude/pickle.md` in the user's project, read with Read by `pickle-mode`, written by `/pickle:setup` |
+| Vendored skills | addyosmani/agent-skills skills ship as plain model-invocable pickle skills, chosen per row in `UPSTREAM.md`. Upstream text lands on the `vendor/agent-skills` branch (only the chosen skills, at pickle paths, shared references copied into each skill, dashes replaced) and merges into `main`, so local edits survive updates. A skill that drifts far moves to `rewritten` |
 | Tools | `how`, `why`, `architect`, `interrogate`, `swarm`, each a forked `pickle-lead` that fans out to its own subagents and returns one answer. `why` forks as `pickle-historian` instead, which has no tools list so it can reach MCP sources. `arena` (bakeoff) dropped: one model family. `interrogate panel` and `swarm` only when a playbook calls for them or the user names them |
 | Reply style | not pickle's job. Lives in the user's CLAUDE.md |
 | Observability | playbook and principle Reads in the transcript, a `Loaded:` line at the end of each reply, optional mod pane |
