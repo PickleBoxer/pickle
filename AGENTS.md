@@ -38,7 +38,7 @@ UPSTREAM.md                   upstream source and version per pickle file
 - GitHub: run `gh auth switch -u PickleBoxer` before any `gh` call. The SSH remote uses the host alias `github-PickleBoxer.com`.
 - Never run an eval without asking first.
 - Ask before assuming intent or architecture. Say whether a claim is measured, inferred or a guess.
-- Claude Code facts come from the `claude-code-docs` MCP server, never from memory or WebFetch: `mcp__claude-code-docs__search_claude_code_docs`, then `mcp__claude-code-docs__query_docs_filesystem_claude_code_docs` (`/en/<page>.mdx`). Tell research subagents the same. If the server is missing, ask the user to run `claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp`, never at project scope (a root `.mcp.json` would ship with the plugin).
+- Claude Code facts come from the `claude-code-docs` MCP server, never from memory or WebFetch: `mcp__claude-code-docs__search_claude_code_docs`, then `mcp__claude-code-docs__query_docs_filesystem_claude_code_docs` (`/en/<page>.mdx`). Tell research subagents the same. If the server is missing, ask the user to run `claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp`, never at project scope (a root `.mcp.json` would ship with the plugin). `.claude/mcp.json` has the same server for `claude --mcp-config .claude/mcp.json`.
 - Before writing mod code, load the `plugin-authoring` skill. Mod notes: `docs/claude-code.md`, Mods.
 
 ## Checks
