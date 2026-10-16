@@ -78,12 +78,15 @@ done < <(grep -noE '\$\{CLAUDE_PLUGIN_ROOT\}/[A-Za-z0-9_./-]+[A-Za-z0-9_-]' $shi
 
 # pickle-mode routes by name: every workflow skill in it must be a checked call, never bare.
 # Upstream writes bare names, so a merge can bring one in. Drop the call forms, then look for leftovers.
+# One-word names (how, why) are also English words, so they count only in code font or bold.
 pm=skills/pickle-mode/SKILL.md
-names=$(ls skills | grep -vx pickle-mode | paste -sd'|' -)
+names=$(ls skills | grep -vx pickle-mode | grep -- - | paste -sd'|' -)
+words=$(ls skills | grep -vx pickle-mode | grep -v -- - | paste -sd'|' -)
 while IFS=: read -r l t; do
+  t=$(echo "$t" | tr -d '`*')
   err "$pm:$l: bare skill name '$t', write: the **$t** skill (Skill tool, \`pickle:$t\`)"
 done < <(sed -E 's/\*\*[a-z0-9-]+\*\* skill \(Skill tool, `pickle:[a-z0-9-]+`\)//g; s/pickle:[a-z0-9-]+//g' "$pm" \
-  | grep -noE "(^|[^a-z0-9-])($names)([^a-z0-9-]|\$)" | sed -E 's/:[^a-z]*/:/; s/[^a-z0-9-]*$//')
+  | grep -noE "(^|[^a-z0-9-])($names)([^a-z0-9-]|\$)|\`($words)\`|\*\*($words)\*\*" | sed -E 's/:[^a-z`*]*/:/; s/[^a-z0-9`*-]*$//')
 
 # Agent skills: preload lists. A user-only skill there is skipped silently.
 for f in agents/*.md; do

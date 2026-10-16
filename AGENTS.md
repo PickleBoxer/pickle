@@ -4,7 +4,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships `typescript-best-practices`, ported from pstack. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships five skills from pstack: `typescript-best-practices`, `unslop` and `technical-writing` (ported), `how` and `why` (rewritten for Claude Code). Origin and licenses: `CREDITS.md`.
 
 ## Next
 
@@ -20,11 +20,13 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed and user-only on main
 skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
+skills/how/, skills/why/      investigation skills (pstack): how code works, why it is shaped that way
+skills/unslop/, skills/technical-writing/   writing skills (pstack)
 references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (6 firing and 5 loading cases)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (9 firing and 6 loading cases)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)

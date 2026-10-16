@@ -16,6 +16,18 @@ _Avoid_: playbook, mode, recipe
 A skill with default idioms for one language or framework: pickle's own (typescript-best-practices) or a third-party one the user installs. The project's own rules win over it.
 _Avoid_: language pack, rules pack
 
+**Investigation skill**:
+A skill that explains code before a change: how (what it does and how it runs) or why (the reasons it is shaped that way). From pstack.
+_Avoid_: research skill, archaeology
+
+**Source guide**:
+A file in why's `references/sources/` with search steps for one evidence category, such as the issue tracker or team chat.
+_Avoid_: playbook
+
+**Writing skill**:
+A skill with rules for prose: technical-writing (document structure and sentences) or unslop (AI writing patterns). From pstack.
+_Avoid_: style guide, prose pack
+
 ## Evals
 
 **Loading eval**:

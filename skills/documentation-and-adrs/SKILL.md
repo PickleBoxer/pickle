@@ -12,6 +12,8 @@ metadata:
 
 Document decisions, not just code. The most valuable documentation captures the *why* — the context, constraints, and trade-offs that led to a decision. Code shows *what* was built; documentation explains *why it was built this way* and *what alternatives were considered*. This context is essential for future humans and agents working in the codebase.
 
+This skill decides what to document. Write the prose with the **technical-writing** skill (Skill tool, `pickle:technical-writing`). To record the rationale of code that already exists, find it first with the **why** skill (Skill tool, `pickle:why`).
+
 ## When to Use
 
 - Making a significant architectural decision

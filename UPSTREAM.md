@@ -1,6 +1,6 @@
 # Upstream
 
-Where each pickle file comes from upstream (agent-skills, and pstack for `typescript-best-practices`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
+Where each pickle file comes from upstream (agent-skills, and pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how` and `why`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
@@ -14,7 +14,7 @@ Where each pickle file comes from upstream (agent-skills, and pstack for `typesc
 
 | Source | Repo | Version | Commit | Compared |
 |---|---|---|---|---|
-| pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.24 | 1e5c90a | 2026-10-14 |
+| pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.25 | 99743e9 | 2026-10-16 |
 | agent-skills | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 0.6.13 | aeac41d | 2026-10-15 |
 
 ## Relations
@@ -30,7 +30,11 @@ A source starting with `as:` is in addyosmani/agent-skills, and its version is t
 
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
-| skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.24 | model-invocable, no `paths` (ignored for plugin skills) |
+| skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.25 | model-invocable, no `paths` (ignored for plugin skills) |
+| skills/unslop | skill | skills/unslop | ported | 0.15.25 | model-invocable (user-only upstream), so other skills can call it. Adds a scope line. Rule numbers kept: other skills cite them |
+| skills/technical-writing | skill | skills/technical-writing | ported | 0.15.25 | model-invocable (user-only upstream). Calls `pickle:unslop`, drops the rules unslop already owns, project conventions win, no Cursor house rules |
+| skills/how | skill | skills/how | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool (Explore explorers), no per-role models. Simple questions and the explanation are written inline, not by an explainer subagent |
+| skills/why | skill | skills/why | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool and ToolSearch for MCP discovery, no per-role models. Answers inline when only source control is available. Source guides renamed by category, `source-playbook.md` folded into `SKILL.md`, warehouse guide made generic |
 
 ## Agent skills
 
@@ -47,7 +51,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | |
 | skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | |
 | skills/deprecation-and-migration | skill | as:skills/deprecation-and-migration | vendored | 0.6.13 | |
-| skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | |
+| skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | Overview adds a line on `main` that calls `pickle:technical-writing` and `pickle:why` |
 | skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | |
 | skills/frontend-ui-engineering | skill | as:skills/frontend-ui-engineering | vendored | 0.6.13 | |
 | skills/git-workflow-and-versioning | skill | as:skills/git-workflow-and-versioning | vendored | 0.6.13 | |

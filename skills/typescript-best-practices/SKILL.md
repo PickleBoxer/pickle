@@ -3,7 +3,7 @@ name: typescript-best-practices
 description: Default TypeScript idioms (discriminated unions, branded types, no `as` casts, schemas at the boundary, exhaustive switches) for .ts and .tsx code. Use when writing, editing or reviewing TypeScript and the project has no TypeScript conventions of its own. The project's own conventions win.
 metadata:
   upstream: pstack/skills/typescript-best-practices
-  upstream-version: 0.15.24
+  upstream-version: 0.15.25
 ---
 
 # TypeScript best practices

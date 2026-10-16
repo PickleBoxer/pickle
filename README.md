@@ -20,6 +20,8 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
   - Review: `code-review-and-quality`, `code-simplification`, `security-and-hardening`, `performance-optimization`
   - Ship: `git-workflow-and-versioning`, `ci-cd-and-automation`, `deprecation-and-migration`, `documentation-and-adrs`, `observability-and-instrumentation`, `shipping-and-launch`
 - **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
+- **Investigation skills.** `how` explains how a part of the code works, and `why` digs up the reasons it is shaped that way from git history, PRs and any MCP servers you have added.
+- **Writing skills.** `technical-writing` applies a layered standard to docs, PR descriptions and commit messages, and `unslop` removes AI writing patterns from any prose.
 
 ### Commands
 
@@ -47,7 +49,7 @@ Shared checklists (testing, security, performance, accessibility, observability,
 - Commands live under `pickle:`, so `/pickle:review` never clashes with the built-in `/review`.
 - Agent names stay bare, so your own agents can override them.
 - Vendored skills will be trimmed where evals show they are too long or overlap.
-- `typescript-best-practices` is added.
+- `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` are added from pstack.
 
 ## Install
 
@@ -72,6 +74,7 @@ pickle ships no MCP server. Some skills do more when you add one yourself:
 | MCP server | Used by | Without it |
 |---|---|---|
 | [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) | `browser-testing-with-devtools`, the browser section of `test-driven-development`, traces in `performance-optimization` | No live DOM, console, network or performance checks. Setup is in `browser-testing-with-devtools`. |
+| An issue tracker, docs, chat, observability, error-tracking or analytics server (for example Linear, Notion, Slack, Datadog, Sentry, Databricks) | `why` | `why` searches only git and `gh`, answers inline, and lists each missing category as a gap. |
 
 `context-engineering` also suggests documentation, database and GitHub servers for richer context. Any of them helps, none is required.
 
@@ -87,7 +90,7 @@ claude --allowedTools TaskCreate
 
 ## Credits
 
-Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
 
 ## License
 

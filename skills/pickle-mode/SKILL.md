@@ -31,6 +31,8 @@ Start at the first phase the task needs and work down. Skip the phases it doesn'
    - Have a spec, need tasks: the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`)
 3. **Build**
    - Need better context: the **context-engineering** skill (Skill tool, `pickle:context-engineering`)
+   - Unfamiliar code, need to know how it works: the **how** skill (Skill tool, `pickle:how`)
+   - Need to know why code is shaped this way before changing it: the **why** skill (Skill tool, `pickle:why`)
    - Need doc-verified code: the **source-driven-development** skill (Skill tool, `pickle:source-driven-development`)
    - Implementing code: the **incremental-implementation** skill (Skill tool, `pickle:incremental-implementation`), and alongside it when they apply:
      - UI work: the **frontend-ui-engineering** skill (Skill tool, `pickle:frontend-ui-engineering`)
@@ -49,6 +51,7 @@ Start at the first phase the task needs and work down. Skip the phases it doesn'
 6. **Ship**
    - Committing or branching: the **git-workflow-and-versioning** skill (Skill tool, `pickle:git-workflow-and-versioning`)
    - Writing docs or ADRs: the **documentation-and-adrs** skill (Skill tool, `pickle:documentation-and-adrs`)
+   - Writing docs, PR descriptions or commit messages: the **technical-writing** skill (Skill tool, `pickle:technical-writing`)
    - Deprecating or migrating: the **deprecation-and-migration** skill (Skill tool, `pickle:deprecation-and-migration`)
    - CI/CD pipeline work: the **ci-cd-and-automation** skill (Skill tool, `pickle:ci-cd-and-automation`)
    - Deploying or launching: the **shipping-and-launch** skill (Skill tool, `pickle:shipping-and-launch`)
