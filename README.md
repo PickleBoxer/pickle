@@ -65,6 +65,16 @@ git clone https://github.com/PickleBoxer/pickle.git
 claude --plugin-dir ./pickle
 ```
 
+### Optional extras
+
+pickle ships no MCP server. Some skills do more when you add one yourself:
+
+| MCP server | Used by | Without it |
+|---|---|---|
+| [Chrome DevTools MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp) | `browser-testing-with-devtools`, the browser section of `test-driven-development`, traces in `performance-optimization` | No live DOM, console, network or performance checks. Setup is in `browser-testing-with-devtools`. |
+
+`context-engineering` also suggests documentation, database and GitHub servers for richer context. Any of them helps, none is required.
+
 ## Credits
 
 Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).

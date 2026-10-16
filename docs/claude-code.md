@@ -140,7 +140,8 @@ A mod is a plugin with function hooks, on by default from Claude Code 2.1.287. T
 - Restrict a forked skill's tools through its `agent`, not `disallowed-tools`.
 - Set `run_in_background` explicitly on every Agent call in a fan-out skill.
 - Name skills with the Skill tool form above, and agents by bare name unless they must be pinned.
-- Ship nothing that depends on the user's MCP servers, settings or agents. A skill must still work when installed with `npx skills add`.
+- Ship nothing that depends on the user's settings or agents. A skill must still work when installed with `npx skills add`.
+- A skill may use an MCP server the user adds. List it in README, Optional extras, with what the skill loses without it.
 - Measure before relying on a behaviour the docs do not state: probe it with a throwaway plugin under `claude --plugin-dir`, then record it here with its mark.
 
 ## Unverified
