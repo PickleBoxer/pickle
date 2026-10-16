@@ -19,7 +19,7 @@ _Avoid_: language pack, rules pack
 ## Evals
 
 **Loading eval**:
-An eval that checks only which workflow skills pickle-mode invoked for a task. No code changes. Planned.
+An eval that checks only which workflow skills pickle-mode invoked for a task. No code changes.
 _Avoid_: routing eval
 
 **Firing eval**:

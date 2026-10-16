@@ -8,7 +8,7 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 
 ## Next
 
-1. Run the firing evals, with the user's go-ahead, until the skills fire on their own. Then write loading evals for `pickle-mode`.
+1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus.
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
@@ -24,7 +24,7 @@ references/                   vendored checklists and patterns shared by skills,
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (5 firing cases)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (6 firing and 5 loading cases)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
@@ -75,6 +75,7 @@ From Anthropic's skill authoring guide. Skill basics and measured behaviour: `do
 
 - Always pass `--no-publish` (reports publish to claude.ai by default) and `--max-cost-usd`.
 - Firing cases need both arms: run them with the default ablation, `--runs 1` while iterating and 3 for decisions, and read the Δ, since a skill fires in some runs and not others. A `tool_used: Skill` grader is left out of the score in two-arm runs, so each case pairs it with a grader on the reply.
+- Loading cases (`pickle-mode-routes-*`) run one arm with `--ablation none`: without pickle, `/pickle:pickle-mode` does not exist. The dry-run rule sits in `append_system_prompt`, so the task stays what a user would type.
 - Skills target Sonnet and Opus, not Haiku. `--model haiku` is fine for checking that graders work; decide on firing and outcomes with `--model sonnet` and `--model opus`.
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. For test results, have Claude write them to a file and grade the file.
 - Tools listed in a case's `allowed_tools` are granted if read-only. Edit, Write and Bash need `--allow-tools`.
