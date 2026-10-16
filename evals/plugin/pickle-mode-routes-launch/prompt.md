@@ -3,8 +3,7 @@ description: A loading eval dry run. A deploy request started through pickle-mod
 expected_outcome: pickle:shipping-and-launch is loaded with the Skill tool.
 max_turns: 4
 allowed_tools: [Skill]
+append_system_prompt: "Dry run: call the Skill tool once for each skill you would use for the task, in order, then stop and list them. Don't read, write or run anything else."
 ---
 
 /pickle:pickle-mode Deploy this to production.
-
-Dry run: load the skills you would use for this task, in order, then stop and list them. Don't read, write or run anything.
