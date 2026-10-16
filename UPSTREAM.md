@@ -62,7 +62,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/source-driven-development | skill | as:skills/source-driven-development | vendored | 0.6.13 | |
 | skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | |
 | skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | |
-| skills/pickle-mode | skill | as:skills/using-agent-skills | vendored | 0.6.13 | the entry skill, `/pickle:pickle-mode`. Renamed and user-only: `name: pickle-mode` and `disable-model-invocation: true` are set on `main` |
+| skills/pickle-mode | skill | as:skills/using-agent-skills | vendored | 0.6.13 | the entry skill, `/pickle:pickle-mode`. Renamed and user-only: `name: pickle-mode` and `disable-model-invocation: true` are set on `main`. Rewritten on `main` above Core Operating Behaviors: procedure, phase-ordered router with `pickle:` names, user-facing description. Upstream changes there conflict on merge |
 | commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | |
 | commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | |
 | commands/constraints.md | command | as:.claude/commands/constraints.md | vendored | 0.6.13 | |
