@@ -11,7 +11,7 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 1. Run the firing evals, with the user's go-ahead, until the skills fire on their own. Then write loading evals for `pickle-mode`.
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Re-add `pending` pieces one at a time, for a measured gap.
-4. Outcome evals, token evals, then the Haiku, Sonnet and Opus pass before a release.
+4. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
 Old working plans are in `.scratch/` (excluded via `.git/info/exclude`, never committed). They predate the baseline reset.
 
@@ -24,7 +24,6 @@ skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed 
 skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
 references/                   vendored checklists and patterns shared by skills, commands and agents
-references/stacks/            pickle's stack references: php.md (PHP, Laravel, Symfony), swift.md
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/
@@ -79,7 +78,7 @@ From Anthropic's skill authoring guide. Skill mechanics (frontmatter, context, c
 
 - Always pass `--no-publish` (reports publish to claude.ai by default) and `--max-cost-usd`.
 - Firing cases need both arms: run them with the default ablation, `--runs 1` while iterating and 3 for decisions, and read the Δ, since a skill fires in some runs and not others. A `tool_used: Skill` grader is left out of the score in two-arm runs, so each case pairs it with a grader on the reply.
-- Iterate with `--model haiku`.
+- Skills target Sonnet and Opus, not Haiku. `--model haiku` is fine for checking that graders work; decide on firing and outcomes with `--model sonnet` and `--model opus`.
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. For test results, have Claude write them to a file and grade the file.
 - Tools listed in a case's `allowed_tools` are granted if read-only. Edit, Write and Bash need `--allow-tools`.
 - No `.claude/` config loads inside a run.

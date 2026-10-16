@@ -162,8 +162,6 @@ Picking a dimension means installing something. Don't leave the user with a numb
 | Architecture | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | any violation |
 | Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
 
-For PHP (Laravel, Symfony) and Swift tools per dimension, see `${CLAUDE_PLUGIN_ROOT}/references/stacks/php.md` and `${CLAUDE_PLUGIN_ROOT}/references/stacks/swift.md`.
-
 Five things that will bite you if you skip them:
 
 1. **`--redact` on gitleaks is not optional.** Without it the matched secret lands in the agent's transcript, which is how a leaked key ends up in a log, a summary, or a commit message. Report the rule and the location, never the value.
