@@ -12,8 +12,42 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
 ```
 
 - **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, renamed and started only by you: a decision tree that maps the task to the workflow skills, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
-- **Engineering skills.** 25 skills from [agent-skills](https://github.com/addyosmani/agent-skills), from spec and planning to review, security and shipping. pickle-mode picks from them, and they also load on their own when a task matches. Its commands come along (`/pickle:spec`, `/pickle:plan`, `/pickle:build`, `/pickle:test`, `/pickle:review`, `/pickle:ship` and more), with the `code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor` agents.
+- **24 workflow skills** from [agent-skills](https://github.com/addyosmani/agent-skills). pickle-mode picks from them, and they also load on their own when a task matches.
+  - Define: `interview-me`, `idea-refine`, `spec-driven-development`, `constraint-driven-development`
+  - Plan: `planning-and-task-breakdown`
+  - Build: `incremental-implementation`, `test-driven-development`, `context-engineering`, `source-driven-development`, `doubt-driven-development`, `frontend-ui-engineering`, `api-and-interface-design`
+  - Verify: `browser-testing-with-devtools`, `debugging-and-error-recovery`
+  - Review: `code-review-and-quality`, `code-simplification`, `security-and-hardening`, `performance-optimization`
+  - Ship: `git-workflow-and-versioning`, `ci-cd-and-automation`, `deprecation-and-migration`, `documentation-and-adrs`, `observability-and-instrumentation`, `shipping-and-launch`
 - **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
+
+### Commands
+
+| Doing | Command |
+|---|---|
+| Define what to build | `/pickle:spec` |
+| Plan it in small tasks | `/pickle:plan` |
+| Build one slice, or `auto` for the whole plan | `/pickle:build` |
+| Prove it works | `/pickle:test` |
+| Set the quality bar | `/pickle:constraints` |
+| Review before merge | `/pickle:review` |
+| Audit web performance | `/pickle:webperf` |
+| Simplify code | `/pickle:code-simplify` |
+| Ship | `/pickle:ship` |
+
+### Agents
+
+`code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor`. A project or user agent with the same name overrides pickle's. See [docs/agents.md](docs/agents.md).
+
+Shared checklists (testing, security, performance, accessibility, observability, definition of done) live in [references/](references/). To roll pickle out on a new or existing codebase, see [docs/adoption-guide.md](docs/adoption-guide.md).
+
+## How pickle differs from agent-skills
+
+- `pickle-mode` is user-only, so it stays out of every session's context until you start it.
+- Commands live under `pickle:`, so `/pickle:review` never clashes with the built-in `/review`.
+- Agent names stay bare, so your own agents can override them.
+- Vendored skills will be trimmed where evals show they are too long or overlap.
+- `typescript-best-practices` is added.
 
 ## Install
 
@@ -22,6 +56,13 @@ Once the first release lands:
 ```bash
 /plugin marketplace add PickleBoxer/claude-plugins
 /plugin install pickle@pickleboxer
+```
+
+To try it now from a clone:
+
+```bash
+git clone https://github.com/PickleBoxer/pickle.git
+claude --plugin-dir ./pickle
 ```
 
 ## Credits
