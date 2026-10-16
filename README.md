@@ -11,7 +11,7 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
 /pickle:pickle-mode extract the payment gateway behind an interface
 ```
 
-- **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, renamed and started only by you: a decision tree that maps the task to the workflow skills, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
+- **Entry skill.** `pickle-mode` is agent-skills' `using-agent-skills`, rewritten on `main` and started only by you: a list of the workflow skills by phase, from Define to Ship, that it loads for the task, plus the operating rules every skill follows (surface assumptions, push back, keep scope, verify).
 - **24 workflow skills** from [agent-skills](https://github.com/addyosmani/agent-skills). pickle-mode picks from them, and they also load on their own when a task matches.
   - Define: `interview-me`, `idea-refine`, `spec-driven-development`, `constraint-driven-development`
   - Plan: `planning-and-task-breakdown`

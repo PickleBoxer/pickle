@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fails when a skill or agent mention does not resolve, when a called
-# skill is user-only, or when UPSTREAM.md disagrees with the files.
+# skill is user-only, when pickle-mode names a skill bare, or when UPSTREAM.md disagrees with the files.
 # Run from anywhere: bash scripts/check-refs.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -75,6 +75,15 @@ while IFS=: read -r f l t; do
   t=${t#'${CLAUDE_PLUGIN_ROOT}/'}; t=${t%%#*}
   [ -e "$t" ] || err "$f:$l: \${CLAUDE_PLUGIN_ROOT}/$t does not resolve"
 done < <(grep -noE '\$\{CLAUDE_PLUGIN_ROOT\}/[A-Za-z0-9_./-]+[A-Za-z0-9_-]' $shipped)
+
+# pickle-mode routes by name: every workflow skill in it must be a checked call, never bare.
+# Upstream writes bare names, so a merge can bring one in. Drop the call forms, then look for leftovers.
+pm=skills/pickle-mode/SKILL.md
+names=$(ls skills | grep -vx pickle-mode | paste -sd'|' -)
+while IFS=: read -r l t; do
+  err "$pm:$l: bare skill name '$t', write: the **$t** skill (Skill tool, \`pickle:$t\`)"
+done < <(sed -E 's/\*\*[a-z0-9-]+\*\* skill \(Skill tool, `pickle:[a-z0-9-]+`\)//g; s/pickle:[a-z0-9-]+//g' "$pm" \
+  | grep -noE "(^|[^a-z0-9-])($names)([^a-z0-9-]|\$)" | sed -E 's/:[^a-z]*/:/; s/[^a-z0-9-]*$//')
 
 # Agent skills: preload lists. A user-only skill there is skipped silently.
 for f in agents/*.md; do

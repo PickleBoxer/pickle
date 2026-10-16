@@ -49,7 +49,7 @@ bash scripts/check-refs.sh
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), or `UPSTREAM.md` disagrees with the files. `claude plugin test .` joins CI with the first mod test.
+`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), `pickle-mode` names a skill without the call form, or `UPSTREAM.md` disagrees with the files. `claude plugin test .` joins CI with the first mod test.
 
 ## Vendored skills
 
