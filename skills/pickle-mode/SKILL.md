@@ -14,8 +14,8 @@ Run the task through pickle's workflow skills. Each skill encodes a process seni
 ## Procedure
 
 1. Read the task: the `ARGUMENTS` line at the end of this skill.
-2. Find its phases in the router below. Tell the user which skills you will use, in order.
-3. Load the first skill with the Skill tool, using the name exactly as written. Load each next skill when its phase starts. Don't work from memory of what a skill says.
+2. Find its phases in the router below. Tell the user which skills you will use, in order. If the TaskCreate tool is available, add one entry per skill to the task list, in that order.
+3. Load the first skill with the Skill tool, using the name exactly as written. Load each next skill when its phase starts. Don't work from memory of what a skill says. If you added entries, use TaskUpdate to mark each one `in_progress` when its skill loads and `completed` when its steps are done.
 4. Follow each skill's steps in order. Skills are workflows, not suggestions: don't skip verification steps.
 
 ## Router

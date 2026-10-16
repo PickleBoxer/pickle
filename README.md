@@ -75,6 +75,16 @@ pickle ships no MCP server. Some skills do more when you add one yourself:
 
 `context-engineering` also suggests documentation, database and GitHub servers for richer context. Any of them helps, none is required.
 
+`pickle-mode` adds one task list entry per skill it will use, when Claude Code provides the task tools. Some models get them only when you opt in, with either of these:
+
+```bash
+CLAUDE_CODE_ENABLE_TODO_TOOLS=1 claude
+```
+
+```bash
+claude --allowedTools TaskCreate
+```
+
 ## Credits
 
 Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
