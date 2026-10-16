@@ -23,38 +23,38 @@ Run the task through pickle's workflow skills. Each skill encodes a process seni
 Start at the first phase the task needs and work down. Skip the phases it doesn't need.
 
 1. **Define**
-   - Don't know what you want yet: `pickle:interview-me`
-   - Rough concept, need variants: `pickle:idea-refine`
-   - New project, feature or change: `pickle:spec-driven-development`
-   - No quality bar written down: `pickle:constraint-driven-development`
+   - Don't know what you want yet: the **interview-me** skill (Skill tool, `pickle:interview-me`)
+   - Rough concept, need variants: the **idea-refine** skill (Skill tool, `pickle:idea-refine`)
+   - New project, feature or change: the **spec-driven-development** skill (Skill tool, `pickle:spec-driven-development`)
+   - No quality bar written down: the **constraint-driven-development** skill (Skill tool, `pickle:constraint-driven-development`)
 2. **Plan**
-   - Have a spec, need tasks: `pickle:planning-and-task-breakdown`
+   - Have a spec, need tasks: the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`)
 3. **Build**
-   - Need better context: `pickle:context-engineering`
-   - Need doc-verified code: `pickle:source-driven-development`
-   - Implementing code: `pickle:incremental-implementation`, and alongside it when they apply:
-     - UI work: `pickle:frontend-ui-engineering`
-     - API work: `pickle:api-and-interface-design`
-     - Logs, metrics, alerts: `pickle:observability-and-instrumentation` (during the build, not after)
-     - Stakes high or code unfamiliar: `pickle:doubt-driven-development` (per decision, in flight)
+   - Need better context: the **context-engineering** skill (Skill tool, `pickle:context-engineering`)
+   - Need doc-verified code: the **source-driven-development** skill (Skill tool, `pickle:source-driven-development`)
+   - Implementing code: the **incremental-implementation** skill (Skill tool, `pickle:incremental-implementation`), and alongside it when they apply:
+     - UI work: the **frontend-ui-engineering** skill (Skill tool, `pickle:frontend-ui-engineering`)
+     - API work: the **api-and-interface-design** skill (Skill tool, `pickle:api-and-interface-design`)
+     - Logs, metrics, alerts: the **observability-and-instrumentation** skill (Skill tool, `pickle:observability-and-instrumentation`), during the build, not after
+     - Stakes high or code unfamiliar: the **doubt-driven-development** skill (Skill tool, `pickle:doubt-driven-development`), per decision, in flight
 4. **Verify**
-   - Writing or running tests: `pickle:test-driven-development`
-     - Browser-based: `pickle:browser-testing-with-devtools`
-   - Something broke: `pickle:debugging-and-error-recovery`
+   - Writing or running tests: the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`)
+     - Browser-based: the **browser-testing-with-devtools** skill (Skill tool, `pickle:browser-testing-with-devtools`)
+   - Something broke: the **debugging-and-error-recovery** skill (Skill tool, `pickle:debugging-and-error-recovery`)
 5. **Review**
-   - Reviewing code: `pickle:code-review-and-quality`, plus when needed:
-     - Too complex: `pickle:code-simplification`
-     - Security concerns: `pickle:security-and-hardening`
-     - Performance concerns: `pickle:performance-optimization`
+   - Reviewing code: the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`), plus when needed:
+     - Too complex: the **code-simplification** skill (Skill tool, `pickle:code-simplification`)
+     - Security concerns: the **security-and-hardening** skill (Skill tool, `pickle:security-and-hardening`)
+     - Performance concerns: the **performance-optimization** skill (Skill tool, `pickle:performance-optimization`)
 6. **Ship**
-   - Committing or branching: `pickle:git-workflow-and-versioning`
-   - Writing docs or ADRs: `pickle:documentation-and-adrs`
-   - Deprecating or migrating: `pickle:deprecation-and-migration`
-   - CI/CD pipeline work: `pickle:ci-cd-and-automation`
-   - Deploying or launching: `pickle:shipping-and-launch`
+   - Committing or branching: the **git-workflow-and-versioning** skill (Skill tool, `pickle:git-workflow-and-versioning`)
+   - Writing docs or ADRs: the **documentation-and-adrs** skill (Skill tool, `pickle:documentation-and-adrs`)
+   - Deprecating or migrating: the **deprecation-and-migration** skill (Skill tool, `pickle:deprecation-and-migration`)
+   - CI/CD pipeline work: the **ci-cd-and-automation** skill (Skill tool, `pickle:ci-cd-and-automation`)
+   - Deploying or launching: the **shipping-and-launch** skill (Skill tool, `pickle:shipping-and-launch`)
 
-A bug fix skips most phases: `pickle:debugging-and-error-recovery` → `pickle:test-driven-development` → `pickle:code-review-and-quality`.
-When the task is non-trivial and there's no spec, start with `pickle:spec-driven-development`.
+A bug fix skips most phases: the **debugging-and-error-recovery** skill (Skill tool, `pickle:debugging-and-error-recovery`) → the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`) → the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`).
+When the task is non-trivial and there's no spec, start with the **spec-driven-development** skill (Skill tool, `pickle:spec-driven-development`).
 
 ## Core Operating Behaviors
 
