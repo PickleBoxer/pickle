@@ -24,6 +24,7 @@ skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed 
 skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
 references/                   vendored checklists and patterns shared by skills, commands and agents
+references/stacks/            pickle's stack references: php.md (PHP, Laravel, Symfony), swift.md
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/

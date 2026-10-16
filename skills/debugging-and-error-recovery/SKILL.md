@@ -75,7 +75,7 @@ Cannot reproduce on demand:
     └── Document the conditions observed and revisit when it recurs
 ```
 
-For test failures (npm shown — substitute the repository's own test command, per the test-driven-development skill's Discover the Stack First section):
+For test failures (npm shown — substitute the repository's own test command, per the test-driven-development skill's Discover the Stack First section; PHP (Laravel, Symfony) and Swift commands are in `${CLAUDE_PLUGIN_ROOT}/references/stacks/php.md` and `${CLAUDE_PLUGIN_ROOT}/references/stacks/swift.md`):
 ```bash
 # Run the specific failing test
 npm test -- --grep "test name"

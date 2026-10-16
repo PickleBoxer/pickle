@@ -180,6 +180,8 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | |
 | agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | |
 | references | reference | as:references | vendored | 0.6.13 | checklists and patterns shared by several skills, commands and agents |
+| references/stacks/php.md | reference | - | new | n/a | stack reference for PHP, Laravel and Symfony, linked from the detection steps of test-driven-development, debugging-and-error-recovery and constraint-driven-development |
+| references/stacks/swift.md | reference | - | new | n/a | stack reference, linked like php.md |
 | docs/agents.md | doc | as:docs/agents.md | vendored | 0.6.13 | persona orchestration rules, linked from the vendored agents |
 | docs/adoption-guide.md | doc | as:docs/adoption-guide.md | vendored | 0.6.13 | greenfield and brownfield rollout |
 | evals/README.md | eval | as:evals/README.md | vendored | 0.6.13 | upstream's eval guide. Its Tier 1 to 3 and `run-evals.js` parts are not in pickle |

@@ -49,6 +49,7 @@ requirements.txt / pyproject.toml → Python/Django/Flask
 go.mod          → Go
 Cargo.toml      → Rust
 Gemfile         → Ruby/Rails
+Package.swift   → Swift/SwiftPM (an *.xcodeproj alone: Xcode project)
 ```
 
 State what you found explicitly:

@@ -152,6 +152,8 @@ First locate the **installation boundary**. If the package is matched by a paren
 | pnpm | `pnpm install --frozen-lockfile` | `pnpm audit` |
 | Yarn 2+ | `yarn install --immutable` | `yarn npm audit -A -R` |
 | Yarn 1 | `yarn install --frozen-lockfile` | `yarn audit` |
+| Composer 2.4+ (`composer.lock`) | `composer install` (fails on a stale lock: `composer validate`) | `composer audit --locked` |
+| SwiftPM (`Package.resolved`) | `swift build --only-use-versions-from-resolved-file`, or `xcodebuild -onlyUsePackageVersionsFromResolvedFile` | none native: Dependabot alerts (`package-ecosystem: "swift"`) |
 
 For an unlisted manager or version, consult its official documentation; do not substitute another manager's commands or newer defaults.
 
@@ -178,6 +180,8 @@ Never discover dependency lifecycle scripts by first executing an ordinary insta
 | Yarn 4.14+ | Dependency postinstalls are disabled by default. Grant only required exceptions with top-level `dependenciesMeta.<package>.built: true`. |
 | Yarn 2–4.13 | Set `enableScripts: false` in `.yarnrc.yml`, then grant only required exceptions with top-level `dependenciesMeta.<package>.built: true`; do not enable scripts globally. |
 | Yarn 1 | Bootstrap with `yarn install --ignore-scripts`; keep scripts disabled unless each required exception is reviewed under the pinned client's documented workflow. |
+| Composer 2.2+ | Bootstrap with `composer install --no-scripts --no-plugins`. Allow each reviewed plugin by name under `config.allow-plugins`, which defaults to none. |
+| SwiftPM and Xcode | Package plugins and macros run at build time; Xcode asks to trust each one. Never pass `-skipPackagePluginValidation` or `-skipMacroValidation` without that review. |
 
 Authoritative checks: [npm install-scripts](https://docs.npmjs.com/cli/v11/commands/npm-install-scripts/), [install policy](https://docs.npmjs.com/cli/v11/commands/npm-install/), and [CLI releases](https://github.com/npm/cli/releases); [pnpm approve-builds](https://pnpm.io/cli/approve-builds) and [build settings](https://pnpm.io/settings#allowbuilds); [Yarn security](https://yarnpkg.com/features/security) and [manifest](https://yarnpkg.com/configuration/manifest#dependenciesMeta).
 

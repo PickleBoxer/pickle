@@ -16,6 +16,10 @@ _Avoid_: playbook, mode, recipe
 A skill with default idioms for one language or framework: pickle's own (typescript-best-practices) or a third-party one the user installs. The project's own rules win over it.
 _Avoid_: language pack, rules pack
 
+**Stack reference**:
+A file in `references/stacks/` that maps workflow skill steps (test, lint, audit, profile, ship) to one stack's commands and tools. A workflow skill links it where it would otherwise assume npm. The project's own commands win over it.
+_Avoid_: stack guide, cheat sheet
+
 ## Evals
 
 **Loading eval**:

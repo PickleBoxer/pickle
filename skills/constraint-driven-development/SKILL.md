@@ -48,9 +48,9 @@ Never ask what you can read. Before the first question, gather:
 
 | What | Where to look |
 |------|---------------|
-| Language and stack | `package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml` |
+| Language and stack | `package.json`, `composer.json`, `Package.swift` or `*.xcodeproj`, `pyproject.toml`, `go.mod`, `Cargo.toml` |
 | Test runner | dev dependencies, `test` script, existing test files |
-| Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml` |
+| Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml`, `pint.json`, `phpstan.neon`, `.swiftlint.yml`, `.swift-format` |
 | Coverage today | `coverage/` output, or run the suite once |
 | CI | `.github/workflows/`, `.gitlab-ci.yml` |
 | Agent harness | `.claude/`, `.codex/`, `AGENTS.md` |
@@ -161,6 +161,8 @@ Picking a dimension means installing something. Don't leave the user with a numb
 | Accessibility | axe-core | `npm i -D @axe-core/cli` | `axe $URL --tags wcag2a,wcag2aa,wcag21aa` | zero critical or serious |
 | Architecture | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | any violation |
 | Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
+
+For PHP (Laravel, Symfony) and Swift tools per dimension, see `${CLAUDE_PLUGIN_ROOT}/references/stacks/php.md` and `${CLAUDE_PLUGIN_ROOT}/references/stacks/swift.md`.
 
 Five things that will bite you if you skip them:
 
