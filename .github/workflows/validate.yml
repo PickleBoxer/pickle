@@ -14,5 +14,5 @@ jobs:
         with:
           node-version: 22
       - run: npx -y @anthropic-ai/claude-code plugin validate . --strict
-      # Skill, principle and agent mentions resolve; UPSTREAM.md matches the files
+      # Skill and agent mentions resolve; UPSTREAM.md matches the files
       - run: bash scripts/check-refs.sh

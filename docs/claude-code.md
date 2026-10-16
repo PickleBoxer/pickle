@@ -1,6 +1,6 @@
 # Claude Code native features
 
-What Claude Code ships that a workflow plugin like pickle can build on: extension points, skills, subagents, tools, bundled skills, commands, hooks, MCP, background work and the plugin manifest. The last column of some tables says where pickle uses a feature. [pstack.md](pstack.md) maps pstack's skills onto these features.
+What Claude Code ships that a workflow plugin like pickle can build on: extension points, skills, subagents, tools, bundled skills, commands, hooks, MCP, background work and the plugin manifest. The last column of some tables says where pickle uses a feature.
 
 Sources: the Claude Code docs at <https://code.claude.com/docs/en/> (skills, sub-agents, agent-teams, commands, tools-reference, hooks, plugins/components, plugins/manifest-reference, plugins/cli-reference, plugins/mods/overview, memory, output-styles, permission-modes, worktrees, scheduled-tasks, checkpointing, headless, mcp, mcp-quickstart, permissions, settings-reference, plugin-evals). Checked 2026-10-14 on Claude Code 2.1.296. The MCP section was read through the Claude Code Docs MCP server on 2026-10-14. Recheck after Claude Code updates.
 
@@ -28,10 +28,10 @@ Marks: **read** = stated in the docs. **measured** = probed with a throwaway plu
 | Point | Where | Loaded | Cost until used | pickle uses |
 |---|---|---|---|---|
 | Skill | `skills/<name>/SKILL.md` | description always (unless `disable-model-invocation`), body on invoke | description, max 1,536 chars | yes: `pickle-mode`, the vendored skills |
-| Command | `commands/*.md` | flat markdown, docs prefer skills | description | no |
-| Agent | `agents/*.md`, subfolders join with `:` | description always, body when spawned | description | yes: explorer, implementer, reviewer |
-| Hook | `hooks/hooks.json`, skill or agent frontmatter, settings | on event | 0 | not yet |
-| Mod | `hooks/hooks.json` `modules` plus `register.tsx` | JS/TS handlers in process, 2.1.287+ | 0 | planned (observability) |
+| Command | `commands/*.md` | flat markdown, docs prefer skills | description | yes: the 9 vendored commands |
+| Agent | `agents/*.md`, subfolders join with `:` | description always, body when spawned | description | yes: the 4 vendored agents |
+| Hook | `hooks/hooks.json`, skill or agent frontmatter, settings | on event | 0 | no |
+| Mod | `hooks/hooks.json` `modules` plus `register.tsx` | JS/TS handlers in process, 2.1.287+ | 0 | no |
 | MCP server | plugin root `.mcp.json` or `plugin.json` `mcpServers` | starts when the plugin is enabled, tools deferred behind ToolSearch | tool names | no. See MCP |
 | LSP server | `.lsp.json`, binary on user PATH | on matching files | 0 | no |
 | Output style | `output-styles/*.md`, used as `<plugin>:<name>` | when selected | 0 | no (reply style is the user's) |
@@ -118,7 +118,7 @@ Nesting (measured):
 
 - Named agents only: main, then layers 1, 2, 3. The layer 3 agent has no Agent tool.
 - A `context: fork` skill invoked from the main thread does not use a layer. A `context: fork` skill invoked inside it does. Measured chain: fork, nested fork, agent, agent; the last one had no Agent tool.
-- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing. With pickle's former skills: `architect` under depth 1 still started both Plan runners, and the nested `how` followed its fallback, reading the code itself and saying so under Not checked.
+- With `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=1`, a top-level forked skill still fans out to two agents. A forked skill inside it gets no Agent tool and reports that instead of failing.
 - Waiting: inside a fork, an Agent call without `run_in_background` launched async. The nested fork returned before its child replied, and the late completions surfaced on the main thread as extra turns. With `run_in_background: false` the fork waited and got the reports through SubagentHandback. Fan-out skills must set it explicitly.
 
 Fork vs named: a fork inherits the full conversation, tools and model and shares the prompt cache (`/subtask`, or Claude asks for the fork type). A named subagent starts fresh with only the prompt. A `context: fork` skill starts a subagent of the `agent` type with the skill as prompt (read), so it behaves like a named subagent, not a fork (inferred).
@@ -328,7 +328,7 @@ Inferred from the facts above.
 
 CLI: `claude plugin init | install | uninstall | enable | disable | update | list | details | configure | prune | tag | validate [--strict] | test | eval | eval init | marketplace ...`.
 
-Plugin facts (learned while porting pstack, recheck after updates):
+Plugin facts (measured, recheck after updates):
 
 - `.claude-plugin/plugin.json` alone makes a folder a valid plugin. Skills load from `skills/<folder>/SKILL.md`, agents from `agents/*.md` as `pickle:<name>`.
 - A skill named like its plugin becomes `/pickle:pickle`, which is why the entry skill is `pickle-mode`.
@@ -349,7 +349,7 @@ A plugin with function hooks. Claude Code 2.1.287+ (verified on 2.1.296), early 
 - Guards (`tool.call`, `prompt.submit`, `command.run`, ...) are skipped if they throw, unless `.catch` answers: `on(...).catch(($, e, next) => next.called ? next(e) : { deny: 'why' })`.
 - Types: the engine writes the gitignored `.claude-plugin/types/` when it loads the mod from a watched folder. `tsc -p .` type-checks. `claude --debug` shows skipped hooks.
 - Tests: `*.test.ts` importing `test`, `expect`, `mock` from `claude-code/testing`, run by `claude plugin test .`, which needs at least one test. Loop UI tests over `['terminal', 'desktop'] as const`.
-- Events pstack's mod used: `skill.prompt`, `tool.call`, `agent.spawn`, `prompt.submit`, `prompt.compose`, `session.compact`, `command.run`, `command.describe`, `ui.render`.
+- Common events: `skill.prompt`, `tool.call`, `agent.spawn`, `prompt.submit`, `prompt.compose`, `session.compact`, `command.run`, `command.describe`, `ui.render`.
 
 ## Project instructions and modes
 

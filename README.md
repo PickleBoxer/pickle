@@ -26,7 +26,7 @@ Once the first release lands:
 
 ## Credits
 
-Built on ideas from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), with skills from Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
 
 ## License
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Maintainer only. Lists what changed upstream since each baseline in UPSTREAM.md: pstack/ and
-# cursor-team-kit/ (kit: rows) in cursor/plugins, and addyosmani/agent-skills (as: rows). Per
-# source: new version, new commits, a diff stat per tracked row, and (pstack, agent-skills)
-# upstream files no row covers. Fetches the clones, moves no branch.
+# Maintainer only. Lists what changed upstream since each baseline in UPSTREAM.md: pstack/ in
+# cursor/plugins, and addyosmani/agent-skills (as: rows). Per source: new version, new commits,
+# a diff stat per tracked row, and (agent-skills) upstream files no row covers. Fetches the
+# clones, moves no branch.
 #
 # Usage: bash scripts/upstream-diff.sh [-p]     -p prints full diffs instead of stats
 # Env:   PSTACK_UPSTREAM_DIR, a clone of https://github.com/cursor/plugins
@@ -18,11 +18,10 @@ agentskills=${AGENT_SKILLS_UPSTREAM_DIR:-$HOME/dev/code/agent-skills}
 
 # Sources: UPSTREAM.md Baseline name | clone | folder in the clone | source prefix in rows |
 # manifest with the version | list upstream files no row covers (1) or only the taken rows (0).
-sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|1
-cursor-team-kit|$plugins|cursor-team-kit|kit:|.cursor-plugin/plugin.json|0
+sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|0
 agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1"
 
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|playbook|principle|agent|script|mod|automation) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|script) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5}' UPSTREAM.md)
 
 while IFS='|' read -r name repo dir prefix manifest whole; do
@@ -60,7 +59,6 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   sources=""
   while IFS='|' read -r item src rel; do
     [ "$src" = "-" ] && continue
-    case "$src" in port:*) continue;; esac
     if [ -n "$prefix" ]; then
       case "$src" in "$prefix"*) src_paths=${src#"$prefix"};; *) continue;; esac
     else
@@ -78,7 +76,7 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
     if [ "$full" = 1 ]; then g diff "$base" "$new" -- "${paths[@]}"; else echo "$stat"; fi
   done <<< "$rows"
 
-  # pstack and agent-skills are tracked as a whole. For the kit, only the rows pickle took.
+  # agent-skills is tracked as a whole. For pstack, only the rows pickle took.
   if [ "$whole" = 1 ]; then
     echo
     echo "## Upstream files no row covers"
@@ -91,5 +89,4 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   echo
 done <<< "$sources_tbl"
 
-echo "Rows with a port: source exist only in PickleBoxer/pstack and are not diffed."
 echo "Per row: take, ignore or note the change, bump its Upstream version, then that source's baseline when all its rows are done."

@@ -4,16 +4,13 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships `typescript-best-practices`, ported from pstack. Every other pstack piece (playbooks, principles, tools, profile, `setup`) is `pending` in `UPSTREAM.md` and comes back only when an eval or real use shows the gap. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships `typescript-best-practices`, ported from pstack. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
 1. Run the firing evals, with the user's go-ahead, until the skills fire on their own. Then write loading evals for `pickle-mode`.
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
-3. Re-add `pending` pieces one at a time, for a measured gap.
-4. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
-
-Old working plans are in `.scratch/` (excluded via `.git/info/exclude`, never committed). They predate the baseline reset.
+3. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
 ## Layout
 
@@ -28,7 +25,7 @@ commands/                     9 vendored commands (/pickle:build, /pickle:ship, 
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/
 evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (5 firing cases)
-docs/                         claude-code.md (native features, plugin and mod notes), pstack.md (historical pstack map),
+docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
 UPSTREAM.md                   upstream source and version per pickle file
@@ -59,7 +56,7 @@ claude --plugin-dir ~/dev/code/pickle
 - `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit and merge commands. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
 - Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version.
 - To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
-- `scripts/upstream-diff.sh` lists upstream changes since each baseline: pstack, `kit:` (cursor-team-kit) and `as:` (agent-skills) rows.
+- `scripts/upstream-diff.sh` lists upstream changes since each baseline: the pstack row and the `as:` (agent-skills) rows.
 
 ## Authoring
 
@@ -85,10 +82,10 @@ From Anthropic's skill authoring guide. Skill mechanics (frontmatter, context, c
 
 ## References
 
-- Native features, plugin and mod notes: `docs/claude-code.md`. pstack map: `docs/pstack.md`.
+- Native features, plugin and mod notes: `docs/claude-code.md`.
 - Skills: https://code.claude.com/docs/en/skills
 - Authoring: https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 - Plugins: https://code.claude.com/docs/en/plugins-reference
 - Mods: https://code.claude.com/docs/en/plugins/mods/overview
-- pstack: https://github.com/cursor/plugins/tree/main/pstack, port: https://github.com/PickleBoxer/pstack
+- pstack (source of `typescript-best-practices`): https://github.com/cursor/plugins/tree/main/pstack
 - Marketplace: https://github.com/PickleBoxer/claude-plugins
