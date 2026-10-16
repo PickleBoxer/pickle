@@ -60,7 +60,7 @@ claude --plugin-dir ~/dev/code/pickle
 
 ## Authoring
 
-From Anthropic's skill authoring guide. Skill mechanics (frontmatter, context, compaction, substitutions): `docs/claude-code.md`, Skills.
+From Anthropic's skill authoring guide. Skill basics and measured behaviour: `docs/claude-code.md`, Skills. Full mechanics: the docs server, `/en/skills.mdx`.
 
 - Every line must justify its token cost. `SKILL.md` under 500 lines, references one level deep, a table of contents over 100 lines.
 - Descriptions in third person: what it does, then when to use it, key use case first. Description plus `when_to_use` is cut at 1,536 characters and sits in every session unless the skill is user-only.
