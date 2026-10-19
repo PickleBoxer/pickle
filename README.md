@@ -34,6 +34,7 @@ pickle-mode routes only through the workflow skills. These sit beside them: work
 | `codebase-design` | extension | Deep modules, seams, the deletion test | From workflow skills only, not in the `/` menu |
 | `domain-modeling` | extension | Your project's `GLOSSARY.md` | From workflow skills only, not in the `/` menu |
 | `setup` | user-only | Records where your issues and domain docs live, in `docs/agents/` | `/pickle:setup`, once per repo |
+| `reflect` | user-only | Reviews a finished session and proposes fixes, checks and scripts first, then skill edits and pointers. Applies only the rows you approve | `/pickle:reflect`, with a session ID, a `.jsonl` path or `last N` |
 | `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `docs/agents/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
 
 ### Scheduled reports
@@ -82,7 +83,7 @@ Shared checklists (testing, security, performance, accessibility, observability,
 - Commands live under `pickle:`, so `/pickle:review` never clashes with the built-in `/review`.
 - Agent names stay bare, so your own agents can override them.
 - Vendored skills will be trimmed where evals show they are too long or overlap.
-- `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` are added from pstack.
+- `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop` and `reflect` are added from pstack. `reflect` also takes the environment checks from Matt Pocock's `retro`.
 - `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` are added from Matt Pocock's skills. ADRs default to `docs/adr/`.
 
 ## Install
@@ -112,6 +113,16 @@ pickle ships no MCP server. Some skills do more when you add one yourself:
 
 `context-engineering` also suggests documentation, database and GitHub servers for richer context. Any of them helps, none is required.
 
+pickle depends on no other plugin. One skill hands work to a plugin you install yourself:
+
+| Plugin | Used by | Without it |
+|---|---|---|
+| [skill-creator](https://github.com/anthropics/claude-plugins-official/tree/main/plugins/skill-creator) | `reflect`, for skill edits longer than a line, description tuning and new skills | `reflect` applies one-line skill edits only and gives you the install command. |
+
+```bash
+/plugin install skill-creator@claude-plugins-official
+```
+
 `pickle-mode` adds one task list entry per skill it will use, when Claude Code provides the task tools. Some models get them only when you opt in, with either of these:
 
 ```bash
@@ -124,7 +135,7 @@ claude --allowedTools TaskCreate
 
 ## Credits
 
-Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop` and `reflect` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
 
 ## License
 

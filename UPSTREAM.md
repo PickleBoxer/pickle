@@ -1,6 +1,6 @@
 # Upstream
 
-Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how` and `why`, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
+Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how`, `why` and `reflect`, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
@@ -37,6 +37,7 @@ A source starting with `as:` is in addyosmani/agent-skills, and one starting wit
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.25 | model-invocable (user-only upstream). Calls `pickle:unslop`, drops the rules unslop already owns, project conventions win, no Cursor house rules |
 | skills/how | skill | skills/how | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool (Explore explorers), no per-role models. Simple questions and the explanation are written inline, not by an explainer subagent. Uses `GLOSSARY.md` terms when the project has one |
 | skills/why | skill | skills/why | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool and ToolSearch for MCP discovery, no per-role models. Answers inline when only source control is available. Source guides renamed by category, `source-playbook.md` folded into `SKILL.md`, warehouse guide made generic. Uses `GLOSSARY.md` terms when the project has one |
+| skills/reflect | skill | skills/reflect | rewritten | 0.15.25 | user-only. Merged with mattpocock-skills `skills/engineering/retro` (1.3.1): its environment categories became the environment lens, and its rule that a mechanical violation gets a check became the deterministic-first criterion. `scripts/digest.sh` finds the transcript from `${CLAUDE_SESSION_ID}`, keeps to this project's folder and prints the deterministic signals. Judgment and divergent lenses merged, tooling lens adds tool economy. Reviewers only above 50 tool calls, synthesis inline, no per-role models. Routings name Claude Code homes (hooks, `.claude/rules/`, auto memory, `/doctor prompt-audit`); larger skill edits go to `skill-creator:skill-creator` |
 
 ## Matt Pocock skills
 
