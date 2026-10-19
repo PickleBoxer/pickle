@@ -28,7 +28,7 @@ Target and focus from the user: $ARGUMENTS
 bash "${CLAUDE_SKILL_DIR}/scripts/digest.sh" "${CLAUDE_SESSION_ID}" <target> > "${TMPDIR:-/tmp}/reflect-${CLAUDE_SESSION_ID}.md"
 ```
 
-`<target>` is the session part of the arguments, or nothing for the current session. The rest of the arguments is a **focus** (a lens name or a topic) that narrows the review. Read the digest. It lists, without judgment: failed calls, repeated commands, files read more than once, the largest tool results, skills and subagents used, and a timeline with every user prompt and one line per tool call. For the detail behind a line, search the transcript path in its header with `jq` or `grep`, not a full `Read`.
+`<target>` is the session part of the arguments, or nothing for the current session. The rest of the arguments is a **focus** (a lens name or a topic) that narrows the review. Read the digest. It lists, without judgment: failed calls, repeated commands, repeated pipelines, files read more than once, the largest tool results, skills and subagents used, and a timeline with every user prompt and one line per tool call. For the detail behind a line, search the transcript path in its header with `jq` or `grep`, not a full `Read`.
 
 ## 2. Review through three lenses
 
@@ -54,7 +54,7 @@ Follow each approved row's routing. Follow the target repo's own rules for the f
 |---|---|
 | `check:` a lint rule, pre-commit hook or CI job | Build it with the repo's own linter or check command. Run it once to show it catches the case |
 | `hook:` a Claude Code hook | Add it to `.claude/settings.json` (shared) or `.claude/settings.local.json` (personal). A `PreToolUse` hook blocks a call, a `PostToolUse` hook checks after an edit |
-| `script:` a repeated multi-step command | Write it to the repo's scripts folder and point to it in one line where agents look |
+| `script:` a repeated multi-step command | Write it to the repo's scripts folder, with a usage line and a non-zero exit on failure. Run it once on the case from the session and show the output. Then point to it in one line where agents look |
 | `pointer:` navigation | One line in `CLAUDE.md` or `AGENTS.md`, or a `.claude/rules/` file with `paths:` so it loads only for matching files |
 | `standard:` a judgment call for review | The repo's coding standards file, or the reviewer agent's prompt. Not the implementer's steering file |
 | `memory:` a personal preference | Claude Code's auto memory, not a project file |

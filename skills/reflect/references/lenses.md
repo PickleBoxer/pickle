@@ -42,7 +42,7 @@ Name the concrete command, path, flag or tool fact a future session would otherw
 
 - Commands and flags found by trial and error. The digest's failed calls and repeated commands are the first place to look.
 - Tool economy: the digest's largest results and files read more than once. Could a narrower command, a script or a filtered output have cost less?
-- A multi-step command sequence run more than once: a `script:` candidate.
+- A multi-step command run more than once: a `script:` candidate. The digest's repeated pipelines list the ones a script can spot. Check the timeline for sequences spread over several calls too.
 - Context the user pasted that the session could have fetched itself: a ticket, a log, a doc, a URL. Route it to the skill or `pointer:` that should fetch it, or name the MCP server or log file that would give access.
 - Build, package-manager, sandbox or permission surprises that cost time the first time.
 

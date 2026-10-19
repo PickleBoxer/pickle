@@ -8,8 +8,8 @@
 # inside the current session's project folder, so the digest never reads another project's chats.
 #
 # The digest has the counts and signals a script can find without judgment (failed calls, repeated
-# commands, files read more than once, the largest tool results, skills and subagents used), then a
-# timeline with every user prompt and one line per tool call.
+# commands, repeated pipelines, files read more than once, the largest tool results, skills and
+# subagents used), then a timeline with every user prompt and one line per tool call.
 set -euo pipefail
 
 root="${CLAUDE_CONFIG_DIR:-$HOME/.claude}/projects"
@@ -42,6 +42,17 @@ digest() {
       then (.command // .file_path // .pattern // .skill // .description // .url // .query // .prompt // tostring)
       else tostring end;
     def text: if type == "string" then . else (map(select(.type == "text") | .text) | join(" ")) end;
+    # The pipelines of a command as program names: "git log | grep | head". Heredoc bodies, variable
+    # assignments, shell keywords, arguments and trailing output trims (head, cut, sort) are dropped;
+    # git, npm, gh and similar keep a subcommand.
+    def program: split(" ") | map(select(length > 0 and (test("^[A-Za-z_][A-Za-z0-9_]*=|^[0-9]") | not)))
+      | until(length == 0 or (.[0] | test("^(for|do|done|while|if|then|else|fi|time|xargs|sudo)$") | not); .[1:])
+      | if (.[0] // "") | test("^(git|npm|pnpm|yarn|bun|gh|docker|kubectl|cargo|go|claude)$") then .[0:2] else .[0:1] end | join(" ");
+    def pipelines: split("\n") | ((map(test("<<")) | index(true)) as $h | if $h then .[0:$h + 1] else . end) | join("; ")
+      | gsub("\"[^\"]*\""; "Q") | gsub("\u0027[^\u0027]*\u0027"; "Q")
+      | [splits("\\s*(&&|\\|\\||;)\\s*")] | map([splits("\\s*\\|\\s*")] | map(program | select(length > 0 and (test("^(echo|printf|cd|true)$") | not))))
+      | map(until(length == 0 or (.[-1] | test("^(head|tail|cut|wc|sort|uniq|less|cat|tr|column)$") | not); .[0:-1]))
+      | map(select(length > 1) | join(" | ")) | unique;
 
     map(select(.type == "user" or .type == "assistant")) as $msgs
     | [$msgs[] | select(.type == "assistant") | .message.content[]? | select(.type == "tool_use")] as $calls
@@ -75,6 +86,14 @@ digest() {
       "",
       ([$calls[] | select(.name == "Bash") | .input.command] | group_by(.) | map(select(length > 1) | {c: .[0], n: length}) | sort_by(-.n)
         | if length == 0 then "None." else .[] | "- \(.n)× `\(.c | clip(160))`" end),
+      "",
+      "## Repeated pipelines",
+      "",
+      "Pipelines of two or more programs, arguments dropped, seen in three or more different Bash commands. Each is a script candidate.",
+      "",
+      ([$calls[] | select(.name == "Bash") | .input.command // "" | select(length > 0)] | unique
+        | map(. as $c | pipelines | .[] | {p: ., c: $c}) | group_by(.p) | map(select(length > 2) | {p: .[0].p, n: length, e: .[0].c}) | sort_by(-.n)
+        | if length == 0 then "None." else .[] | "- \(.n)× `\(.p)`, e.g. `\(.e | clip(140))`" end),
       "",
       "## Files read more than once",
       "",
