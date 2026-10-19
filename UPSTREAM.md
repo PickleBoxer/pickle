@@ -46,7 +46,7 @@ From mattpocock/skills, MIT. `codebase-design` and `domain-modeling` are **exten
 |---|---|---|---|---|---|
 | skills/codebase-design | skill | mp:skills/engineering/codebase-design | ported | 1.3.1 | extension. Description narrowed to internal module shape, not HTTP or public API contracts. Design-it-twice names the Agent tool with `Plan` subagents |
 | skills/domain-modeling | skill | mp:skills/engineering/domain-modeling | rewritten | 1.3.1 | extension, glossary only: ADR-FORMAT.md and the ADR rules dropped, since documentation-and-adrs owns ADRs and calls this skill for their terms. Reads `docs/agents/domain.md` when present |
-| skills/setup | skill | mp:skills/engineering/setup-matt-pocock-skills | rewritten | 1.3.1 | user-only, `/pickle:setup`. Issue tracker and domain docs only: no triage labels, no wayfinder operations, no PR triage flag. Default ADR folder `docs/adr/`. Adds optional glossary seeding through an Explore subagent and `pickle:domain-modeling`. Edits `AGENTS.md` when `CLAUDE.md` only imports it |
+| skills/setup | skill | mp:skills/engineering/setup-matt-pocock-skills | rewritten | 1.3.1 | user-only, `/pickle:setup`. Issue tracker and domain docs only: no triage labels, no wayfinder operations, no PR triage flag. Default ADR folder `docs/adr/`. Adds optional glossary seeding through an Explore subagent and `pickle:domain-modeling`. Edits `AGENTS.md` when `CLAUDE.md` only imports it. For an Other tracker, checks the MCP server or CLI with one read-only call and records the exact tool names. The local markdown reference keeps plans in `tasks/` |
 | skills/improve-codebase-architecture | skill | mp:skills/engineering/improve-codebase-architecture | rewritten | 1.3.1 | user-only. Fully offline report (inline CSS and SVG, no Tailwind or Mermaid CDN), written to `docs/agents/reports/`. Rules and a "report only" mode at the top, hot spots from a fixed `git log` command, Explore subagents with a set brief and return format, at most 6 candidates. Grilling inlined (upstream calls the `grilling` skill), ADRs through `pickle:documentation-and-adrs`, hand-off to spec-driven-development |
 
 ## Agent skills
@@ -73,17 +73,17 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/interview-me | skill | as:skills/interview-me | vendored | 0.6.13 | |
 | skills/observability-and-instrumentation | skill | as:skills/observability-and-instrumentation | vendored | 0.6.13 | |
 | skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | |
-| skills/planning-and-task-breakdown | skill | as:skills/planning-and-task-breakdown | vendored | 0.6.13 | |
+| skills/planning-and-task-breakdown | skill | as:skills/planning-and-task-breakdown | vendored | 0.6.13 | on `main`: External tracker follows `docs/agents/issue-tracker.md` from `/pickle:setup`, and a local markdown tracker keeps `tasks/todo.md` |
 | skills/security-and-hardening | skill | as:skills/security-and-hardening | vendored | 0.6.13 | |
 | skills/shipping-and-launch | skill | as:skills/shipping-and-launch | vendored | 0.6.13 | |
 | skills/source-driven-development | skill | as:skills/source-driven-development | vendored | 0.6.13 | |
 | skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | on `main`: Code Style item names domain concepts from `GLOSSARY.md` and calls `pickle:domain-modeling` |
 | skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | on `main`: line after Prefer Real Implementations Over Mocks that calls `pickle:codebase-design` |
 | skills/pickle-mode | skill | as:skills/using-agent-skills | vendored | 0.6.13 | the entry skill, `/pickle:pickle-mode`. Renamed and user-only: `name: pickle-mode` and `disable-model-invocation: true` are set on `main`. Rewritten on `main` above Core Operating Behaviors: procedure, phase-ordered router with `pickle:` names, user-facing description. Upstream changes there conflict on merge |
-| commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | |
+| commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | on `main`: Default reads open items from the issue tracker when `tasks/plan.md` names one |
 | commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | |
 | commands/constraints.md | command | as:.claude/commands/constraints.md | vendored | 0.6.13 | |
-| commands/plan.md | command | as:.claude/commands/plan.md | vendored | 0.6.13 | |
+| commands/plan.md | command | as:.claude/commands/plan.md | vendored | 0.6.13 | on `main`: task list goes to the task list target of `pickle:planning-and-task-breakdown`, not always `tasks/todo.md` |
 | commands/review.md | command | as:.claude/commands/review.md | vendored | 0.6.13 | |
 | commands/ship.md | command | as:.claude/commands/ship.md | vendored | 0.6.13 | |
 | commands/spec.md | command | as:.claude/commands/spec.md | vendored | 0.6.13 | |

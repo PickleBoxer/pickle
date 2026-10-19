@@ -13,7 +13,7 @@ Invoke the pickle:incremental-implementation skill alongside pickle:test-driven-
 
 ## Default: one task
 
-Pick the next pending task from the plan. Then:
+Pick the next pending task from the plan. If `tasks/plan.md` says tasks live in an issue tracker, read the open items from there, following `docs/agents/issue-tracker.md` when it exists. Then:
 
 1. Read the task's acceptance criteria
 2. Load relevant context (existing code, patterns, types)

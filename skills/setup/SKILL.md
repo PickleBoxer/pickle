@@ -41,7 +41,7 @@ Propose the tracker that matches `git remote`: GitHub for github.com, GitLab for
 - **GitHub**: the repo's GitHub Issues, through the `gh` CLI
 - **GitLab**: the repo's GitLab Issues, through the [`glab`](https://gitlab.com/gitlab-org/cli) CLI
 - **Local markdown**: files under `.scratch/<feature>/` in this repo (solo projects, repos without a remote)
-- **Other** (Jira, Linear and so on): ask for one paragraph describing the workflow, and record it as written
+- **Other** (Jira, Linear and so on): ask for one paragraph describing the workflow, and which tool Claude reaches the tracker through (an MCP server or a CLI). Make one read-only call with that tool to check it works. If it fails, say so and offer to continue with local markdown until the tool is connected. Record the paragraph as written, plus the exact tool names
 
 **Section B: Domain docs.** Default to **single-context**: one `GLOSSARY.md` and `docs/adr/` at the root. This fits almost every repo; take it without asking. If an ADR folder other than `docs/adr/` already holds ADRs, record that folder instead.
 
@@ -91,7 +91,7 @@ Then write the docs files from the templates:
 - [references/issue-tracker-local.md](references/issue-tracker-local.md): local markdown
 - [references/domain.md](references/domain.md): domain docs, with its Layout section filled in and any non-default ADR folder replacing `docs/adr/`
 
-For "other" trackers, write `docs/agents/issue-tracker.md` from the user's description, with the same two closing sections the templates have: what "publish to the issue tracker" and "fetch the relevant ticket" mean.
+For "other" trackers, write `docs/agents/issue-tracker.md` from the user's description, with a Conventions section naming the exact tool calls to create and read an item, and the same two closing sections the templates have: what "publish to the issue tracker" and "fetch the relevant ticket" mean.
 
 ## 5. Done
 

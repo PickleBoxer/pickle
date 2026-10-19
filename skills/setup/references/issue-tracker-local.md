@@ -10,6 +10,8 @@ Issues and specs for this repo live as markdown files in `.scratch/`.
 - State is recorded as a `Status:` line near the top of each issue file (`open`, `in-progress`, `done`)
 - Comments and conversation history append to the bottom of the file under a `## Comments` heading
 
+Plans and task lists from `pickle:planning-and-task-breakdown` stay in `tasks/plan.md` and `tasks/todo.md`, where `/pickle:build` reads them. `.scratch/` holds issues only when a skill or the user publishes one.
+
 ## When a skill says "publish to the issue tracker"
 
 Create a new file under `.scratch/<feature-slug>/` (creating the directory if needed).
