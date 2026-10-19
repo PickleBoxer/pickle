@@ -111,6 +111,8 @@ git bisect good <known-good-sha> # This commit worked
 git bisect run npm test -- --grep "failing test"  # substitute the repository's focused-test command
 ```
 
+Once bisection finds the commit, read why that change was made with the **why** skill (Skill tool, `pickle:why`) before you revert or patch it.
+
 ### Step 3: Reduce
 
 Create the minimal failing case:

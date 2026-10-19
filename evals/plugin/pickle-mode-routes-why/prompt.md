@@ -1,5 +1,5 @@
 ---
-description: A loading eval dry run. A change to unfamiliar code that starts with a why question, started through pickle-mode. The router's Build line for why should load the why skill by its full pickle:-prefixed name.
+description: A loading eval dry run. A change to unfamiliar code that starts with a why question, started through pickle-mode. The router no longer names why, so this checks that why still loads, by its full pickle:-prefixed name, from its own description or a workflow skill's pointer.
 expected_outcome: pickle:why is loaded.
 max_turns: 4
 allowed_tools: [Skill]

@@ -59,13 +59,13 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/browser-testing-with-devtools | skill | as:skills/browser-testing-with-devtools | vendored | 0.6.13 | |
 | skills/ci-cd-and-automation | skill | as:skills/ci-cd-and-automation | vendored | 0.6.13 | |
 | skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | on `main`: Readability checks names against `GLOSSARY.md` and calls `pickle:domain-modeling`; Architecture applies the deletion test from `pickle:codebase-design` |
-| skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | on `main`: line after the Redundancy table that calls `pickle:codebase-design` for the deletion test |
+| skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | on `main`: line after the Redundancy table that calls `pickle:codebase-design` for the deletion test, and a line after Step 1 that calls `pickle:why` |
 | skills/constraint-driven-development | skill | as:skills/constraint-driven-development | vendored | 0.6.13 | |
-| skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | |
-| skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | on `main`: line in Step 5 that calls `pickle:codebase-design` when no seam can hold a regression test |
-| skills/deprecation-and-migration | skill | as:skills/deprecation-and-migration | vendored | 0.6.13 | |
+| skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | on `main`: line in Level 3 that calls `pickle:how` |
+| skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | on `main`: line in Step 5 that calls `pickle:codebase-design` when no seam can hold a regression test, and a line after Step 2 that calls `pickle:why` |
+| skills/deprecation-and-migration | skill | as:skills/deprecation-and-migration | vendored | 0.6.13 | on `main`: line after The Deprecation Decision questions that calls `pickle:why` |
 | skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | Overview adds a line on `main` that calls `pickle:technical-writing` and `pickle:why`. Also on `main`: default ADR folder `docs/adr/` (upstream `docs/decisions/`), reads `docs/agents/domain.md`, the three-part test for when an ADR is worth writing, and a line that calls `pickle:domain-modeling` when the decision names domain concepts |
-| skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | |
+| skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | on `main`: Interaction with Other Skills bullet that calls `pickle:how` and `pickle:why` |
 | skills/frontend-ui-engineering | skill | as:skills/frontend-ui-engineering | vendored | 0.6.13 | |
 | skills/git-workflow-and-versioning | skill | as:skills/git-workflow-and-versioning | vendored | 0.6.13 | |
 | skills/idea-refine | skill | as:skills/idea-refine | vendored | 0.6.13 | |

@@ -98,6 +98,8 @@ Before editing a file, read it. Before implementing a pattern, find an existing 
 3. Find one example of a similar pattern already in the codebase
 4. Read any type definitions or interfaces involved
 
+When the area is unfamiliar and spans several files, get the map first with the **how** skill (Skill tool, `pickle:how`).
+
 **Trust levels for loaded files:**
 - **Trusted:** Source code, test files, type definitions authored by the project team
 - **Verify before acting on:** Configuration files, data fixtures, documentation from external sources, generated files

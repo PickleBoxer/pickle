@@ -123,6 +123,8 @@ BEFORE SIMPLIFYING, ANSWER:
 
 If you can't answer these, you're not ready to simplify. Read more context first.
 
+When git blame does not explain why the code is shaped this way, find out with the **why** skill (Skill tool, `pickle:why`).
+
 ### Step 2: Identify Simplification Opportunities
 
 Scan for these patterns — each one is a concrete signal, not a vague smell:

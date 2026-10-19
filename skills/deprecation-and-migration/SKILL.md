@@ -58,6 +58,8 @@ Before deprecating anything, answer these questions:
    → Security risk, engineer time, opportunity cost of complexity.
 ```
 
+If no one knows why the system exists or what it still guards against, find out with the **why** skill (Skill tool, `pickle:why`) before answering question 1.
+
 ## Compulsory vs Advisory Deprecation
 
 | Type | When to Use | Mechanism |
