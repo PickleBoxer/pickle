@@ -154,6 +154,8 @@ it('finds tasks with special characters in title', async () => {
 
 This test will prevent the same bug from recurring. It should fail without the fix and pass with it.
 
+If no test can reach the bug without mocking several layers, there is no good seam. Say so, and find where one belongs with the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
+
 ### Step 6: Verify End-to-End
 
 After fixing, verify the complete scenario with the repository's own commands (npm shown):

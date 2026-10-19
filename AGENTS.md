@@ -4,11 +4,11 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships five skills from pstack: `typescript-best-practices`, `unslop` and `technical-writing` (ported), `how` and `why` (rewritten for Claude Code). Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships five skills from pstack: `typescript-best-practices`, `unslop` and `technical-writing` (ported), `how` and `why` (rewritten for Claude Code). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
-1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus.
+1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus. Then the cases for the Matt Pocock skills: the extension chains, `setup-*` and `improve-architecture-*` (scaffolded, `--ablation none` for the user-only ones).
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
@@ -22,11 +22,13 @@ skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
 skills/how/, skills/why/      investigation skills (pstack): how code works, why it is shaped that way
 skills/unslop/, skills/technical-writing/   writing skills (pstack)
+skills/codebase-design/, skills/domain-modeling/   extensions (mattpocock/skills), called by workflow skills
+skills/setup/, skills/improve-codebase-architecture/   user-only (mattpocock/skills)
 references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
-LICENSES/                     agent-skills.txt, for every vendored file outside skills/
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (9 firing and 6 loading cases)
+LICENSES/                     agent-skills.txt, for every vendored file outside skills/; mattpocock-skills.txt
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (15 firing and 6 loading cases, plus 5 scaffolded cases for the user-only skills)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
@@ -41,6 +43,7 @@ UPSTREAM.md                   upstream source and version per pickle file
 - Never run an eval without asking first.
 - Ask before assuming intent or architecture. Say whether a claim is measured, inferred or a guess.
 - Claude Code facts come from the `claude-code-docs` MCP server, never from memory or WebFetch: `mcp__claude-code-docs__search_claude_code_docs`, then `mcp__claude-code-docs__query_docs_filesystem_claude_code_docs` (`/en/<page>.mdx`). Tell research subagents the same. If the server is missing, ask the user to run `claude mcp add --transport http claude-code-docs https://code.claude.com/docs/mcp`, never at project scope (a root `.mcp.json` would ship with the plugin). `.claude/mcp.json` has the same server for `claude --mcp-config .claude/mcp.json`.
+- Extensions (`codebase-design`, `domain-modeling`) call no skill. Workflow skills reach them with a one-line pointer, noted in the row's Notes in `UPSTREAM.md`. `check-refs.sh` enforces it.
 - Before writing mod code, load the `plugin-authoring` skill. Mod notes: `docs/claude-code.md`, Mods.
 
 ## Checks
@@ -58,7 +61,7 @@ claude --plugin-dir ~/dev/code/pickle
 - `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit and merge commands. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
 - Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version.
 - To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
-- `scripts/upstream-diff.sh` lists upstream changes since each baseline: the pstack row and the `as:` (agent-skills) rows.
+- `scripts/upstream-diff.sh` lists upstream changes since each baseline: the pstack rows, the `as:` (agent-skills) rows and the `mp:` (mattpocock-skills) rows.
 
 ## Authoring
 
@@ -81,6 +84,7 @@ From Anthropic's skill authoring guide. Skill basics and measured behaviour: `do
 - Skills target Sonnet and Opus, not Haiku. `--model haiku` is fine for checking that graders work; decide on firing and outcomes with `--model sonnet` and `--model opus`.
 - Prefer free graders (`tool_used`, `tool_order`, `regex`, `file_exists`) over `llm`. For test results, have Claude write them to a file and grade the file.
 - Tools listed in a case's `allowed_tools` are granted if read-only. Edit, Write and Bash need `--allow-tools`.
+- A case with a `case.yaml` scaffold needs `--scaffold`. Each case's description names the flags it needs.
 - No `.claude/` config loads inside a run.
 
 ## References

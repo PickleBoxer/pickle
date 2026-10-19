@@ -24,6 +24,14 @@ _Avoid_: research skill, archaeology
 A file in why's `references/sources/` with search steps for one evidence category, such as the issue tracker or team chat.
 _Avoid_: playbook
 
+**Extension**:
+A skill that workflow skills call to go deeper on one concern: codebase-design (module shape) or domain-modeling (the domain glossary). Hidden from the `/` menu, and calls no skill itself. From Matt Pocock's skills.
+_Avoid_: base skill, add-on, helper skill
+
+**Domain glossary**:
+A project's own `GLOSSARY.md` (or one per context, listed in `GLOSSARY-MAP.md`), kept by domain-modeling. Not pickle's GLOSSARY.md.
+_Avoid_: context file, dictionary
+
 **Writing skill**:
 A skill with rules for prose: technical-writing (document structure and sentences) or unslop (AI writing patterns). From pstack.
 _Avoid_: style guide, prose pack

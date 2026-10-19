@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Maintainer only. Lists what changed upstream since each baseline in UPSTREAM.md: pstack/ in
-# cursor/plugins, and addyosmani/agent-skills (as: rows). Per source: new version, new commits,
+# cursor/plugins, addyosmani/agent-skills (as: rows) and mattpocock/skills (mp: rows). Per source: new version, new commits,
 # a diff stat per tracked row, and (agent-skills) upstream files no row covers. Fetches the
 # clones, moves no branch.
 #
@@ -9,17 +9,21 @@
 #        (default ~/dev/code/cursor-plugins)
 #        AGENT_SKILLS_UPSTREAM_DIR, a clone of https://github.com/addyosmani/agent-skills
 #        (default ~/dev/code/agent-skills)
+#        MP_SKILLS_UPSTREAM_DIR, a clone of https://github.com/mattpocock/skills
+#        (default ~/dev/code/mattpocock-skills)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
 full=0; [ "${1:-}" = "-p" ] && full=1
 plugins=${PSTACK_UPSTREAM_DIR:-$HOME/dev/code/cursor-plugins}
 agentskills=${AGENT_SKILLS_UPSTREAM_DIR:-$HOME/dev/code/agent-skills}
+mpskills=${MP_SKILLS_UPSTREAM_DIR:-$HOME/dev/code/mattpocock-skills}
 
 # Sources: UPSTREAM.md Baseline name | clone | folder in the clone | source prefix in rows |
 # manifest with the version | list upstream files no row covers (1) or only the taken rows (0).
 sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|0
-agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1"
+agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1
+mattpocock-skills|$mpskills|.|mp:|.claude-plugin/plugin.json|0"
 
 rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|script) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5}' UPSTREAM.md)
@@ -28,6 +32,7 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   if ! git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
     url=https://github.com/cursor/plugins.git
     [ "$name" = agent-skills ] && url=https://github.com/addyosmani/agent-skills.git
+    [ "$name" = mattpocock-skills ] && url=https://github.com/mattpocock/skills.git
     echo "upstream-diff: no $name clone at $repo. Clone it once:" >&2
     echo "  git clone --filter=blob:none $url $repo" >&2
     exit 1
@@ -76,7 +81,7 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
     if [ "$full" = 1 ]; then g diff "$base" "$new" -- "${paths[@]}"; else echo "$stat"; fi
   done <<< "$rows"
 
-  # agent-skills is tracked as a whole. For pstack, only the rows pickle took.
+  # agent-skills is tracked as a whole. For pstack and mattpocock-skills, only the rows pickle took.
   if [ "$whole" = 1 ]; then
     echo
     echo "## Upstream files no row covers"

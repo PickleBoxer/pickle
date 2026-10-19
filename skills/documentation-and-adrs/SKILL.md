@@ -38,9 +38,13 @@ ADRs capture the reasoning behind significant technical decisions. They're the h
 - Choosing between build tools, hosting platforms, or infrastructure
 - Any decision that would be expensive to reverse
 
+Write one only when all three hold: the decision is hard to reverse, a future reader would find it surprising without context, and it came from a real trade-off between alternatives. If any is missing, skip the ADR.
+
+When the decision names domain concepts, check and update their terms with the **domain-modeling** skill (Skill tool, `pickle:domain-modeling`) before writing the ADR.
+
 ### Match the existing convention first
 
-Before creating an ADR, inspect the available repository context for an established convention — existing ADRs, project instructions, and ADR-related configuration or tooling (e.g. an `.adr-dir` file). An established convention overrides the defaults below. Match:
+Before creating an ADR, inspect the available repository context for an established convention — existing ADRs, project instructions, `docs/agents/domain.md`, and ADR-related configuration or tooling (e.g. an `.adr-dir` file). An established convention overrides the defaults below. Match:
 
 - **Location and format** — e.g. `docs/adr/*.md`, `Documentation/Decisions/*.rst`, a MADR layout, or an `adr-tools` setup. Match the existing directory, file extension, and markup (Markdown vs reStructuredText).
 - **Numbering and naming** — continue the existing sequence and filename pattern (`ADR-004-Title.rst`, `0004-title.md`, …); don't restart at 001 or introduce a second scheme.
@@ -50,7 +54,7 @@ If the available evidence conflicts, surface the conflict rather than silently i
 
 ### ADR Template
 
-Store ADRs in `docs/decisions/` with sequential numbering (unless the project already uses another location — see above):
+Store ADRs in `docs/adr/` as `0001-slug.md`, with sequential numbering (unless the project already uses another location — see above):
 
 ```markdown
 # ADR-001: Use PostgreSQL for primary database

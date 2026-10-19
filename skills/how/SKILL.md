@@ -35,3 +35,5 @@ If the Agent tool is not available (for example, inside a subagent at the nestin
 Write the explanation yourself from the explorers' findings, or from your own reading on the simple path. Follow `references/explainer-prompt.md`: reconcile overlaps, check contradictions in the code, and use its sections, dropping any that do not apply: Overview, Key Concepts, How It Works, Where Things Live, Gotchas.
 
 Name gaps the explorers flagged instead of hiding them.
+
+If the project has a `GLOSSARY.md` (or a `GLOSSARY-MAP.md` pointing to one per context), use its terms for domain concepts.

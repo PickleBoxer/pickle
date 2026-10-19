@@ -78,7 +78,7 @@ Without investigators: follow `references/synthesizer-prompt.md` and `references
 
 ## Step 6. Present
 
-Present the answer. You may lightly edit it for clarity or add context from the conversation. **Do not rewrite the confidence language.**
+Present the answer. You may lightly edit it for clarity or add context from the conversation. **Do not rewrite the confidence language.** If the project has a `GLOSSARY.md` (or a `GLOSSARY-MAP.md`), use its terms for domain concepts.
 
 The structure is the one in `references/synthesizer-prompt.md`: The Question, The Code in Question, What We Found, What We Can Reasonably Infer, Competing Hypotheses, What We Don't Know, Sources Consulted, Confidence Summary. Keep Sources Consulted to one line per category, including the ones that were unavailable, skipped or empty, each with its reason.
 

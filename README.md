@@ -22,6 +22,8 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
 - **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
 - **Investigation skills.** `how` explains how a part of the code works, and `why` digs up the reasons it is shaped that way from git history, PRs and any MCP servers you have added.
 - **Writing skills.** `technical-writing` applies a layered standard to docs, PR descriptions and commit messages, and `unslop` removes AI writing patterns from any prose.
+- **Extensions.** `codebase-design` (deep modules, seams, the deletion test) and `domain-modeling` (your project's `GLOSSARY.md`). They stay out of the `/` menu: workflow skills such as `test-driven-development`, `code-review-and-quality` and `documentation-and-adrs` call them when a task needs them.
+- **Setup and architecture review.** `/pickle:setup` records where your issues and domain docs live, in `docs/agents/`. `/pickle:improve-codebase-architecture` scans for shallow modules worth deepening, writes an offline HTML report and grills you through the one you pick.
 
 ### Commands
 
@@ -50,6 +52,7 @@ Shared checklists (testing, security, performance, accessibility, observability,
 - Agent names stay bare, so your own agents can override them.
 - Vendored skills will be trimmed where evals show they are too long or overlap.
 - `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` are added from pstack.
+- `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` are added from Matt Pocock's skills. ADRs default to `docs/adr/`.
 
 ## Install
 
@@ -90,7 +93,7 @@ claude --allowedTools TaskCreate
 
 ## Credits
 
-Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing` and `unslop` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
 
 ## License
 

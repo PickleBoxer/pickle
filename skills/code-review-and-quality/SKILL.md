@@ -41,6 +41,7 @@ Does the code do what it claims to do?
 Can another engineer (or agent) understand this code without the author explaining it?
 
 - Are names descriptive and consistent with project conventions? (No `temp`, `data`, `result` without context)
+- Do domain names match `GLOSSARY.md`, when the project has one? A new or clashing domain term goes through the **domain-modeling** skill (Skill tool, `pickle:domain-modeling`).
 - Is the control flow straightforward (avoid nested ternaries, deep callbacks)?
 - Is the code organized logically (related code grouped, clear module boundaries)?
 - Are there any "clever" tricks that should be simplified?
@@ -57,6 +58,7 @@ Does the change fit the system's design?
 
 - Does it follow existing patterns or introduce a new one? If new, is it justified?
 - Does it maintain clean module boundaries?
+- **Does each new module earn its interface?** Apply the deletion test from the **codebase-design** skill (Skill tool, `pickle:codebase-design`) to modules that only forward calls.
 - Is there code duplication that should be shared?
 - Are dependencies flowing in the right direction (no circular dependencies)?
 - Is the abstraction level appropriate (not over-engineered, not too coupled)?

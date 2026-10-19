@@ -20,6 +20,8 @@ Design stable, well-documented interfaces that are hard to misuse. Good interfac
 - Establishing database schema that informs API shape
 - Changing existing public interfaces
 
+For a module's internal shape (depth, where the seam goes, testability), use the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
+
 ## Core Principles
 
 ### Hyrum's Law

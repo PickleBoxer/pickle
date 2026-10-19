@@ -1,12 +1,13 @@
 # Upstream
 
-Where each pickle file comes from upstream (agent-skills, and pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how` and `why`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
+Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how` and `why`, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
 - Baseline
 - Relations
 - Skills
+- Matt Pocock skills
 - Agent skills
 - Scripts
 
@@ -16,6 +17,7 @@ Where each pickle file comes from upstream (agent-skills, and pstack for `typesc
 |---|---|---|---|---|
 | pstack | [cursor/plugins](https://github.com/cursor/plugins/tree/main/pstack) (`pstack/`) | 0.15.25 | 99743e9 | 2026-10-16 |
 | agent-skills | [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | 0.6.13 | aeac41d | 2026-10-15 |
+| mattpocock-skills | [mattpocock/skills](https://github.com/mattpocock/skills) | 1.3.1 | 49dd158 | 2026-10-19 |
 
 ## Relations
 
@@ -24,7 +26,7 @@ Where each pickle file comes from upstream (agent-skills, and pstack for `typesc
 - `vendored`: upstream text, merged from the `vendor/agent-skills` branch. Local edits stay on `main` and survive each merge. Change a row to `rewritten` to stop syncing it, then keep your copy in the next merge.
 - `new`: no upstream source.
 
-A source starting with `as:` is in addyosmani/agent-skills, and its version is that repo's. Any other source is in `pstack/` of cursor/plugins.
+A source starting with `as:` is in addyosmani/agent-skills, and one starting with `mp:` is in mattpocock/skills; each version is that repo's. Any other source is in `pstack/` of cursor/plugins.
 
 ## Skills
 
@@ -33,8 +35,19 @@ A source starting with `as:` is in addyosmani/agent-skills, and its version is t
 | skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.25 | model-invocable, no `paths` (ignored for plugin skills) |
 | skills/unslop | skill | skills/unslop | ported | 0.15.25 | model-invocable (user-only upstream), so other skills can call it. Adds a scope line. Rule numbers kept: other skills cite them |
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.25 | model-invocable (user-only upstream). Calls `pickle:unslop`, drops the rules unslop already owns, project conventions win, no Cursor house rules |
-| skills/how | skill | skills/how | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool (Explore explorers), no per-role models. Simple questions and the explanation are written inline, not by an explainer subagent |
-| skills/why | skill | skills/why | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool and ToolSearch for MCP discovery, no per-role models. Answers inline when only source control is available. Source guides renamed by category, `source-playbook.md` folded into `SKILL.md`, warehouse guide made generic |
+| skills/how | skill | skills/how | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool (Explore explorers), no per-role models. Simple questions and the explanation are written inline, not by an explainer subagent. Uses `GLOSSARY.md` terms when the project has one |
+| skills/why | skill | skills/why | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool and ToolSearch for MCP discovery, no per-role models. Answers inline when only source control is available. Source guides renamed by category, `source-playbook.md` folded into `SKILL.md`, warehouse guide made generic. Uses `GLOSSARY.md` terms when the project has one |
+
+## Matt Pocock skills
+
+From mattpocock/skills, MIT. `codebase-design` and `domain-modeling` are **extensions**: hidden from the `/` menu (`user-invocable: false`), called by the workflow skills, and calling no other skill (`scripts/check-refs.sh` enforces it). `setup` and `improve-codebase-architecture` are user-only entry points outside the workflow. Reference files moved to `references/`, lowercase. No `agents/openai.yaml` (Codex only).
+
+| pickle item | Kind | mattpocock-skills source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/codebase-design | skill | mp:skills/engineering/codebase-design | ported | 1.3.1 | extension. Description narrowed to internal module shape, not HTTP or public API contracts. Design-it-twice names the Agent tool with `Plan` subagents |
+| skills/domain-modeling | skill | mp:skills/engineering/domain-modeling | rewritten | 1.3.1 | extension, glossary only: ADR-FORMAT.md and the ADR rules dropped, since documentation-and-adrs owns ADRs and calls this skill for their terms. Reads `docs/agents/domain.md` when present |
+| skills/setup | skill | mp:skills/engineering/setup-matt-pocock-skills | rewritten | 1.3.1 | user-only, `/pickle:setup`. Issue tracker and domain docs only: no triage labels, no wayfinder operations, no PR triage flag. Default ADR folder `docs/adr/`. Adds optional glossary seeding through an Explore subagent and `pickle:domain-modeling`. Edits `AGENTS.md` when `CLAUDE.md` only imports it |
+| skills/improve-codebase-architecture | skill | mp:skills/engineering/improve-codebase-architecture | rewritten | 1.3.1 | user-only. Fully offline report (inline CSS and SVG, no Tailwind or Mermaid CDN). Rules and a "report only" mode at the top, hot spots from a fixed `git log` command, Explore subagents with a set brief and return format, at most 6 candidates. Grilling inlined (upstream calls the `grilling` skill), ADRs through `pickle:documentation-and-adrs`, hand-off to spec-driven-development |
 
 ## Agent skills
 
@@ -42,16 +55,16 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 
 | pickle item | Kind | agent-skills source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
-| skills/api-and-interface-design | skill | as:skills/api-and-interface-design | vendored | 0.6.13 | |
+| skills/api-and-interface-design | skill | as:skills/api-and-interface-design | vendored | 0.6.13 | on `main`: line in When to Use that calls `pickle:codebase-design` for internal module shape |
 | skills/browser-testing-with-devtools | skill | as:skills/browser-testing-with-devtools | vendored | 0.6.13 | |
 | skills/ci-cd-and-automation | skill | as:skills/ci-cd-and-automation | vendored | 0.6.13 | |
-| skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | |
-| skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | |
+| skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | on `main`: Readability checks names against `GLOSSARY.md` and calls `pickle:domain-modeling`; Architecture applies the deletion test from `pickle:codebase-design` |
+| skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | on `main`: line after the Redundancy table that calls `pickle:codebase-design` for the deletion test |
 | skills/constraint-driven-development | skill | as:skills/constraint-driven-development | vendored | 0.6.13 | |
 | skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | |
-| skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | |
+| skills/debugging-and-error-recovery | skill | as:skills/debugging-and-error-recovery | vendored | 0.6.13 | on `main`: line in Step 5 that calls `pickle:codebase-design` when no seam can hold a regression test |
 | skills/deprecation-and-migration | skill | as:skills/deprecation-and-migration | vendored | 0.6.13 | |
-| skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | Overview adds a line on `main` that calls `pickle:technical-writing` and `pickle:why` |
+| skills/documentation-and-adrs | skill | as:skills/documentation-and-adrs | vendored | 0.6.13 | Overview adds a line on `main` that calls `pickle:technical-writing` and `pickle:why`. Also on `main`: default ADR folder `docs/adr/` (upstream `docs/decisions/`), reads `docs/agents/domain.md`, the three-part test for when an ADR is worth writing, and a line that calls `pickle:domain-modeling` when the decision names domain concepts |
 | skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | |
 | skills/frontend-ui-engineering | skill | as:skills/frontend-ui-engineering | vendored | 0.6.13 | |
 | skills/git-workflow-and-versioning | skill | as:skills/git-workflow-and-versioning | vendored | 0.6.13 | |
@@ -64,8 +77,8 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/security-and-hardening | skill | as:skills/security-and-hardening | vendored | 0.6.13 | |
 | skills/shipping-and-launch | skill | as:skills/shipping-and-launch | vendored | 0.6.13 | |
 | skills/source-driven-development | skill | as:skills/source-driven-development | vendored | 0.6.13 | |
-| skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | |
-| skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | |
+| skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | on `main`: Code Style item names domain concepts from `GLOSSARY.md` and calls `pickle:domain-modeling` |
+| skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | on `main`: line after Prefer Real Implementations Over Mocks that calls `pickle:codebase-design` |
 | skills/pickle-mode | skill | as:skills/using-agent-skills | vendored | 0.6.13 | the entry skill, `/pickle:pickle-mode`. Renamed and user-only: `name: pickle-mode` and `disable-model-invocation: true` are set on `main`. Rewritten on `main` above Core Operating Behaviors: procedure, phase-ordered router with `pickle:` names, user-facing description. Upstream changes there conflict on merge |
 | commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | |
 | commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | |

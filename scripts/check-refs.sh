@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # Fails when a skill or agent mention does not resolve, when a called
-# skill is user-only, when pickle-mode names a skill bare, or when UPSTREAM.md disagrees with the files.
+# skill is user-only, when pickle-mode names a skill bare, when an extension calls a skill, or when
+# UPSTREAM.md disagrees with the files.
 # Run from anywhere: bash scripts/check-refs.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -88,6 +89,16 @@ while IFS=: read -r l t; do
 done < <(sed -E 's/\*\*[a-z0-9-]+\*\* skill \(Skill tool, `pickle:[a-z0-9-]+`\)//g; s/pickle:[a-z0-9-]+//g' "$pm" \
   | grep -noE "(^|[^a-z0-9-])($names)([^a-z0-9-]|\$)|\`($words)\`|\*\*($words)\*\*" | sed -E 's/:[^a-z`*]*/:/; s/[^a-z0-9`*-]*$//')
 
+# Extensions are called by workflow skills and call nothing themselves, so dependencies point one way:
+# pickle-mode, then workflow skills, then extensions.
+for x in codebase-design domain-modeling; do
+  [ -d "skills/$x" ] || { err "skills/$x: extension is missing"; continue; }
+  [ "$(fm_key "skills/$x/SKILL.md" user-invocable)" = "false" ] || err "skills/$x/SKILL.md: extension needs user-invocable: false"
+  while IFS=: read -r f l m; do
+    err "$f:$l: extension $x calls ${m##*[^a-z0-9:-]}, but extensions call no skill"
+  done < <(grep -rnoE '(^|[^/[:alnum:]-])pickle:[a-z0-9-]+' "skills/$x")
+done
+
 # Agent skills: preload lists. A user-only skill there is skipped silently.
 for f in agents/*.md; do
   for s in $(fm "$f" | awk '/^skills:/{m=1; sub(/^skills: */, ""); gsub(/[][,]/, " "); print; next} m && /^ *- /{sub(/^ *- */, ""); print; next} m{m=0}'); do
@@ -117,7 +128,7 @@ while IFS='|' read -r item kind src rel ver; do
     if [ "$rel" = "new" ]; then
       [ -z "$up" ] || err "$sk: metadata upstream '$up' on a new skill"
     else
-      case "$src" in as:*) exp="agent-skills/${src#as:}";; *) exp="pstack/$src";; esac
+      case "$src" in as:*) exp="agent-skills/${src#as:}";; mp:*) exp="mattpocock-skills/${src#mp:}";; *) exp="pstack/$src";; esac
       [ "$up" = "$exp" ] || err "$sk: metadata upstream '$up', UPSTREAM.md says '$exp'"
       [ "$upv" = "$ver" ] || err "$sk: metadata upstream-version '$upv', UPSTREAM.md says '$ver'"
     fi

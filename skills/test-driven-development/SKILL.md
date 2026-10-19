@@ -249,6 +249,8 @@ Preference order (most to least preferred):
 
 **Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects you can't control (external APIs, email sending). Over-mocking creates tests that pass while production breaks.
 
+When the code under test builds its own dependencies, or a test has to mock layer after layer, the seam is in the wrong place. Move it with the **codebase-design** skill (Skill tool, `pickle:codebase-design`), then test through the deepened module's interface.
+
 ### Use the Arrange-Act-Assert Pattern
 
 ```typescript
