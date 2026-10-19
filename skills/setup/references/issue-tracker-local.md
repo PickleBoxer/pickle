@@ -1,11 +1,11 @@
 # Issue tracker: Local Markdown
 
-Issues and specs for this repo live as markdown files in `.scratch/`.
+Issues for this repo live as markdown files in `.scratch/`.
 
 ## Conventions
 
 - One feature per directory: `.scratch/<feature-slug>/`
-- The spec is `.scratch/<feature-slug>/spec.md`
+- Specs are not issues: `/pickle:spec` writes them to `SPEC.md`
 - Implementation issues are one file per ticket at `.scratch/<feature-slug>/issues/<NN>-<slug>.md`, numbered from `01`, never a single combined tickets file
 - State is recorded as a `Status:` line near the top of each issue file (`open`, `in-progress`, `done`)
 - Comments and conversation history append to the bottom of the file under a `## Comments` heading

@@ -46,7 +46,7 @@ From mattpocock/skills, MIT. `codebase-design` and `domain-modeling` are **exten
 |---|---|---|---|---|---|
 | skills/codebase-design | skill | mp:skills/engineering/codebase-design | ported | 1.3.1 | extension. Description narrowed to internal module shape, not HTTP or public API contracts. Design-it-twice names the Agent tool with `Plan` subagents |
 | skills/domain-modeling | skill | mp:skills/engineering/domain-modeling | rewritten | 1.3.1 | extension, glossary only: ADR-FORMAT.md and the ADR rules dropped, since documentation-and-adrs owns ADRs and calls this skill for their terms. Reads `docs/agents/domain.md` when present |
-| skills/setup | skill | mp:skills/engineering/setup-matt-pocock-skills | rewritten | 1.3.1 | user-only, `/pickle:setup`. Issue tracker and domain docs only: no triage labels, no wayfinder operations, no PR triage flag. Default ADR folder `docs/adr/`. Adds optional glossary seeding through an Explore subagent and `pickle:domain-modeling`. Edits `AGENTS.md` when `CLAUDE.md` only imports it. For an Other tracker, checks the MCP server or CLI with one read-only call and records the exact tool names. The local markdown reference keeps plans in `tasks/` |
+| skills/setup | skill | mp:skills/engineering/setup-matt-pocock-skills | rewritten | 1.3.1 | user-only, `/pickle:setup`. Issue tracker and domain docs only: no triage labels, no wayfinder operations, no PR triage flag. Default ADR folder `docs/adr/`. Adds optional glossary seeding through an Explore subagent and `pickle:domain-modeling`. Edits `AGENTS.md` when `CLAUDE.md` only imports it. For an Other tracker, checks the MCP server or CLI with one read-only call and records the exact tool names. The local markdown reference keeps plans in `tasks/` and specs in `SPEC.md`, with `.scratch/` for issues only |
 | skills/improve-codebase-architecture | skill | mp:skills/engineering/improve-codebase-architecture | rewritten | 1.3.1 | user-only. Fully offline report (inline CSS and SVG, no Tailwind or Mermaid CDN), written to `docs/agents/reports/`. Rules and a "report only" mode at the top, hot spots from a fixed `git log` command, Explore subagents with a set brief and return format, at most 6 candidates. Grilling inlined (upstream calls the `grilling` skill), ADRs through `pickle:documentation-and-adrs`, hand-off to spec-driven-development |
 
 ## Agent skills
@@ -68,7 +68,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/doubt-driven-development | skill | as:skills/doubt-driven-development | vendored | 0.6.13 | on `main`: Interaction with Other Skills bullet that calls `pickle:how` and `pickle:why` |
 | skills/frontend-ui-engineering | skill | as:skills/frontend-ui-engineering | vendored | 0.6.13 | |
 | skills/git-workflow-and-versioning | skill | as:skills/git-workflow-and-versioning | vendored | 0.6.13 | |
-| skills/idea-refine | skill | as:skills/idea-refine | vendored | 0.6.13 | |
+| skills/idea-refine | skill | as:skills/idea-refine | vendored | 0.6.13 | on `main`: Usage runs the script through `${CLAUDE_SKILL_DIR}`, so it resolves outside the pickle repo |
 | skills/incremental-implementation | skill | as:skills/incremental-implementation | vendored | 0.6.13 | |
 | skills/interview-me | skill | as:skills/interview-me | vendored | 0.6.13 | |
 | skills/observability-and-instrumentation | skill | as:skills/observability-and-instrumentation | vendored | 0.6.13 | |
