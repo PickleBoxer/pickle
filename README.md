@@ -19,11 +19,42 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
   - Verify: `browser-testing-with-devtools`, `debugging-and-error-recovery`
   - Review: `code-review-and-quality`, `code-simplification`, `security-and-hardening`, `performance-optimization`
   - Ship: `git-workflow-and-versioning`, `ci-cd-and-automation`, `deprecation-and-migration`, `documentation-and-adrs`, `observability-and-instrumentation`, `shipping-and-launch`
-- **Language skill.** pickle's `typescript-best-practices` gives default TypeScript idioms when your project has none of its own.
-- **Investigation skills.** `how` explains how a part of the code works, and `why` digs up the reasons it is shaped that way from git history, PRs and any MCP servers you have added.
-- **Writing skills.** `technical-writing` applies a layered standard to docs, PR descriptions and commit messages, and `unslop` removes AI writing patterns from any prose.
-- **Extensions.** `codebase-design` (deep modules, seams, the deletion test) and `domain-modeling` (your project's `GLOSSARY.md`). They stay out of the `/` menu: workflow skills such as `test-driven-development`, `code-review-and-quality` and `documentation-and-adrs` call them when a task needs them.
-- **Setup and architecture review.** `/pickle:setup` records where your issues and domain docs live, in `docs/agents/`. `/pickle:improve-codebase-architecture` scans for shallow modules worth deepening, writes an offline HTML report and grills you through the one you pick.
+
+### Added by pickle
+
+pickle-mode routes only through the workflow skills. These sit beside them: workflow skills point to them where they help, and you can call the ones in the `/` menu yourself.
+
+| Skill | Kind | What it does | How it loads |
+|---|---|---|---|
+| `how` | investigation | Explains how a part of the code works | `/pickle:how`, on its own, or from `context-engineering` and `doubt-driven-development` |
+| `why` | investigation | Finds why code is shaped that way, from git history, PRs and any MCP servers you have added | `/pickle:why`, on its own, or from `debugging-and-error-recovery`, `code-simplification`, `deprecation-and-migration`, `doubt-driven-development` and `documentation-and-adrs` |
+| `technical-writing` | writing | Applies a layered standard to docs, PR descriptions and commit messages | On its own, or from pickle-mode and `documentation-and-adrs` |
+| `unslop` | writing | Removes AI writing patterns from any prose | On its own, or from `technical-writing` |
+| `typescript-best-practices` | language | Default TypeScript idioms when your project has none of its own | On its own, for `.ts` and `.tsx` work |
+| `codebase-design` | extension | Deep modules, seams, the deletion test | From workflow skills only, not in the `/` menu |
+| `domain-modeling` | extension | Your project's `GLOSSARY.md` | From workflow skills only, not in the `/` menu |
+| `setup` | user-only | Records where your issues and domain docs live, in `docs/agents/` | `/pickle:setup`, once per repo |
+| `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `docs/agents/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
+
+### Scheduled reports
+
+Some skills are worth running on a schedule: they read the codebase, write a report and change no code. Run them as a local [routine](https://code.claude.com/docs/en/desktop-scheduled-tasks) in Claude Code Desktop, which runs on your machine with your local files and tools.
+
+| Skill | Routine instructions | Cadence |
+|---|---|---|
+| `improve-codebase-architecture` | `/pickle:improve-codebase-architecture report only` | Weekly |
+
+To set one up:
+
+1. In the **Code** tab, open **Routines**, click **New routine** and choose **Local**.
+2. Paste the routine instructions, pick the repo folder, and set the schedule to **Weekly** with a day and time.
+3. Click **Run now** once and allow each tool it asks for, so later runs don't stall on a permission prompt.
+
+Each run opens a session under **Scheduled** in the sidebar, with the report path and a one-line summary per candidate. Reports collect in `docs/agents/reports/`. Add that folder to `.gitignore` unless you want to keep them in the repo. To work through a candidate, run the skill yourself and name that area.
+
+- Choose **Local**, not **Cloud**. A [cloud routine](https://code.claude.com/docs/en/routines) runs on a fresh clone, and cloud sessions don't install plugins, so pickle is not there.
+- A local routine runs only while the app is open and the computer is awake. After a missed run, Desktop starts one catch-up run on wake.
+- Leave the worktree toggle off, so the report lands in your checkout. The run reads the folder as it is, uncommitted changes included.
 
 ### Commands
 
