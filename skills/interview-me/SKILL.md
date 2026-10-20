@@ -129,7 +129,7 @@ If they correct you, fold the correction in and restate. Loop until you get an e
 When the user confirms the statement of intent with an explicit "yes":
 
 1. **Deliver the confirmed Statement of Intent.**
-2. **Offer downstream paths** (offer to save it to `docs/intent/[topic].md`, draft a spec with `spec-driven-development`, or move to task planning after the spec).
+2. **Offer downstream paths** (offer to save it to `.scratch/<feature-slug>/intent.md`, draft a spec with `spec-driven-development`, or move to task planning after the spec).
 3. **STOP YOUR TURN IMMEDIATELY.** Do NOT invoke tools or start downstream work in this turn. Hand control back to the user to choose the next step.
 
 ### The 95% Confidence Stop
@@ -146,7 +146,7 @@ This is a checkable test, not a vibe. It also has a floor: if you've gone severa
 
 The output of this skill is a **confirmed statement of intent**: the restate from Step 4, with an explicit yes from Step 5. That's the deliverable. Specs, plans, and task lists are downstream; they consume the intent this skill produces.
 
-If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `docs/intent/[topic].md`. Only save if they confirm.
+If the user wants the intent to persist (a multi-session project, a handoff to another collaborator), offer to save it to `.scratch/<feature-slug>/intent.md`, the feature folder the spec and plan reuse (`${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`). Only save if they confirm.
 
 ## Example
 

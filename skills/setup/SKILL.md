@@ -26,7 +26,7 @@ Read whatever exists; don't assume:
 - `docs/agents/`: does this skill's earlier output exist?
 - `GLOSSARY.md` and `GLOSSARY-MAP.md` at the root
 - ADR folders: `docs/adr/`, `docs/decisions/`, an `.adr-dir` file, any `src/*/docs/adr/`
-- `.scratch/`: a sign that local-markdown issues are already in use
+- `.scratch/`: feature folders from earlier work; an `issues/` folder in one means local-markdown issues are already in use
 - Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
 - MCP servers: those connected in this session (your own tool list) and those in `.mcp.json`. Servers added at user scope or by a plugin never appear in `.mcp.json`. Note docs tools (`laravel-boost`, Context7) and trackers (Linear, Atlassian for Jira); `laravel/boost` in `composer.lock` also counts
 - `CONSTRAINTS.md` at the root

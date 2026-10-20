@@ -36,14 +36,14 @@ A new project is the best-case scenario: there's no legacy behavior to preserve,
 Run the lifecycle in order for the project's first real feature:
 
 ```
-/pickle:spec   →  SPEC.md            (spec-driven-development)
-/pickle:plan   →  tasks/plan.md      (planning-and-task-breakdown)
+/pickle:spec   →  .scratch/<slug>/SPEC.md   (spec-driven-development)
+/pickle:plan   →  .scratch/<slug>/plan.md   (planning-and-task-breakdown)
 /pickle:build  →  one slice at a time (incremental-implementation + test-driven-development)
 /pickle:review →  before every merge  (code-review-and-quality)
 /pickle:ship   →  when going live     (shipping-and-launch)
 ```
 
-`/pickle:build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`SPEC.md`, `tasks/`) are living documents, keep them in version control while the work is in flight. If the feature spans more than one session, those files are also the handoff, see Restartable Session Boundaries in [context-engineering](../skills/context-engineering/SKILL.md).
+`/pickle:build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts live in one feature folder per piece of work, `.scratch/<slug>/` (see [feature-folder](../references/feature-folder.md)). Commit them: they are living documents while the work is in flight and history once it ships. If the feature spans more than one session, those files are also the handoff, see Restartable Session Boundaries in [context-engineering](../skills/context-engineering/SKILL.md).
 
 ### From the start, treat these as always-on
 

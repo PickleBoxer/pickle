@@ -1,5 +1,6 @@
 ---
 description: Implement tasks incrementally — build, test, verify, commit. Add "auto" to run the whole plan in one approved pass.
+argument-hint: "[auto] [feature-slug]"
 ---
 
 Invoke the **incremental-implementation** skill (Skill tool, `pickle:incremental-implementation`) alongside the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`).
@@ -9,11 +10,13 @@ Invoke the **incremental-implementation** skill (Skill tool, `pickle:incremental
 - **`/pickle:build`** — implement the *next* pending task, then stop (careful, one slice at a time).
 - **`/pickle:build auto`** — generate the plan if needed, get a single approval, then implement *every* task without stopping between them.
 
-`$ARGUMENTS` selects the mode. Treat `auto` (canonical) or `all` as autonomous mode; anything else (or empty) is the default single-task mode. Note: autonomous mode is not faster *per task* — it runs the same test-driven loop — it only removes the human stepping *between* tasks.
+`$ARGUMENTS` selects the mode and the feature. Treat `auto` (canonical) or `all` as autonomous mode; without it, run the default single-task mode. Any other word is the feature slug. Note: autonomous mode is not faster *per task* — it runs the same test-driven loop — it only removes the human stepping *between* tasks.
+
+**Pick the feature folder first** (`.scratch/<feature-slug>/`, see `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`): the slug from `$ARGUMENTS`; else the one folder with unchecked tasks in `todo.md` or open tracker items named in `plan.md`; if several qualify, list them and ask. `SPEC.md`, `plan.md` and `todo.md` below all mean the files in that folder.
 
 ## Default: one task
 
-Pick the next pending task from the plan. If `tasks/plan.md` says tasks live in an issue tracker, read the open items from there, following `docs/agents/issue-tracker.md` when it exists. Then:
+Pick the next pending task from the plan. If `plan.md` says tasks live in an issue tracker, read the open items from there, following `docs/agents/issue-tracker.md` when it exists. Then:
 
 1. Read the task's acceptance criteria
 2. Load relevant context (existing code, patterns, types)
@@ -28,10 +31,10 @@ Pick the next pending task from the plan. If `tasks/plan.md` says tasks live in 
 
 Use this once a spec exists and you want to collapse plan + build into one run. It removes the manual stepping between tasks — **not** the verification. Every task still earns a passing test and its own commit.
 
-1. **Require a spec.** Look only for a spec at a known path: `SPEC.md` at the repo root, `docs/SPEC.md`, or a file under `spec/`. A README or arbitrary doc does **not** count. If none exists, stop and tell the user to run `/pickle:spec` first — do not invent requirements.
-2. **Establish a clean baseline.** Run `git status --porcelain`. If there are uncommitted changes outside the expected planning artifacts (`SPEC.md`, `docs/SPEC.md`, `spec/*`, `tasks/plan.md`, `tasks/todo.md`), stop and ask the user to commit, stash, or confirm how to handle them. Autonomous per-task commits must not absorb unrelated local work, or the clean-rollback guarantee breaks.
-3. **Plan if needed.** If there is no `tasks/plan.md`, invoke the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`) to generate one.
-4. **Single checkpoint.** Present the full plan and wait for an unambiguous affirmative (e.g. "approve", "go", "yes"). Treat hedged responses ("looks reasonable", "I guess") as **not** approved. This is the only human gate — after approval, run autonomously. If you generated `tasks/plan.md`, commit it as a single preparatory commit now so it doesn't bleed into the first task's commit.
+1. **Require a spec.** Look only for a spec at a known path: `SPEC.md` in the feature folder, or for older projects `SPEC.md` at the repo root, `docs/SPEC.md`, or a file under `spec/`. A README or arbitrary doc does **not** count. If none exists, stop and tell the user to run `/pickle:spec` first — do not invent requirements.
+2. **Establish a clean baseline.** Run `git status --porcelain`. If there are uncommitted changes outside the expected planning artifacts (the feature folder, `SPEC.md`, `docs/SPEC.md`, `spec/*`), stop and ask the user to commit, stash, or confirm how to handle them. Autonomous per-task commits must not absorb unrelated local work, or the clean-rollback guarantee breaks.
+3. **Plan if needed.** If there is no `plan.md`, invoke the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`) to generate one.
+4. **Single checkpoint.** Present the full plan and wait for an unambiguous affirmative (e.g. "approve", "go", "yes"). Treat hedged responses ("looks reasonable", "I guess") as **not** approved. This is the only human gate — after approval, run autonomously. If you generated `plan.md`, commit it as a single preparatory commit now so it doesn't bleed into the first task's commit.
 5. **Execute every task in dependency order.** Use each task's declared dependencies; if they aren't explicit, execute in the order the plan lists them. For each task, run the full default loop above (RED → GREEN → regression → build → commit → mark complete). Stage only the files that task touched plus its task-status update — never `git add -A` blindly — and make one commit per task so any point is a clean rollback.
 6. **Stop and ask the user** (do not push through) when:
    - a test can't be made to pass or the build breaks without an obvious fix → follow the **debugging-and-error-recovery** skill (Skill tool, `pickle:debugging-and-error-recovery`)

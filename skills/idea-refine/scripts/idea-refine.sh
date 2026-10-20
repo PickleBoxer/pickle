@@ -1,9 +1,15 @@
 #!/bin/bash
 set -e
 
-# This script helps initialize the ideas directory for the idea-refine skill.
+# This script helps initialize the feature folder for the idea-refine skill.
+# Usage: idea-refine.sh <feature-slug>
 
-IDEAS_DIR="docs/ideas"
+if [ -z "$1" ]; then
+  echo "Usage: idea-refine.sh <feature-slug>" >&2
+  exit 1
+fi
+
+IDEAS_DIR=".scratch/$1"
 
 if [ ! -d "$IDEAS_DIR" ]; then
   mkdir -p "$IDEAS_DIR"

@@ -31,13 +31,13 @@ Refines raw ideas into sharp, actionable concepts worth building through structu
 This skill is primarily an interactive dialogue. Invoke it with an idea, and the agent will guide you through the process.
 
 ```bash
-# Optional: Initialize the ideas directory
-bash "${CLAUDE_SKILL_DIR}/scripts/idea-refine.sh"
+# Optional: Initialize the feature folder
+bash "${CLAUDE_SKILL_DIR}/scripts/idea-refine.sh" <feature-slug>
 ```
 
 ## Output
 
-The final output is a markdown one-pager saved to `docs/ideas/[idea-name].md` (after user confirmation), containing:
+The final output is a markdown one-pager saved to `.scratch/<feature-slug>/idea.md` (after user confirmation; see `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`), containing:
 - Problem Statement
 - Recommended Direction
 - Key Assumptions
@@ -145,7 +145,7 @@ Produce a concrete artifact — a markdown one-pager that moves work forward:
 
 **The "Not Doing" list is arguably the most valuable part.** Focus is about saying no to good ideas. Make the trade-offs explicit.
 
-Ask the user if they'd like to save this to `docs/ideas/[idea-name].md` (or a location of their choosing). Only save if they confirm.
+Ask the user if they'd like to save this to `.scratch/<feature-slug>/idea.md` (or a location of their choosing). Only save if they confirm.
 
 ### Anti-patterns to Avoid
 
