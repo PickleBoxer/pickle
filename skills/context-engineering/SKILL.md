@@ -80,6 +80,8 @@ Create a rules file that persists across sessions. This is the highest-leverage 
 - `.github/copilot-instructions.md` (GitHub Copilot)
 - `AGENTS.md` (OpenAI Codex)
 
+If a tool generates a block in the rules file (Laravel Boost rewrites everything inside `<laravel-boost-guidelines>`), leave that block alone and write project rules outside it.
+
 ### Level 2: Specs and Architecture
 
 Load the relevant spec section when starting a feature. Don't load the entire spec if only one section applies.
@@ -250,6 +252,7 @@ For richer context, use Model Context Protocol servers:
 | MCP Server | What It Provides |
 |-----------|-----------------|
 | **Context7** | Auto-fetches relevant documentation for libraries |
+| **Laravel Boost** | Version-matched Laravel ecosystem docs, application info, database schema, last error |
 | **Chrome DevTools** | Live browser state, DOM, console, network |
 | **PostgreSQL** | Direct database schema and query results |
 | **Filesystem** | Project file access and search |

@@ -80,15 +80,15 @@ for (const line of diff.split('\n')) {
 
 const findings = [];
 const flag = (rule, f, text) => findings.push({ rule, file: f, text: text.trim().slice(0, 120) });
-const isTest = (f) => /\.(test|spec)\.|_test\.|test_/.test(f);
+const isTest = (f) => /\.(test|spec)\.|_test\.|test_|Test\.php$/.test(f);
 const isConstraints = (f) => /CONSTRAINTS\.md$/.test(f);
 
 // 1. Silenced checker — extend this list for your ecosystem.
-const SUPPRESSIONS = /@ts-ignore|@ts-nocheck|eslint-disable|biome-ignore|# *noqa|# *type: *ignore|istanbul ignore|nosemgrep|gitleaks:allow|Stryker disable/;
+const SUPPRESSIONS = /@ts-ignore|@ts-nocheck|eslint-disable|biome-ignore|# *noqa|# *type: *ignore|istanbul ignore|nosemgrep|gitleaks:allow|Stryker disable|@phpstan-ignore|@psalm-suppress|phpcs:ignore|@codeCoverageIgnore|@infection-ignore-all/;
 // 4. Unfinished work.
-const STUBS = /throw new (Error|NotImplemented).*[Nn]ot implemented|catch\s*\(\w*\)\s*\{\s*\}|catch\s*\{\s*\}|\bTODO\b|\bpass\s*# *stub/;
+const STUBS = /throw new \\?(Error|NotImplemented|Exception|LogicException|RuntimeException).*[Nn]ot implemented|catch\s*\([^)]*\)\s*\{\s*\}|catch\s*\{\s*\}|\bTODO\b|\bpass\s*# *stub/;
 // 2. A test made easier (added skips).
-const SKIPS = /\.(skip|todo)\b|\bxit\(|\bxdescribe\(|@pytest\.mark\.skip|t\.Skip\(/;
+const SKIPS = /\.(skip|todo)\b|->(skip|todo)\(|markTest(Skipped|Incomplete)|\bxit\(|\bxdescribe\(|@pytest\.mark\.skip|t\.Skip\(/;
 
 for (const { file, text } of added) {
   if (SUPPRESSIONS.test(text)) flag('silenced-checker', file, text);
@@ -100,7 +100,7 @@ for (const { file, text } of added) {
 // 2b. A test file deleted, or an assertion removed from a test file that still exists.
 for (const f of deleted) if (isTest(f)) flag('test-deleted', f, 'file deleted');
 for (const { file, text } of removed) {
-  if (isTest(file) && !deleted.includes(file) && /\b(expect|assert|should)\b/.test(text)) {
+  if (isTest(file) && !deleted.includes(file) && /\b(expect|assert\w*|should)\b/.test(text)) {
     flag('assertion-removed', file, text);
   }
 }

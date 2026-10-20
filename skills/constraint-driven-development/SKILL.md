@@ -104,7 +104,7 @@ Last reviewed: 2026-08-08 by @addy
 
 ## Floor (always enforced, no setup required)
 
-- No new suppression comments: `@ts-ignore`, `eslint-disable`, `# noqa`, `# type: ignore`
+- No new suppression comments: `@ts-ignore`, `eslint-disable`, `# noqa`, `# type: ignore`, `@phpstan-ignore`, `@psalm-suppress`
 - No unimplemented stubs: `throw new Error("Not implemented")`, empty `catch {}`
 - No skipped or deleted tests without a reason in the commit message
 - No secrets in source
@@ -150,17 +150,22 @@ Picking a dimension means installing something. Don't leave the user with a numb
 |-----------|------|---------|-----|---------|
 | Types (TS) | tsc | already there | `tsc --noEmit` | any error |
 | Types (Python) | mypy | `pip install mypy` | `mypy .` | any error |
-| Lint | your existing config | already there | `eslint .` / `biome check` / `ruff check` | any error |
+| Types (PHP) | PHPStan (Larastan on Laravel) | `composer require --dev larastan/larastan` | `vendor/bin/phpstan analyse` | any error at the chosen level |
+| Lint | your existing config | already there | `eslint .` / `biome check` / `ruff check` / `vendor/bin/pint --test` | any error |
 | Coverage (JS) | your test runner | already there | `vitest run --coverage` (or `jest --coverage`) | coverage of changed lines |
 | Coverage (Python) | pytest-cov | `pip install pytest-cov` | `pytest --cov --cov-report=lcov` | same |
+| Coverage (PHP) | Pest or PHPUnit, with pcov | `pecl install pcov` | `vendor/bin/pest --coverage --min=80` | same |
 | Security: code | Semgrep | `pipx install semgrep` | `semgrep scan --config p/default --config p/owasp-top-ten` | any high finding |
 | Security: secrets | gitleaks | `brew install gitleaks` | `gitleaks detect --redact --no-banner` | any finding |
 | Security: dependencies | osv-scanner | `brew install osv-scanner` | `osv-scanner scan source -r .` | high or above |
+| Security: dependencies (PHP) | Composer 2.4+ | already there | `composer audit --locked` | high or above |
 | Performance: page | Lighthouse | `npm i -D lighthouse` | `lighthouse $URL --output=json --quiet` | LCP, CLS, performance score |
 | Performance: bundle | size-limit | `npm i -D size-limit` | `size-limit --json` | per-entry byte budget |
 | Accessibility | axe-core | `npm i -D @axe-core/cli` | `axe $URL --tags wcag2a,wcag2aa,wcag21aa` | zero critical or serious |
 | Architecture | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | any violation |
+| Architecture (PHP) | Pest arch tests | already in Pest | `vendor/bin/pest tests/ArchTest.php` | any violation |
 | Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
+| Assertion quality (PHP) | Infection | `composer require --dev infection/infection` | `vendor/bin/infection --git-diff-lines --git-diff-base=origin/main` | mutation score |
 
 Five things that will bite you if you skip them:
 
@@ -181,6 +186,8 @@ Add each one to the project's own script so it's reproducible without an agent:
   }
 }
 ```
+
+On PHP the same three names go in `composer.json` `scripts` (`composer check:fast`).
 
 That mapping matters more than the tools. `check:fast` is what runs after an edit, `check:task` when the agent thinks it's done, `check:full` in CI.
 

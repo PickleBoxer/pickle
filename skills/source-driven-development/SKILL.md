@@ -52,6 +52,8 @@ Gemfile         → Ruby/Rails
 Package.swift   → Swift/SwiftPM (an *.xcodeproj alone: Xcode project)
 ```
 
+`composer.json` and `package.json` hold version ranges; read the installed version from the lockfile (`composer.lock`, `package-lock.json`).
+
 State what you found explicitly:
 
 ```
@@ -66,13 +68,15 @@ If versions are missing or ambiguous, **ask the user**. Don't guess — the vers
 
 ### Step 2: Fetch Official Documentation
 
+If `docs/agents/sources.md` exists, query the docs tool it names first (such as Laravel Boost's `search-docs`, which answers for the installed versions), and fall back to fetching the page.
+
 Fetch the specific documentation page for the feature you're implementing. Not the homepage, not the full docs — the relevant page.
 
 **Source hierarchy (in order of authority):**
 
 | Priority | Source | Example |
 |----------|--------|---------|
-| 1 | Official documentation | react.dev, docs.djangoproject.com, symfony.com/doc |
+| 1 | Official documentation | react.dev, docs.djangoproject.com, symfony.com/doc, laravel.com/docs, php.net/manual |
 | 2 | Official blog / changelog | react.dev/blog, nextjs.org/blog |
 | 3 | Web standards references | MDN, web.dev, html.spec.whatwg.org |
 | 4 | Browser/runtime compatibility | caniuse.com, node.green |
