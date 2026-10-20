@@ -28,7 +28,7 @@ Read whatever exists; don't assume:
 - ADR folders: `docs/adr/`, `docs/decisions/`, an `.adr-dir` file, any `src/*/docs/adr/`
 - `.scratch/`: a sign that local-markdown issues are already in use
 - Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
-- Docs tools: MCP servers in `.mcp.json` (`laravel-boost`, `context7`), and `laravel/boost` in `composer.lock`
+- MCP servers: those connected in this session (your own tool list) and those in `.mcp.json`. Servers added at user scope or by a plugin never appear in `.mcp.json`. Note docs tools (`laravel-boost`, Context7) and trackers (Linear, Atlassian for Jira); `laravel/boost` in `composer.lock` also counts
 - `CONSTRAINTS.md` at the root
 - Monorepo signals: `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or a populated `packages/*` with its own `src/`. Their absence means single-context, which is almost every repo.
 
@@ -40,12 +40,17 @@ Lead each section with the recommended answer so the user can accept it in a wor
 
 **Section A: Issue tracker.** Skills that create or read issues follow `docs/agents/issue-tracker.md`, so they never guess between `gh issue create`, a markdown file under `.scratch/`, or another workflow.
 
-Propose the tracker that matches `git remote`: GitHub for github.com, GitLab for a GitLab host, local markdown when there is no remote. Otherwise, or if the user prefers, offer:
+Propose the tracker that matches `git remote`: GitHub for github.com, GitLab for a GitLab host, local markdown when there is no remote. When a Linear or Atlassian MCP server is connected, name it as the alternative: code on GitHub with issues in Linear or Jira is common. Otherwise, or if the user prefers, offer:
 
 - **GitHub**: the repo's GitHub Issues, through the `gh` CLI
 - **GitLab**: the repo's GitLab Issues, through the [`glab`](https://gitlab.com/gitlab-org/cli) CLI
 - **Local markdown**: files under `.scratch/<feature>/` in this repo (solo projects, repos without a remote)
-- **Other** (Jira, Linear and so on): ask for one paragraph describing the workflow, and which tool Claude reaches the tracker through (an MCP server or a CLI). Make one read-only call with that tool to check it works. If it fails, say so and offer to continue with local markdown until the tool is connected. Record the paragraph as written, plus the exact tool names
+- **Linear**: Linear issues through Linear's MCP server. Check it with `list_teams` and ask which team (and project, if any) this repo's issues go to
+- **Jira**: Jira issues through Atlassian's MCP server. Check it with `getAccessibleAtlassianResources` (it returns the `cloudId` every Jira tool needs), then `listJiraProjects`, and ask which project key this repo's issues go to
+
+When the Linear or Atlassian server is not connected, give the user its `claude mcp add` command and offer local markdown until it is: `claude mcp add --transport http linear-server https://mcp.linear.app/mcp` or `claude mcp add --transport http atlassian https://mcp.atlassian.com/v2/mcp`, then `/mcp` to sign in.
+
+- **Other** (YouTrack, Shortcut and so on): ask for one paragraph describing the workflow, and which tool Claude reaches the tracker through (an MCP server or a CLI). Make one read-only call with that tool to check it works. If it fails, say so and offer to continue with local markdown until the tool is connected. Record the paragraph as written, plus the exact tool names
 
 **Section B: Domain docs.** Default to **single-context**: one `GLOSSARY.md` and `docs/adr/` at the root. This fits almost every repo; take it without asking. If an ADR folder other than `docs/adr/` already holds ADRs, record that folder instead.
 
@@ -101,6 +106,8 @@ Then write the docs files from the templates:
 - [references/issue-tracker-github.md](references/issue-tracker-github.md): GitHub
 - [references/issue-tracker-gitlab.md](references/issue-tracker-gitlab.md): GitLab
 - [references/issue-tracker-local.md](references/issue-tracker-local.md): local markdown
+- [references/issue-tracker-linear.md](references/issue-tracker-linear.md): Linear, with each `{{tool}}` replaced by the exact name the server lists
+- [references/issue-tracker-jira.md](references/issue-tracker-jira.md): Jira, with the site, project key and `cloudId` filled in
 - [references/domain.md](references/domain.md): domain docs, with its Layout section filled in and any non-default ADR folder replacing `docs/adr/`
 - [references/sources.md](references/sources.md): docs sources, with the confirmed rows
 
