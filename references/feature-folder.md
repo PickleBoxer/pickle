@@ -1,6 +1,6 @@
 # Feature folder
 
-Working files for one piece of work live together in `.scratch/<feature-slug>/` at the repo root. Commit them with the work: the folder is the handoff between sessions, and finished folders stay as history.
+Working files for one piece of work live together in `.scratch/<feature-slug>/` at the repo root. File names keep the case upstream gave them: `SPEC.md` and `PERF.md` uppercase, the rest lowercase. Commit them with the work: the folder is the handoff between sessions, and finished folders stay as history.
 
 ```
 .scratch/<feature-slug>/
@@ -9,6 +9,7 @@ Working files for one piece of work live together in `.scratch/<feature-slug>/` 
   SPEC.md         spec-driven-development (module specs: SPEC-<module>.md)
   plan.md         planning-and-task-breakdown: plan document
   todo.md         planning-and-task-breakdown: task list, when no external tracker
+  PERF.md         performance-optimization: experiment log
   issues/NN-*.md  local markdown issue tracker (docs/agents/issue-tracker.md)
 .scratch/reports/ improve-codebase-architecture reports, not a feature
 ```

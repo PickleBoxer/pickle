@@ -73,7 +73,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/incremental-implementation | skill | as:skills/incremental-implementation | vendored | 0.6.13 | |
 | skills/interview-me | skill | as:skills/interview-me | vendored | 0.6.13 | on `main`: intent saved to `.scratch/<feature-slug>/intent.md` |
 | skills/observability-and-instrumentation | skill | as:skills/observability-and-instrumentation | vendored | 0.6.13 | |
-| skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | |
+| skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | on `main`: experiment log in `.scratch/<feature-slug>/PERF.md` |
 | skills/planning-and-task-breakdown | skill | as:skills/planning-and-task-breakdown | vendored | 0.6.13 | on `main`: External tracker follows `docs/agents/issue-tracker.md` from `/pickle:setup`, and a local markdown tracker keeps `todo.md`; plan and todo in `.scratch/<feature-slug>/`, not `tasks/` |
 | skills/security-and-hardening | skill | as:skills/security-and-hardening | vendored | 0.6.13 | |
 | skills/shipping-and-launch | skill | as:skills/shipping-and-launch | vendored | 0.6.13 | |
