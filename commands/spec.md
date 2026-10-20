@@ -2,7 +2,7 @@
 description: Start spec-driven development — write a structured specification before writing code
 ---
 
-Invoke the pickle:spec-driven-development skill.
+Invoke the **spec-driven-development** skill (Skill tool, `pickle:spec-driven-development`).
 
 Begin by understanding what the user wants to build. Ask clarifying questions about:
 1. The objective and target users

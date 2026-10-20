@@ -2,7 +2,7 @@
 description: Run TDD workflow — write failing tests, implement, verify. For bugs, use the Prove-It pattern.
 ---
 
-Invoke the pickle:test-driven-development skill.
+Invoke the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`).
 
 For new features:
 1. Write tests that describe the expected behavior (they should FAIL)
@@ -16,4 +16,4 @@ For bug fixes (Prove-It pattern):
 4. Confirm the test passes
 5. Run the full test suite for regressions
 
-For browser-related issues, also invoke pickle:browser-testing-with-devtools to verify with Chrome DevTools MCP.
+For browser-related issues, also invoke the **browser-testing-with-devtools** skill (Skill tool, `pickle:browser-testing-with-devtools`) to verify with Chrome DevTools MCP.

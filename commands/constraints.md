@@ -2,7 +2,7 @@
 description: Define and enforce this project's quality bar — interview, sane defaults, CONSTRAINTS.md
 ---
 
-Invoke the pickle:constraint-driven-development skill.
+Invoke the **constraint-driven-development** skill (Skill tool, `pickle:constraint-driven-development`).
 
 $ARGUMENTS
 

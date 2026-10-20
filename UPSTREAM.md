@@ -81,14 +81,14 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/spec-driven-development | skill | as:skills/spec-driven-development | vendored | 0.6.13 | on `main`: Code Style item names domain concepts from `GLOSSARY.md` and calls `pickle:domain-modeling` |
 | skills/test-driven-development | skill | as:skills/test-driven-development | vendored | 0.6.13 | on `main`: line after Prefer Real Implementations Over Mocks that calls `pickle:codebase-design` |
 | skills/pickle-mode | skill | as:skills/using-agent-skills | vendored | 0.6.13 | the entry skill, `/pickle:pickle-mode`. Renamed and user-only: `name: pickle-mode` and `disable-model-invocation: true` are set on `main`. Rewritten on `main` above Core Operating Behaviors: procedure, phase-ordered router with `pickle:` names, user-facing description. Upstream changes there conflict on merge |
-| commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | on `main`: Default reads open items from the issue tracker when `tasks/plan.md` names one |
-| commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | |
-| commands/constraints.md | command | as:.claude/commands/constraints.md | vendored | 0.6.13 | |
-| commands/plan.md | command | as:.claude/commands/plan.md | vendored | 0.6.13 | on `main`: task list goes to the task list target of `pickle:planning-and-task-breakdown`, not always `tasks/todo.md` |
-| commands/review.md | command | as:.claude/commands/review.md | vendored | 0.6.13 | |
-| commands/ship.md | command | as:.claude/commands/ship.md | vendored | 0.6.13 | |
-| commands/spec.md | command | as:.claude/commands/spec.md | vendored | 0.6.13 | |
-| commands/test.md | command | as:.claude/commands/test.md | vendored | 0.6.13 | |
+| commands/build.md | command | as:.claude/commands/build.md | vendored | 0.6.13 | on `main`: Default reads open items from the issue tracker when `tasks/plan.md` names one; every skill call in the Skill tool form |
+| commands/code-simplify.md | command | as:.claude/commands/code-simplify.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
+| commands/constraints.md | command | as:.claude/commands/constraints.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
+| commands/plan.md | command | as:.claude/commands/plan.md | vendored | 0.6.13 | on `main`: task list goes to the task list target of `pickle:planning-and-task-breakdown`, not always `tasks/todo.md`; every skill call in the Skill tool form |
+| commands/review.md | command | as:.claude/commands/review.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
+| commands/ship.md | command | as:.claude/commands/ship.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
+| commands/spec.md | command | as:.claude/commands/spec.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
+| commands/test.md | command | as:.claude/commands/test.md | vendored | 0.6.13 | on `main`: every skill call in the Skill tool form |
 | commands/webperf.md | command | as:.claude/commands/webperf.md | vendored | 0.6.13 | |
 | agents/code-reviewer.md | agent | as:agents/code-reviewer.md | vendored | 0.6.13 | |
 | agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | |
