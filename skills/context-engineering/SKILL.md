@@ -80,6 +80,8 @@ Create a rules file that persists across sessions. This is the highest-leverage 
 - `.github/copilot-instructions.md` (GitHub Copilot)
 - `AGENTS.md` (OpenAI Codex)
 
+Edit one instruction file: `CLAUDE.md` if it exists, or `AGENTS.md` when `CLAUDE.md` only imports it or when only `AGENTS.md` exists. Never create one when the other exists.
+
 If a tool generates a block in the rules file (Laravel Boost rewrites everything inside `<laravel-boost-guidelines>`), leave that block alone and write project rules outside it.
 
 ### Level 2: Specs and Architecture
@@ -131,7 +133,7 @@ For the proactive discipline that makes these last resorts unnecessary — what 
 
 A fresh session is safe at a completed task boundary, not at an arbitrary token count. Before leaving the current session, persist:
 
-1. the accepted scope and decisions in the spec or plan;
+1. the accepted scope and decisions in the spec or plan, in the work's feature folder `.scratch/<feature-slug>/` (see `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`);
 2. the current task status and the next pending task;
 3. the files changed and the working-tree state;
 4. the exact verification commands and outcomes;
