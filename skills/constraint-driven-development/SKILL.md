@@ -50,12 +50,13 @@ Never ask what you can read. Before the first question, gather:
 |------|---------------|
 | Language and stack | `package.json`, `composer.json`, `Package.swift` or `*.xcodeproj`, `pyproject.toml`, `go.mod`, `Cargo.toml` |
 | Test runner | dev dependencies, `test` script, existing test files |
-| Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml`, `pint.json`, `phpstan.neon`, `.swiftlint.yml`, `.swift-format` |
+| Existing linters | `eslint.config.*`, `biome.json`, `.ruff.toml`, `pint.json`, `phpstan.neon`, `phpstan-baseline.neon`, `psalm.xml`, `rector.php`, `.php-cs-fixer.php`, `phpcs.xml`, `.swiftlint.yml`, `.swift-format` |
 | Coverage today | `coverage/` output, or run the suite once |
 | CI | `.github/workflows/`, `.gitlab-ci.yml` |
 | Agent harness | `.claude/`, `.codex/`, `AGENTS.md` |
+| Existing boundaries | `tests/Architecture/`, `*ArchTest*`, `.dependency-cruiser.*`, `.importlinter`, `deptrac.yaml`, `phpstan/Rules/`, `.semgrep/`, `infection.json5`, `CODEOWNERS` |
 
-Report what you found in two lines, then ask only what's left.
+Report what you found in two lines, then ask only what's left. Never install a second tool for a job one already does. Rules about the code itself belong in `AGENTS.md`, not in `CONSTRAINTS.md`; if `docs/agents/boundaries.md` exists, it says how to back them.
 
 ### Step 2: Four questions, each with a default
 
@@ -104,7 +105,7 @@ Last reviewed: 2026-08-08 by @addy
 
 ## Floor (always enforced, no setup required)
 
-- No new suppression comments: `@ts-ignore`, `eslint-disable`, `# noqa`, `# type: ignore`, `@phpstan-ignore`, `@psalm-suppress`
+- No new suppression comments: `@ts-ignore`, `eslint-disable`, `# noqa`, `# type: ignore`, `@phpstan-ignore`, `@psalm-suppress`, `phpcs:ignore`, `@codeCoverageIgnore`, `@infection-ignore-all`
 - No unimplemented stubs: `throw new Error("Not implemented")`, empty `catch {}`
 - No skipped or deleted tests without a reason in the commit message
 - No secrets in source
@@ -132,6 +133,7 @@ number and no command in this column is an aspiration, not a constraint.
 |--------|-------|-----------|
 | Project coverage | 62.4% | must not fall |
 | Bundle size (main) | 184 kB | must not grow |
+| PHPStan baseline entries | 214 | must not grow |
 
 ## Exceptions
 
@@ -140,7 +142,7 @@ number and no command in this column is an aspiration, not a constraint.
 | W1 | `no-explicit-any` | `src/legacy/**` | Rewrite tracked in ENG-441 | @addy | 2026-11-01 |
 ```
 
-Then add one line to `AGENTS.md` and `CLAUDE.md`: `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
+Then add one line to the instruction file: `CLAUDE.md` if it exists, or `AGENTS.md` when `CLAUDE.md` only imports it or when only `AGENTS.md` exists. Never create one when the other exists. The line: `Read CONSTRAINTS.md before writing code. Do not weaken it to make a change pass.`
 
 ### Step 4: Install what each dimension needs
 
@@ -164,8 +166,18 @@ Picking a dimension means installing something. Don't leave the user with a numb
 | Accessibility | axe-core | `npm i -D @axe-core/cli` | `axe $URL --tags wcag2a,wcag2aa,wcag21aa` | zero critical or serious |
 | Architecture | dependency-cruiser | `npm i -D dependency-cruiser` | `depcruise --validate src` | any violation |
 | Architecture (PHP) | Pest arch tests | already in Pest | `vendor/bin/pest tests/ArchTest.php` | any violation |
+| Architecture (PHP, layers) | deptrac | `composer require --dev deptrac/deptrac` | `vendor/bin/deptrac analyse` | any violation |
+| Architecture (Python) | import-linter | `pip install import-linter` | `lint-imports` | any broken contract |
+| Architecture (Go) | depguard | already in golangci-lint | `golangci-lint run` | any violation |
+| Custom rules (any) | Semgrep, local rules | `pipx install semgrep` | `semgrep scan --config .semgrep/` | any error |
+| Lint (PHP, not Laravel) | PHP-CS-Fixer or PHP_CodeSniffer | already there | `vendor/bin/php-cs-fixer fix --dry-run --diff` / `vendor/bin/phpcs` | any error |
+| Refactoring drift (PHP) | Rector | `composer require --dev rector/rector` | `vendor/bin/rector process --dry-run` | any change proposed |
+| Type coverage (Pest) | Pest type coverage plugin | `composer require --dev pestphp/pest-plugin-type-coverage` | `vendor/bin/pest --type-coverage --min=100` | below the minimum |
+| Security: code (PHP) | Psalm taint analysis | `composer require --dev vimeo/psalm` | `vendor/bin/psalm --taint-analysis` | any taint finding |
+| Security: install (PHP) | roave/security-advisories | `composer require --dev roave/security-advisories:dev-latest` | blocks `composer require` itself | a known-vulnerable version |
 | Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
 | Assertion quality (PHP) | Infection | `composer require --dev infection/infection` | `vendor/bin/infection --git-diff-lines --git-diff-base=origin/main` | mutation score |
+| Assertion quality (Pest) | Pest mutate | already in Pest | `vendor/bin/pest --mutate --path=<changed files>` | mutation score |
 
 Five things that will bite you if you skip them:
 
@@ -215,13 +227,13 @@ Someone will point out that if the agent writes the code and the checks, the che
 
 Agents don't craft clever loopholes. They hit a red check and take the cheapest road to green. Watch for these five moves in the diff, at review time:
 
-1. **The threshold moved.** A budget lowered, a severity dropped, a check removed from the fast stage. Compare `CONSTRAINTS.md` against its state at the branch point.
+1. **The threshold moved.** A budget lowered, a severity dropped, a check removed from the fast stage. Compare `CONSTRAINTS.md` against its state at the branch point. On PHP the threshold also lives in config: new entries in `phpstan-baseline.neon`, a lower `level:` or new `ignoreErrors` in `phpstan.neon`, a lower `--min` or `minMsi`, files added to `<exclude>` in `phpunit.xml`, a removed `declare(strict_types=1)`.
 2. **A test got easier.** `.skip` added, a test file deleted, assertions pulled out of tests that stayed.
-3. **A checker got silenced.** New `@ts-ignore` or `eslint-disable`. Four suppressions deserve special attention because they switch off a check you're relying on: `istanbul ignore` drops code from coverage instead of testing it, `Stryker disable` hides a surviving mutant, `nosemgrep` and `gitleaks:allow` do it for security findings.
+3. **A checker got silenced.** New `@ts-ignore` or `eslint-disable`. Some suppressions deserve special attention because they switch off a check you're relying on: `istanbul ignore` and `@codeCoverageIgnore` drop code from coverage instead of testing it, `Stryker disable` and `@infection-ignore-all` hide a surviving mutant, `nosemgrep` and `gitleaks:allow` do it for security findings.
 4. **Work is unfinished.** A stub that throws, an empty `catch` turning a failure into silence, a `TODO` standing where the implementation should be.
 5. **An exception appeared.** A new row in the Exceptions table nobody discussed.
 
-None of this needs tooling beyond `git diff`. Tightening the bar should be silent; loosening it should be loud.
+None of this needs tooling beyond `git diff`. Tightening the bar should be silent; loosening it should be loud. Make loosening need a person: put `CONSTRAINTS.md` and the guard script under `CODEOWNERS` with required review.
 
 Unlike the numbered dimensions, the floor has no de facto tool of its own, so an agent asked to enforce it tends to write a checker from scratch, and two agents write two different ones. A reference implementation of these five checks ships with this skill in [references/floor-guard.md](references/floor-guard.md) (diff-scoped, exit `0`/`1`/`2`, patterns adaptable per ecosystem). Adapt that rather than reinventing it, for the same reason every dimension names a de facto tool: so the mechanism is the same across runs and stacks.
 
@@ -256,6 +268,8 @@ When the user has no opinion, use these. They're chosen to be met by most codeba
 | Accessibility | zero critical or serious axe violations | Moderate and minor are often debatable |
 | Exception lifetime | 90 days | Long enough to plan the fix, short enough to remember |
 | Ratchet tolerance | 0.5% | Absorbs drift when an unrelated file moves the number |
+| PHPStan level (new project) | the highest level that passes today, with no baseline | A baseline from day one hides errors nobody chose to keep |
+| PHPStan baseline | today's entry count, must not grow | The baseline is a list of silenced errors |
 
 State the number and the reason together. A threshold without a rationale gets deleted by the next person who hits it.
 

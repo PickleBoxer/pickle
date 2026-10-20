@@ -22,7 +22,7 @@ Default behaviour with no arguments: set up constraints for this repository.
 
 5. **Place each check by cost.** Types, lint and secrets in the edit loop (seconds). Related tests and changed-line coverage at task end (under 90s). Everything else at review or in CI. Scope checks to the diff, not the whole repo.
 
-6. **Point the agent at it.** Add a line to CLAUDE.md telling agents to read CONSTRAINTS.md and never weaken it to make a change pass.
+6. **Point the agent at it.** Add a line to the instruction file telling agents to read CONSTRAINTS.md and never weaken it to make a change pass: `CLAUDE.md` if it exists, or `AGENTS.md` when `CLAUDE.md` only imports it or when only `AGENTS.md` exists. Never create one when the other exists.
 
 7. **Verify.** Run the constraints against the current branch. If anything fails that the user disagrees with, fix the constraint now rather than leaving a gate people will learn to ignore.
 

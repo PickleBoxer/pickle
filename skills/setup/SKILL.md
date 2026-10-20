@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Configure this repo for pickle's skills: where issues are tracked, where the glossary and ADRs live, and which docs source to check first. Offers to set the quality bar. Run once per repo.
+description: Configure this repo for pickle's skills: where issues are tracked, where the glossary and ADRs live, which docs source to check first, and a guide to setting boundaries. Offers to set the quality bar. Run once per repo.
 disable-model-invocation: true
 metadata:
   upstream: mattpocock-skills/skills/engineering/setup-matt-pocock-skills
@@ -14,6 +14,7 @@ Write the per-repo configuration pickle's skills read:
 - **Issue tracker**: where issues live (GitHub, GitLab, local markdown, or a workflow the user describes)
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and how skills read them
 - **Docs sources**: which docs tool or site to check first for each part of the stack, at the installed version
+- **Boundaries**: a general guide to making a rule stick, the same for every repo
 
 Explore, present what you found, confirm with the user, then write. Nothing is written before the user confirms.
 
@@ -62,12 +63,15 @@ If no `GLOSSARY.md` exists, offer to seed one (recommended: **yes** when the cod
 
 **Section D: Quality bar.** Skip it when `CONSTRAINTS.md` exists. Otherwise offer, recommended **yes**, to run the **constraint-driven-development** skill (Skill tool, `pickle:constraint-driven-development`) once step 5 is done. It asks its own questions; record nothing for it here.
 
+**Section E: Boundaries.** Skip it when `docs/agents/boundaries.md` exists. Otherwise offer, recommended **yes** when the repo has code, to write it from [references/boundaries.md](references/boundaries.md) as it is. It says how agents set boundaries, not which ones this repo has, so it stays true when the code changes: fill in nothing from exploration.
+
 ## 3. Confirm and edit
 
 Show the user a draft of:
 
 - the `## Agent skills` block, and the file it goes in (step 4)
 - `docs/agents/issue-tracker.md`, `docs/agents/domain.md` and `docs/agents/sources.md`
+- `docs/agents/boundaries.md`, if the user said yes in Section E (name the template; it needs no draft)
 
 Let them edit before writing.
 
@@ -99,7 +103,13 @@ The block:
 ### Docs sources
 
 [one-line summary, such as "Boost search-docs first for Laravel 12"]. See `docs/agents/sources.md`.
+
+### Boundaries
+
+Before you add or escalate a rule, see `docs/agents/boundaries.md`.
 ```
+
+Leave out the Boundaries section when the user said no in Section E.
 
 Then write the docs files from the templates:
 
@@ -110,6 +120,7 @@ Then write the docs files from the templates:
 - [references/issue-tracker-jira.md](references/issue-tracker-jira.md): Jira, with the site, project key and `cloudId` filled in
 - [references/domain.md](references/domain.md): domain docs, with its Layout section filled in and any non-default ADR folder replacing `docs/adr/`
 - [references/sources.md](references/sources.md): docs sources, with the confirmed rows
+- [references/boundaries.md](references/boundaries.md): boundaries, copied as it is
 
 For "other" trackers, write `docs/agents/issue-tracker.md` from the user's description, with a Conventions section naming the exact tool calls to create and read an item, and the same two closing sections the templates have: what "publish to the issue tracker" and "fetch the relevant ticket" mean.
 
