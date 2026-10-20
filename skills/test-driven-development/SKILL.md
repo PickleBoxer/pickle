@@ -285,6 +285,20 @@ it('validates titles correctly', () => {
 });
 ```
 
+### Parameterize Instead of Copying
+
+When one behavior must hold for several inputs, write one test with a data table, not copies that differ only in values: Pest datasets (`->with()`), PHPUnit `#[DataProvider]`, `it.each` in Jest and Vitest, `pytest.mark.parametrize`, Go table tests. Name each case so a failure shows which input broke. Different behaviors still get separate tests.
+
+```typescript
+it.each([
+  ['empty', ''],
+  ['whitespace only', '   '],
+  ['too long', 'a'.repeat(256)],
+])('rejects a %s title', (_case, title) => {
+  expect(() => createTask({ title })).toThrow('Title');
+});
+```
+
 ### Name Tests Descriptively
 
 ```typescript
