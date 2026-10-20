@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Configure this repo for pickle's skills: where issues are tracked and where the glossary and ADRs live. Run once per repo.
+description: Configure this repo for pickle's skills: where issues are tracked, where the glossary and ADRs live, and which docs source to check first. Offers to set the quality bar. Run once per repo.
 disable-model-invocation: true
 metadata:
   upstream: mattpocock-skills/skills/engineering/setup-matt-pocock-skills
@@ -13,6 +13,7 @@ Write the per-repo configuration pickle's skills read:
 
 - **Issue tracker**: where issues live (GitHub, GitLab, local markdown, or a workflow the user describes)
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and how skills read them
+- **Docs sources**: which docs tool or site to check first for each part of the stack, at the installed version
 
 Explore, present what you found, confirm with the user, then write. Nothing is written before the user confirms.
 
@@ -21,11 +22,14 @@ Explore, present what you found, confirm with the user, then write. Nothing is w
 Read whatever exists; don't assume:
 
 - `git remote -v`: GitHub, GitLab (`gitlab.com` or a self-hosted host), another host, or no remote?
-- `CLAUDE.md` (root or `.claude/`) and `AGENTS.md` at the root: which exist, does one only import the other (`@AGENTS.md`), and is there already an `## Agent skills` section?
+- `CLAUDE.md` (root or `.claude/`) and `AGENTS.md` at the root: which exist, does one only import the other (`@AGENTS.md`), and is there already an `## Agent skills` section? Note any generated block: Laravel Boost rewrites everything inside `<laravel-boost-guidelines>`.
 - `docs/agents/`: does this skill's earlier output exist?
 - `GLOSSARY.md` and `GLOSSARY-MAP.md` at the root
 - ADR folders: `docs/adr/`, `docs/decisions/`, an `.adr-dir` file, any `src/*/docs/adr/`
 - `.scratch/`: a sign that local-markdown issues are already in use
+- Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
+- Docs tools: MCP servers in `.mcp.json` (`laravel-boost`, `context7`), and `laravel/boost` in `composer.lock`
+- `CONSTRAINTS.md` at the root
 - Monorepo signals: `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or a populated `packages/*` with its own `src/`. Their absence means single-context, which is almost every repo.
 
 ## 2. Present findings and ask
@@ -49,12 +53,16 @@ Offer **multi-context** (a root `GLOSSARY-MAP.md` pointing to one `GLOSSARY.md` 
 
 If no `GLOSSARY.md` exists, offer to seed one (recommended: **yes** when the code has a clear domain). On yes, spawn one Explore subagent (Agent tool, `subagent_type: Explore`) to list the domain nouns the code, tests and docs use, with the synonyms used for the same concept. From its findings, propose 5 to 15 terms, each with a one-sentence definition and an _Avoid_ line. Write only the terms the user confirms, with the **domain-modeling** skill (Skill tool, `pickle:domain-modeling`).
 
+**Section C: Docs sources.** The source-driven-development skill reads `docs/agents/sources.md` to pick where to look before it fetches a page. Propose one row per main framework from the lockfiles: the installed version, the docs tool found in exploration as the first source (Boost's `search-docs` for the Laravel ecosystem, Context7 for other libraries), and the official docs URL for that version as the fallback. With no docs tool, the first source column stays empty and the row still records the versioned URL.
+
+**Section D: Quality bar.** Skip it when `CONSTRAINTS.md` exists. Otherwise offer, recommended **yes**, to run the **constraint-driven-development** skill (Skill tool, `pickle:constraint-driven-development`) once step 5 is done. It asks its own questions; record nothing for it here.
+
 ## 3. Confirm and edit
 
 Show the user a draft of:
 
 - the `## Agent skills` block, and the file it goes in (step 4)
-- `docs/agents/issue-tracker.md` and `docs/agents/domain.md`
+- `docs/agents/issue-tracker.md`, `docs/agents/domain.md` and `docs/agents/sources.md`
 
 Let them edit before writing.
 
@@ -68,7 +76,7 @@ Let them edit before writing.
 
 Never create `AGENTS.md` when `CLAUDE.md` already exists, or the other way round.
 
-If an `## Agent skills` block already exists, update it in place rather than appending a duplicate. Don't touch the sections around it.
+If an `## Agent skills` block already exists, update it in place rather than appending a duplicate. Don't touch the sections around it. Never put the block inside a generated block such as `<laravel-boost-guidelines>`: the tool's next update deletes it.
 
 The block:
 
@@ -82,6 +90,10 @@ The block:
 ### Domain docs
 
 [one-line summary of the layout: "single-context" or "multi-context"]. See `docs/agents/domain.md`.
+
+### Docs sources
+
+[one-line summary, such as "Boost search-docs first for Laravel 12"]. See `docs/agents/sources.md`.
 ```
 
 Then write the docs files from the templates:
@@ -90,9 +102,12 @@ Then write the docs files from the templates:
 - [references/issue-tracker-gitlab.md](references/issue-tracker-gitlab.md): GitLab
 - [references/issue-tracker-local.md](references/issue-tracker-local.md): local markdown
 - [references/domain.md](references/domain.md): domain docs, with its Layout section filled in and any non-default ADR folder replacing `docs/adr/`
+- [references/sources.md](references/sources.md): docs sources, with the confirmed rows
 
 For "other" trackers, write `docs/agents/issue-tracker.md` from the user's description, with a Conventions section naming the exact tool calls to create and read an item, and the same two closing sections the templates have: what "publish to the issue tracker" and "fetch the relevant ticket" mean.
 
 ## 5. Done
 
 Tell the user setup is complete and what was written. They can edit `docs/agents/*.md` directly later; re-running this skill is only needed to switch issue trackers or start over.
+
+If the user said yes in Section D, run the constraint-driven-development skill now.

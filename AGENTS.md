@@ -29,7 +29,7 @@ references/                   vendored checklists and patterns shared by skills,
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/; mattpocock-skills.txt
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (15 firing and 6 loading cases, plus 6 scaffolded cases for the user-only skills)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (15 firing and 6 loading cases, plus 7 scaffolded cases for the user-only skills)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)

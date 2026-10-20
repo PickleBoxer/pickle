@@ -6,4 +6,4 @@ allowed_tools: [Read, Glob, Grep, Skill, Bash, Write, Edit]
 append_system_prompt: "Non-interactive run: the user message is their only reply, so treat it as their answer to every question it covers."
 ---
 
-/pickle:setup Go with your recommended answers, and don't seed the glossary.
+/pickle:setup Go with your recommended answers, don't seed the glossary, and skip the quality bar.
