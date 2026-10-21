@@ -14,7 +14,7 @@ Run the task through pickle's workflow skills. Each skill encodes a process seni
 ## Procedure
 
 1. Read the task: the `ARGUMENTS` line at the end of this skill.
-2. Find its phases in the router below. Tell the user which skills you will use, in order. If the TaskCreate tool is available, add one entry per skill to the task list, in that order.
+2. Find its phases in the router below, or its shortcut. Tell the user which skills you will use, in order. If the TaskCreate tool is available, add one entry per skill to the task list, in that order. A skill you decide to skip stays on the list with a one-line reason.
 3. Load the first skill with the Skill tool, using the name exactly as written. Load each next skill when its phase starts. Don't work from memory of what a skill says. If you added entries, use TaskUpdate to mark each one `in_progress` when its skill loads and `completed` when its steps are done.
 4. Follow each skill's steps in order. Skills are workflows, not suggestions: don't skip verification steps.
 
@@ -54,8 +54,16 @@ Start at the first phase the task needs and work down. Skip the phases it doesn'
    - CI/CD pipeline work: the **ci-cd-and-automation** skill (Skill tool, `pickle:ci-cd-and-automation`)
    - Deploying or launching: the **shipping-and-launch** skill (Skill tool, `pickle:shipping-and-launch`)
 
-A bug fix skips most phases: the **debugging-and-error-recovery** skill (Skill tool, `pickle:debugging-and-error-recovery`) → the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`) → the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`).
 When the task is non-trivial and there's no spec, start with the **spec-driven-development** skill (Skill tool, `pickle:spec-driven-development`).
+
+### Shortcuts
+
+Some tasks skip most phases. Each shortcut names its skills in order and what the final reply must contain.
+
+- **Question about code** (how does X work, why is Y built this way, should we do X or Y): the **how** skill (Skill tool, `pickle:how`), and for questions about motivation the **why** skill (Skill tool, `pickle:why`). Read-only, no code change. Reply: a cited answer, or a recommendation with a tradeoffs table.
+- **Bug fix**: the **debugging-and-error-recovery** skill (Skill tool, `pickle:debugging-and-error-recovery`) → the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`) → the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`). Reply: what broke, the root cause, the fix, and the failing-then-passing output.
+- **Refactor** (same behavior, new structure): the **how** skill (Skill tool, `pickle:how`) to learn what the code does now → the **test-driven-development** skill (Skill tool, `pickle:test-driven-development`) to pin that behavior with a test before any structure moves → the **code-simplification** skill (Skill tool, `pickle:code-simplification`) → the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`). Reply: the pin, what changed, and the proof that behavior did not.
+- **Slow code**: the **performance-optimization** skill (Skill tool, `pickle:performance-optimization`) → the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`). Reply: the baseline, the result, the delta, and what limits it.
 
 ## Core Operating Behaviors
 
@@ -117,8 +125,10 @@ Do NOT:
 - Remove comments you don't understand
 - "Clean up" code orthogonal to the task
 - Refactor adjacent systems as a side effect
-- Delete code that seems unused without explicit approval
+- Delete code that seems unused, outside what your own change made dead, without explicit approval
 - Add features not in the spec because they "seem useful"
+
+Code your own change made dead (the function you replaced, an import nothing uses now, a branch that can no longer run) is part of the task. Delete it before adding the new code, in its own commit.
 
 Your job is surgical precision, not unsolicited renovation.
 
