@@ -99,7 +99,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | |
 | agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | |
 | agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | |
-| references | reference | as:references | vendored | 0.6.13 | checklists and patterns shared by several skills, commands and agents. On `main`: `testing-patterns.md` warns on truthiness matchers |
+| references | reference | as:references | vendored | 0.6.13 | checklists and patterns shared by several skills, commands and agents. On `main`: `testing-patterns.md` warns on truthiness matchers; `orchestration-patterns.md` adds Writing a subagent brief (pstack 0.15.25: orchestrate playbook's brief, minus TIMEBOX and STANDING, plus poteto-mode's Subagents ownership and fresh-agent rules) |
 | references/feature-folder.md | reference | - | new | n/a | the `.scratch/<feature-slug>/` layout, slug and lookup rules shared by the Define and Plan skills and commands |
 | docs/agents.md | doc | as:docs/agents.md | vendored | 0.6.13 | persona orchestration rules, linked from the vendored agents |
 | docs/adoption-guide.md | doc | as:docs/adoption-guide.md | vendored | 0.6.13 | greenfield and brownfield rollout; on `main`: artifacts in `.scratch/<slug>/` |

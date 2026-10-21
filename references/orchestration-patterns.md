@@ -169,6 +169,28 @@ The fields that DO work in plugin agents are: `name`, `description`, `tools`, `d
 
 In Claude Code, parallel fan-out (Pattern 3) requires issuing **multiple Agent tool calls in a single assistant turn**. Sequential turns serialize execution. `/pickle:ship` calls this out explicitly. Any new orchestrator command should do the same.
 
+### Writing a subagent brief
+
+A subagent sees none of this conversation and can't ask you a question, so a vague brief fails quietly. The brief is the only thing it gets. Fill every field. A field you can't fill means the work isn't scoped yet, so don't spawn.
+
+```
+GOAL        one sentence: the outcome, clear to a stranger with no chat access
+SCOPE       files or folders it may change, and the ones it may not
+CONTEXT     paths to read, not pasted file contents; paste in full any earlier
+            agent's report this work depends on, and every user directive that applies
+ACCEPTANCE  checkable criteria, one per line
+VERIFY      the exact commands to run, and known gotchas
+FORBIDDEN   what it must not do: commit, push, edit outside SCOPE, plus task-specific bans
+REPORT      what to return: status, files changed, the commands it ran and their
+            results, deviations from the brief, suggested follow-ups
+```
+
+Size the brief to the work. A one-command task collapses the template to a paragraph that still names the goal, the scope, the verify command and the report.
+
+**You own the subagent's work.** Read its diff and check its claims against the files before you report anything. Write your own summary; don't pass its report through.
+
+**Fresh agent for follow-up work.** A fix round, a retry or the next task goes to a new subagent with a consolidated brief: the original brief, every later directive and the previous agent's report. Resume the old agent only when the work needs state that lives in it and is costly to move, such as its uncommitted changes or a process it still runs.
+
 ---
 
 ## Worked example: Agent Teams for competing-hypothesis debugging
