@@ -77,6 +77,8 @@ Slice 1b: Implement frontend against mock data matching the contract
 Slice 2: Integrate and test end-to-end
 ```
 
+When a slice adds a module that other code will call, sketch it before writing its logic (usage first, then types with stub bodies), per Sketch First in the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
+
 ### Risk-First Slicing
 
 Tackle the riskiest or most uncertain piece first:

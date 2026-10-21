@@ -115,4 +115,5 @@ Good interfaces make testing natural:
 ## Going deeper
 
 - **Deepening a cluster given its dependencies**, see [references/deepening.md](references/deepening.md): dependency categories, seam discipline, and replace-don't-layer testing.
+- **Sketching a module before writing its logic**, see [references/sketch-first.md](references/sketch-first.md): usage first, types with stub bodies, a red-flag screen, a checkpoint with the user, and when to scrap the sketch.
 - **Exploring alternative interfaces**, see [references/design-it-twice.md](references/design-it-twice.md): parallel subagents design the interface several radically different ways, then compare on depth, locality, and seam placement.
