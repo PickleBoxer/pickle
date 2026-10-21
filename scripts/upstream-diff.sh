@@ -25,7 +25,7 @@ sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|0
 agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1
 mattpocock-skills|$mpskills|.|mp:|.claude-plugin/plugin.json|0"
 
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|script) $/ {
+rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|script|reference) $/ {
   for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5}' UPSTREAM.md)
 
 while IFS='|' read -r name repo dir prefix manifest whole; do
