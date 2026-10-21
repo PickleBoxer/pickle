@@ -236,6 +236,21 @@ our project conventions. The spec says [X]. The change should [Y].
 Flag any issues as Critical, Required, Optional, or Nit.
 ```
 
+## Judging Reviewer Findings
+
+When other reviewers report back (the `/pickle:ship` agents, a fresh-context reviewer in doubt-driven-development, a teammate), you are the lead reviewer, not an aggregator. Reviewers saw a slice of the code and none of the conversation. You decide what their findings are worth.
+
+1. **State the intent first.** One paragraph on what the change is meant to do, from the request, the commits and the code. Judge every finding against it.
+2. **Filter the false findings:**
+   - **Nit inflation.** A reviewer that finds nothing big fills the space with nits. If every finding is a nit, say the code is fine.
+   - **Hypothetical vs actual.** "What if this is null?" counts only if a real caller can pass null. Trace the call site before you accept it.
+   - **Premature abstraction.** "Extract an interface" counts only if the code needs to change a second way.
+   - **"I'd have done it differently."** Dismiss it unless the reviewer shows a concrete problem with the current approach.
+   - **Missing context.** Flags on code the change didn't touch, or on a pattern the codebase uses everywhere.
+3. **Agreement is the strongest signal.** A finding that two reviewers raised independently outranks one raised by a single reviewer. Never dismiss a security or correctness finding only because one reviewer raised it.
+4. **Cap the blockers.** More than five must-fix findings means you aren't filtering hard enough.
+5. **Show what you dismissed.** List each dismissed finding with a one-line reason, so the user can overrule you.
+
 ## Dead Code Hygiene
 
 After any refactoring or implementation change, check for orphaned code:

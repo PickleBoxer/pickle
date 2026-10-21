@@ -27,7 +27,7 @@ Constraints (from Claude Code's subagent model):
 
 ## Phase B — Merge in main context
 
-Once all three reports are back, the main agent (not a sub-persona) synthesizes them:
+Once all three reports are back, the main agent (not a sub-persona) synthesizes them. Judge every finding first, per Judging Reviewer Findings in the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`):
 
 1. **Code Quality** — Aggregate Critical/Required findings from `code-reviewer` and any failing tests, lint, or build output. Resolve duplicates between reviewers.
 2. **Security** — Promote any Critical/High `security-auditor` findings to launch blockers. Cross-reference with `code-reviewer`'s security axis.
@@ -48,6 +48,9 @@ Produce a single output:
 
 ### Recommended fixes (should fix before ship)
 - [Source persona: Important finding + file:line]
+
+### Dismissed (with reason)
+- [Source persona: finding + one-line reason it doesn't apply]
 
 ### Acknowledged risks (shipping anyway)
 - [Risk + mitigation]

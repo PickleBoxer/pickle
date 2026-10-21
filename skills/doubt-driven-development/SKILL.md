@@ -179,7 +179,7 @@ For each finding, classify in this **precedence order** (first matching class wi
 3. **Valid trade-off** — issue is real but cost of fixing exceeds cost of accepting. Document the trade-off explicitly so the user sees it.
 4. **Noise** — reviewer flagged something that's actually correct under context the reviewer didn't have. Note it, move on, and ask: would adding that context to the contract have prevented the false flag?
 
-A fresh reviewer can be wrong because it lacks context. Don't defer just because it's "fresh."
+A fresh reviewer can be wrong because it lacks context. Don't defer just because it's "fresh." Before you call a finding noise, run it through the filters in Judging Reviewer Findings in the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`).
 
 ### Step 5: STOP — Bounded loop, not recursion
 
