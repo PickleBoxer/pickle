@@ -44,6 +44,8 @@ Work through these steps in order. Do not skip steps.
 
 Make the failure happen reliably. If you can't reproduce it, you can't fix it with confidence.
 
+Reproduce it yourself, on the surface where it was reported (browser, CLI, API), before you ask the user to. Ask only when you can name the specific reason you can't reach that surface, and only after you have driven it as far as it goes.
+
 ```
 Can you reproduce the failure?
 ├── YES → Proceed to Step 2
@@ -113,6 +115,8 @@ git bisect run npm test -- --grep "failing test"  # substitute the repository's 
 
 Once bisection finds the commit, read why that change was made with the **why** skill (Skill tool, `pickle:why`) before you revert or patch it.
 
+**When it isn't a regression, rule causes out:** list the candidate causes, then eliminate them one at a time with evidence from running the code (logs, instrumentation, a debugger), never by reading and guessing. Each pass, test the split that rules out the most. In unfamiliar code, find the candidates with the **how** skill (Skill tool, `pickle:how`).
+
 ### Step 3: Reduce
 
 Create the minimal failing case:
@@ -140,6 +144,10 @@ Root cause fix (good):
 
 Ask: "Why does this happen?" until you reach the actual cause, not just where it manifests.
 
+Then grep for the same pattern elsewhere and fix every instance, not only the one that was reported.
+
+**Two failed fixes means a wrong assumption.** When two fixes have failed the same check, stop. Write down, in one sentence, the assumption both fixes made. Test that assumption with evidence before you try a third fix.
+
 ### Step 5: Guard Against Recurrence
 
 Write a test that catches this specific failure:
@@ -154,7 +162,7 @@ it('finds tasks with special characters in title', async () => {
 });
 ```
 
-This test will prevent the same bug from recurring. It should fail without the fix and pass with it.
+This test will prevent the same bug from recurring. It should fail without the fix and pass with it. When no cheap test path exists, follow the test-driven-development skill's Prove-It pattern for the closest check that can stand in.
 
 If no test can reach the bug without mocking several layers, there is no good seam. Say so, and find where one belongs with the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
 
@@ -220,15 +228,14 @@ Runtime error:
 
 ## Safe Fallback Patterns
 
-When under time pressure, use safe fallbacks:
+A fallback belongs at a system boundary, for degradation the user can see. It is never the fix for a bug: a default that hides a failure is a symptom fix, and the bug is still there. Required input fails fast and loud.
 
 ```typescript
-// Safe default + warning (instead of crashing)
+// Required config: fail at startup, not with a silent default
 function getConfig(key: string): string {
   const value = process.env[key];
   if (!value) {
-    console.warn(`Missing config: ${key}, using default`);
-    return DEFAULTS[key] ?? '';
+    throw new Error(`Missing required config: ${key}`);
   }
   return value;
 }
