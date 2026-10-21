@@ -111,6 +111,8 @@ git commit -m "refactor validation and add phone number field"
 
 **Separate refactoring from feature work.** A refactoring change and a feature change are two different changes — submit them separately. This makes each change easier to review, revert, and understand in history. Small cleanups (renaming a variable) can be included in a feature commit at reviewer discretion.
 
+**Order the commits so the history explains the change.** Removals first (code your change made dead), then the reshape, then the new behavior. Each commit still builds and passes its tests, so a reviewer can read the series top to bottom and revert any step on its own.
+
 ### 5. Size Your Changes
 
 Target ~100 lines per commit/PR. Changes over ~1000 lines should be split. See the splitting strategies in `code-review-and-quality` for how to break down large changes.

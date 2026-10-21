@@ -91,6 +91,19 @@ Don't mix modes: no reference tables inside a tutorial, no tutorial hand-holding
 - Product UI strings are not documentation. Use your product's copy guidelines for those.
 - Format code snippets the way the project formats its code. Write real paths. Make every count or tree claim true at the commit that lands it, and include the command that regenerates it.
 
+### PR descriptions
+
+When the repository has its own PR template, use it. Otherwise use these `##` sections in this order, and drop any with nothing to say except Scope. Keep the body under about 40 lines: it often becomes the squash commit body.
+
+- `## Why`: the problem and the approach, in one to three sentences.
+- `## What changed`: one to three bullets. Name a symbol or path only when it carries the change, and name both sides of a rename.
+- `## Scope`: always present. What the change covers and what it leaves out on purpose, such as a follow-up or a known gap.
+- `## Tradeoffs`: only the rejected alternatives a reviewer would otherwise ask about.
+- `## Blast radius`: one or two sentences on what it touches and why that is safe or risky.
+- `## Verification`: one to three bullets, each a command or check you ran and its result. For performance, one number with its unit, before and after.
+
+Screenshots or video go after the sections when they prove a claim. Full logs, SHA lists and per-file checklists go in a linked file, not the body.
+
 ## Worked example
 
 Before:
