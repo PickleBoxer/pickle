@@ -3,7 +3,7 @@ name: typescript-best-practices
 description: Default TypeScript idioms (discriminated unions, branded types, no `as` casts, schemas at the boundary, exhaustive switches) for .ts and .tsx code. Use when writing, editing or reviewing TypeScript and the project has no TypeScript conventions of its own. The project's own conventions win.
 metadata:
   upstream: pstack/skills/typescript-best-practices
-  upstream-version: 0.15.25
+  upstream-version: 0.15.29
 ---
 
 # TypeScript best practices
@@ -15,7 +15,7 @@ Examples for every rule: `${CLAUDE_SKILL_DIR}/references/patterns.md`.
 | Rule | Summary |
 |---|---|
 | Discriminated unions | Model variants with one literal discriminant (`kind`) so impossible states cannot be written. No bags of optional fields. |
-| Branded types | Brand primitives with `& { readonly __brand: "X" }` so they cannot be mixed up. Validate once at the boundary. |
+| Branded types | Brand primitives with `& { readonly __brand: "X" }` so they cannot be mixed up. Validate once at the boundary. A brand comes from a verifying type guard (`input is AgentId`), never from `as`. |
 | Constructive modeling | Build the shape so the illegal value cannot exist: `[T, ...T[]]` for non-empty, `[T, T][]` for even length, start plus duration for a range. Not a runtime guard. |
 | Simplest total type | Keep `T[]` while every operation on it stays total. Strengthen only where the loose type forces `!`, a cast or a "should never happen" throw. |
 | `unknown` over `any` | External data is `unknown` until parsed. |

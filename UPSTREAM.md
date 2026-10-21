@@ -32,7 +32,7 @@ A source starting with `as:` is in addyosmani/agent-skills, and one starting wit
 
 | pickle item | Kind | pstack source | Relation | Upstream version | Notes |
 |---|---|---|---|---|---|
-| skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.25 | model-invocable, no `paths` (ignored for plugin skills) |
+| skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.29 | model-invocable, no `paths` (ignored for plugin skills) |
 | skills/unslop | skill | skills/unslop | ported | 0.15.25 | model-invocable (user-only upstream), so other skills can call it. Adds a scope line. Rule numbers kept: other skills cite them |
 | skills/technical-writing | skill | skills/technical-writing | ported | 0.15.25 | model-invocable (user-only upstream). Calls `pickle:unslop`, drops the rules unslop already owns, project conventions win, no Cursor house rules. Adds a PR descriptions section from pstack's Opening a PR playbook (Why, What changed, Scope, Tradeoffs, Blast radius, Verification), after the repo's own template |
 | skills/how | skill | skills/how | rewritten | 0.15.25 | model-invocable. Claude Code Agent tool (Explore explorers), no per-role models. Simple questions and the explanation are written inline, not by an explainer subagent. Uses `GLOSSARY.md` terms when the project has one |
