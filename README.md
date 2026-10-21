@@ -22,15 +22,17 @@ Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skill
 
 ### Added by pickle
 
-pickle-mode routes only through the workflow skills. These sit beside them: workflow skills point to them where they help, and you can call the ones in the `/` menu yourself.
+These sit beside the workflow skills: pickle-mode routes to some of them, workflow skills point to them where they help, and you can call the ones in the `/` menu yourself.
 
 | Skill | Kind | What it does | How it loads |
 |---|---|---|---|
 | `how` | investigation | Explains how a part of the code works | `/pickle:how`, on its own, or from `context-engineering` and `doubt-driven-development` |
 | `why` | investigation | Finds why code is shaped that way, from git history, PRs and any MCP servers you have added | `/pickle:why`, on its own, or from `debugging-and-error-recovery`, `code-simplification`, `deprecation-and-migration`, `doubt-driven-development` and `documentation-and-adrs` |
+| `blast-radius` | investigation | Finds what a change could break outside its diff, and proves the change is safe by running real code | `/pickle:blast-radius`, on its own, or from pickle-mode Review |
 | `technical-writing` | writing | Applies a layered standard to docs, PR descriptions and commit messages | On its own, or from pickle-mode and `documentation-and-adrs` |
 | `unslop` | writing | Removes AI writing patterns from any prose | On its own, or from `technical-writing` |
 | `typescript-best-practices` | language | Default TypeScript idioms when your project has none of its own | On its own, for `.ts` and `.tsx` work |
+| `prototype` | design | Builds throwaway code to settle a design question by trying it: a logic demo, UI variants or a timing script. The verdict goes to `.scratch/<feature-slug>/prototype.md` | `/pickle:prototype`, on its own, or from pickle-mode Define. `test-driven-development`, `frontend-ui-engineering` and `security-and-hardening` treat its throwaways as the exception to their rules |
 | `codebase-design` | extension | Deep modules, seams, the deletion test | From workflow skills only, not in the `/` menu |
 | `domain-modeling` | extension | Your project's `GLOSSARY.md` | From workflow skills only, not in the `/` menu |
 | `teach` | user-only | Explains a change or subsystem so you understand it: runs `how` and `why` and builds the picture up diagram by diagram | `/pickle:teach`, with the change, subsystem or question |
@@ -85,8 +87,8 @@ Shared checklists (testing, security, performance, accessibility, observability,
 - Commands live under `pickle:`, so `/pickle:review` never clashes with the built-in `/review`.
 - Agent names stay bare, so your own agents can override them.
 - Vendored skills will be trimmed where evals show they are too long or overlap.
-- `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `reflect`, `teach` and `sharpen` are added from pstack. `reflect` also takes the environment checks from Matt Pocock's `retro`.
-- `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` are added from Matt Pocock's skills. ADRs default to `docs/adr/`.
+- `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach` and `sharpen` are added from pstack. `reflect` also takes the environment checks from Matt Pocock's `retro`.
+- `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype` are added from Matt Pocock's skills, `prototype` merged with pstack's Prototype playbook. ADRs default to `docs/adr/`.
 
 ## Install
 
@@ -137,7 +139,7 @@ claude --allowedTools TaskCreate
 
 ## Credits
 
-Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `reflect`, `teach` and `sharpen` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach` and `sharpen` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
 
 ## License
 

@@ -1,6 +1,6 @@
 # Upstream
 
-Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how`, `why`, `blast-radius`, `reflect`, `teach`, `sharpen`, performance-optimization's benchmark checklist and codebase-design's sketch-first reference, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup` and `improve-codebase-architecture`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
+Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how`, `why`, `blast-radius`, `reflect`, `teach`, `sharpen`, performance-optimization's benchmark checklist and codebase-design's sketch-first reference, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype`), and the upstream version it was last compared against. The only place pickle records upstream versions. `scripts/check-refs.sh` checks this table against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
