@@ -60,7 +60,7 @@ describe('TaskService', () => {
   it('creates a task with title and default status', async () => {
     const task = await taskService.createTask({ title: 'Buy groceries' });
 
-    expect(task.id).toBeDefined();
+    expect(task.id).toEqual(expect.any(String));
     expect(task.title).toBe('Buy groceries');
     expect(task.status).toBe('pending');
     expect(task.createdAt).toBeInstanceOf(Date);
@@ -145,6 +145,17 @@ export async function completeTask(id: string): Promise<Task> {
 // Step 3: Test passes → bug fixed, regression guarded
 ```
 
+**Confirm it fails for the right reason.** The failure must be the one the bug report describes. If the test passes, or fails on something else (a typo, a missing fixture, a setup error), fix the test before you touch the code.
+
+**Don't force a test.** When no cheap test path exists (it needs brittle mocks, a broad harness, slow end-to-end setup or state that only production has), don't build one just to follow the pattern. Use the closest check you can run instead: a repro script, browser automation, a snapshot or a log assertion. Say which one you used. No new test beats a bad test, and a bad test is one that mostly tests mocks, encodes the current implementation, depends on timing or unrelated global state, or would be deleted right after proving the fix.
+
+**Guardrails:**
+- Never change a test to match a wrong implementation.
+- Never weaken an existing assertion unless the expected behavior really changed, and say why.
+- Land the focused regression test first. Wider coverage for related cases comes after.
+
+**Report the evidence:** the failing-before test (or check) and its failure output, then the passing-after run. If you couldn't show failing-before, say why and name the check you used instead.
+
 ## The Test Pyramid
 
 Invest testing effort according to the pyramid — most tests should be small and fast, with progressively fewer tests at higher levels:
@@ -211,6 +222,16 @@ it('calls db.query with ORDER BY created_at DESC', async () => {
   );
 });
 ```
+
+### Assert Exact Values
+
+Call the code the way its users do and compare the result to a literal expected value. The check: **would this test still pass if every imported function returned `undefined`?** If yes, it proves nothing. Rewrite the assertion or delete the test.
+
+| Loose assertion | Why it fails the check | Write instead |
+|---|---|---|
+| `toBeDefined()`, `toBeTruthy()` | Almost any value passes | `toBe` or `toEqual` with the expected value |
+| Only `toHaveBeenCalled()` | Proves a call, not a result | Assert the state or output the call produced |
+| Expected value computed with the code under test | The test agrees with itself | A literal written by hand |
 
 ### DAMP Over DRY in Tests
 
@@ -323,6 +344,7 @@ describe('TaskService', () => {
 | Anti-Pattern | Problem | Fix |
 |---|---|---|
 | Testing implementation details | Tests break when refactoring even if behavior is unchanged | Test inputs and outputs, not internal structure |
+| Loose assertions | Tests pass whatever the code returns | Assert exact values (see Assert Exact Values) |
 | Flaky tests (timing, order-dependent) | Erode trust in the test suite | Use deterministic assertions, isolate test state |
 | Testing framework code | Wastes time testing third-party behavior | Only test YOUR code |
 | Snapshot abuse | Large snapshots nobody reviews, break on any change | Use snapshots sparingly and review every change |

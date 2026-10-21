@@ -50,7 +50,7 @@ expect(result).toBe(expected);           // Strict equality (===)
 expect(result).toEqual(expected);        // Deep equality (objects/arrays)
 expect(result).toStrictEqual(expected);  // Deep equality + type matching
 
-// Truthiness
+// Truthiness: almost any value passes these, so prefer an exact value
 expect(result).toBeTruthy();
 expect(result).toBeFalsy();
 expect(result).toBeNull();
