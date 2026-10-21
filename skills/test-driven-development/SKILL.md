@@ -223,15 +223,16 @@ it('calls db.query with ORDER BY created_at DESC', async () => {
 });
 ```
 
-### Assert Exact Values
+### Check Each Test Against Two Edits
 
-Call the code the way its users do and compare the result to a literal expected value. The check: **would this test still pass if every imported function returned `undefined`?** If yes, it proves nothing. Rewrite the assertion or delete the test.
+Behavior is what the code's users can observe: return values, errors, state they can read back, and effects outside the code, such as a request sent or a row written. Check each test against two imagined edits:
 
-| Loose assertion | Why it fails the check | Write instead |
-|---|---|---|
-| `toBeDefined()`, `toBeTruthy()` | Almost any value passes | `toBe` or `toEqual` with the expected value |
-| Only `toHaveBeenCalled()` | Proves a call, not a result | Assert the state or output the call produced |
-| Expected value computed with the code under test | The test agrees with itself | A literal written by hand |
+- **Break the behavior.** Make the code return a wrong value, skip an effect or do it twice. If the test still passes, it proves nothing. The usual causes: an assertion looser than the contract (`toBeDefined()` where a value is promised), an expected value computed by the code under test, or an assertion on data the test built itself.
+- **Change only the internals.** Keep every observable result the same and restructure underneath. If the test now fails, it is pinned to the implementation.
+
+Keep a test that fails on the first edit and passes on the second. Rewrite or delete the rest. Drive the code through its users' interface with a concrete input, and derive the expected value from the requirement, not from a run of the code.
+
+The contract decides, not the shape of the assertion. When "an empty cart never charges" is the promise, asserting that the payment client got no call is behavior; pair it with a case where the charge happens. The payload a mocked external service receives is behavior. A call to an internal helper is not. Callers branch on an error's type, so assert the type, not the exact message.
 
 ### DAMP Over DRY in Tests
 
@@ -344,7 +345,7 @@ describe('TaskService', () => {
 | Anti-Pattern | Problem | Fix |
 |---|---|---|
 | Testing implementation details | Tests break when refactoring even if behavior is unchanged | Test inputs and outputs, not internal structure |
-| Loose assertions | Tests pass whatever the code returns | Assert exact values (see Assert Exact Values) |
+| Loose assertions | Tests pass when the behavior breaks | Assert what the contract promises (see Check Each Test Against Two Edits) |
 | Flaky tests (timing, order-dependent) | Erode trust in the test suite | Use deterministic assertions, isolate test state |
 | Testing framework code | Wastes time testing third-party behavior | Only test YOUR code |
 | Snapshot abuse | Large snapshots nobody reviews, break on any change | Use snapshots sparingly and review every change |

@@ -230,6 +230,8 @@ Runtime error:
 
 A fallback belongs at a system boundary, for degradation the user can see. It is never the fix for a bug: a default that hides a failure is a symptom fix, and the bug is still there. Required input fails fast and loud.
 
+Before adding a guard, ask whether the state it handles is legitimate. If the system may really be in that state, handling it where it broke is the fix. If the state should never exist, the guard hides the bug: find what produced the state. Guards, retries, swallowed errors, clamped values and discarded state are the usual ways a bug gets hidden.
+
 ```typescript
 // Required config: fail at startup, not with a silent default
 function getConfig(key: string): string {
