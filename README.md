@@ -127,6 +127,16 @@ pickle depends on no other plugin. One skill hands work to a plugin you install 
 /plugin install skill-creator@claude-plugins-official
 ```
 
+For typed languages, install a [code intelligence plugin](https://code.claude.com/docs/en/plugins/code-intelligence) and its language server. Claude then finds definitions and references by symbol instead of by text search, which means fewer file reads, and it sees type errors right after its edits. pickle doesn't require one. For TypeScript:
+
+```bash
+npm install -g typescript-language-server typescript
+```
+
+```bash
+/plugin install typescript-lsp@claude-plugins-official
+```
+
 `pickle-mode` adds one task list entry per skill it will use, when Claude Code provides the task tools. Some models get them only when you opt in, with either of these:
 
 ```bash
