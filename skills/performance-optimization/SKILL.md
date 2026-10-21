@@ -42,6 +42,8 @@ Measure before optimizing. Performance work without measurement is guessing — 
 
 ### Step 1: Measure
 
+Vet the baseline, and every number after it, with [references/benchmark-checklist.md](references/benchmark-checklist.md) before you plan from it or report it.
+
 Two complementary approaches — use both:
 
 - **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.
@@ -123,7 +125,17 @@ Common bottlenecks by category:
 
 ### Step 3: Fix the Bottleneck
 
-Fix the one thing Step 2 identified, nothing else. The anti-patterns below are the usual suspects; each entry gives the rule and the signature to recognize it, and links to a worked fix in [references/optimization-patterns.md](references/optimization-patterns.md). Open the one you need when you reach that code, not before.
+Fix the one thing Step 2 identified, nothing else. Try the cheapest kind of fix first, and stop at the first one that meets the target:
+
+1. Don't do it. Stop work whose result nothing uses, rather than making it cheaper.
+2. Do it, but don't do it again.
+3. Do it less.
+4. Do it later.
+5. Do it when nobody is waiting.
+6. Do it concurrently.
+7. Do it cheaper.
+
+The anti-patterns below are the usual suspects; each entry gives the rule and the signature to recognize it, and links to a worked fix in [references/optimization-patterns.md](references/optimization-patterns.md). Open the one you need when you reach that code, not before.
 
 **Backend**
 
@@ -148,6 +160,8 @@ A fix is a hypothesis until you re-measure. This step decides whether it survive
 **Change one thing at a time.** Three optimizations landed together produce one number, and you cannot attribute it. If they must ship together, measure each in isolation first.
 
 **Beat the noise, not just the mean.** Repeat the measurement and compare the delta against run-to-run variance. A 3% gain inside ±5% variance is not a gain; it is a different sample.
+
+**Name the limiter.** Before you trust the number, answer "why not double?" and rule out errors and work that never ran, per [references/benchmark-checklist.md](references/benchmark-checklist.md). A result you can't explain is inconclusive, not a keep.
 
 Then decide, strictly:
 
@@ -258,6 +272,7 @@ After any performance-related change:
 - [ ] Before and after measurements exist (specific numbers)
 - [ ] The result was re-measured the same way as the baseline (same command, same conditions)
 - [ ] The improvement exceeds run-to-run variance, not just the mean
+- [ ] The reported number names its limiter, run count and range, and passed the benchmark checklist
 - [ ] Changes that didn't beat the baseline were reverted, not kept as neutral
 - [ ] Attempts are logged, kept and reverted alike, so a dead idea isn't re-run
 - [ ] The specific bottleneck is identified and addressed
