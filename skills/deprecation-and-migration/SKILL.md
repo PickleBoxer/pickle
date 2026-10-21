@@ -69,6 +69,17 @@ If no one knows why the system exists or what it still guards against, find out 
 
 **Default to advisory.** Use compulsory only when the maintenance cost or risk justifies forcing migration. Compulsory deprecation requires providing migration tooling, documentation, and support — you can't just announce a deadline.
 
+## Internal APIs: Migrate and Delete in One Change
+
+When every caller of the old API is in this repository and no outside consumer depends on it, skip the deprecation process below. Do it in one change:
+
+1. Inventory every caller: grep the code, and also strings, docs and config, where renames hide.
+2. Migrate every caller to the new API.
+3. Delete the old API in the same change. No adapter, no strangler, no parallel old and new paths.
+4. Point the tests at the new contract. Delete tests that only protected the old implementation.
+
+An adapter here is an exception with an end date, never the default. The Migration Process, Strangler Pattern and Adapter Pattern below are for APIs with consumers you can't change in the same commit: other repositories, published packages, external clients.
+
 ## The Migration Process
 
 ### Step 1: Build the Replacement
