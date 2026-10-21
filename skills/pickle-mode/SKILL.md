@@ -46,6 +46,7 @@ Start at the first phase the task needs and work down. Skip the phases it doesn'
      - Too complex: the **code-simplification** skill (Skill tool, `pickle:code-simplification`)
      - Security concerns: the **security-and-hardening** skill (Skill tool, `pickle:security-and-hardening`)
      - Performance concerns: the **performance-optimization** skill (Skill tool, `pickle:performance-optimization`)
+   - What could this change break outside the diff: the **blast-radius** skill (Skill tool, `pickle:blast-radius`)
 6. **Ship**
    - Committing or branching: the **git-workflow-and-versioning** skill (Skill tool, `pickle:git-workflow-and-versioning`)
    - Writing docs or ADRs: the **documentation-and-adrs** skill (Skill tool, `pickle:documentation-and-adrs`)

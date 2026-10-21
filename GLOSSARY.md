@@ -17,7 +17,7 @@ A skill with default idioms for one language or framework: pickle's own (typescr
 _Avoid_: language pack, rules pack
 
 **Investigation skill**:
-A skill that explains code before a change: how (what it does and how it runs) or why (the reasons it is shaped that way). From pstack.
+A skill that explains code before a change: how (what it does and how it runs), why (the reasons it is shaped that way) or blast-radius (what a change breaks outside its diff). From pstack.
 _Avoid_: research skill, archaeology
 
 **Source guide**:
