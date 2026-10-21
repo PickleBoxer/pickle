@@ -412,7 +412,7 @@ For JavaScript/TypeScript testing patterns illustrating these principles — Jes
 | "Tests slow me down" | Tests slow you down now. They speed you up every time you change the code later. |
 | "I tested it manually" | Manual testing doesn't persist. Tomorrow's change might break it with no way to know. |
 | "The code is self-explanatory" | Tests ARE the specification. They document what the code should do, not what it does. |
-| "It's just a prototype" | Prototypes become production code. Tests from day one prevent the "test debt" crisis. |
+| "It's just a prototype" | Prototypes become production code. Tests from day one prevent the "test debt" crisis. A throwaway built with the **prototype** skill (Skill tool, `pickle:prototype`) is the exception: it never ships, and the real build starts fresh. |
 | "Let me run the tests again just to be extra sure" | After a clean test run, repeating the same command adds nothing unless the code has changed since. Run again after subsequent edits, not as reassurance. |
 
 ## Red Flags

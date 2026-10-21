@@ -25,6 +25,7 @@ Start at the first phase the task needs and work down. Skip the phases it doesn'
 1. **Define**
    - Don't know what you want yet: the **interview-me** skill (Skill tool, `pickle:interview-me`)
    - Rough concept, need variants: the **idea-refine** skill (Skill tool, `pickle:idea-refine`)
+   - Design question you can settle by trying it (a state model, a layout, which approach behaves better): the **prototype** skill (Skill tool, `pickle:prototype`)
    - New project, feature or change: the **spec-driven-development** skill (Skill tool, `pickle:spec-driven-development`)
    - No quality bar written down: the **constraint-driven-development** skill (Skill tool, `pickle:constraint-driven-development`)
 2. **Plan**

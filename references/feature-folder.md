@@ -10,6 +10,7 @@ Working files for one piece of work live together in `.scratch/<feature-slug>/` 
   plan.md         planning-and-task-breakdown: plan document
   todo.md         planning-and-task-breakdown: task list, when no external tracker
   PERF.md         performance-optimization: experiment log
+  prototype.md    prototype: the question, the variants, the verdict and the branch
   issues/NN-*.md  local markdown issue tracker (docs/agents/issue-tracker.md)
 .scratch/reports/ improve-codebase-architecture reports, not a feature
 ```

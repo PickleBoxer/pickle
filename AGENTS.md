@@ -4,7 +4,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
@@ -25,12 +25,13 @@ skills/unslop/, skills/technical-writing/   writing skills (pstack)
 skills/reflect/               user-only session review (pstack reflect + mattpocock retro), scripts/digest.sh
 skills/teach/, skills/sharpen/   user-only (pstack): explain via how and why, rewrite a prompt
 skills/codebase-design/, skills/domain-modeling/   extensions (mattpocock/skills), called by workflow skills
+skills/prototype/             throwaway prototypes for design questions (mattpocock/skills + pstack)
 skills/setup/, skills/improve-codebase-architecture/   user-only (mattpocock/skills)
 references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/; mattpocock-skills.txt
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (17 firing and 6 loading cases, plus 11 cases for the user-only skills and `/pickle:constraints`)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (18 firing and 6 loading cases, plus 11 cases for the user-only skills and `/pickle:constraints`)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
