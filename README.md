@@ -40,6 +40,7 @@ These sit beside the workflow skills: pickle-mode routes to some of them, workfl
 | `setup` | user-only | Records where your issues and domain docs live, in `docs/agents/` | `/pickle:setup`, once per repo |
 | `reflect` | user-only | Reviews a finished session and proposes fixes, checks and scripts first, then skill edits and pointers. Applies only the rows you approve | `/pickle:reflect`, with a session ID, a `.jsonl` path or `last N` |
 | `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `.scratch/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
+| `audit-architecture` | user-only | Reviews every subsystem for simpler ways to represent state and data, verifies each finding and writes a P0 to P3 report to `.scratch/reports/`. Every run audits the whole codebase | `/pickle:audit-architecture`, with an optional path, or as a [scheduled report](#scheduled-reports) |
 
 ### Scheduled reports
 
@@ -48,6 +49,7 @@ Some skills are worth running on a schedule: they read the codebase, write a rep
 | Skill | Routine instructions | Cadence |
 |---|---|---|
 | `improve-codebase-architecture` | `/pickle:improve-codebase-architecture report only` | Weekly |
+| `audit-architecture` | `/pickle:audit-architecture` | Weekly or monthly |
 
 To set one up:
 

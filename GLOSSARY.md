@@ -37,7 +37,7 @@ A skill with rules for prose: technical-writing (document structure and sentence
 _Avoid_: style guide, prose pack
 
 **Scheduled report**:
-A user-only skill run on a schedule in its no-questions form, such as improve-codebase-architecture with `report only`. It writes a report and changes no code. Set up as a local routine in Claude Code Desktop.
+A user-only skill run on a schedule in its no-questions form, such as improve-codebase-architecture with `report only`, or audit-architecture. It writes a report and changes no code. Set up as a local routine in Claude Code Desktop.
 _Avoid_: cron skill, background job
 
 **Feature folder**:

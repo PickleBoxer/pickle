@@ -4,11 +4,11 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Its own user-only `audit-architecture` audits how a codebase represents state and data. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
-1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus. Then the cases for the Matt Pocock skills: the extension chains, `setup-*`, `improve-architecture-*`, `reflect-*`, `teach-*`, `sharpen-*` and `constraints-*` (scaffolded, `--ablation none` for the user-only ones).
+1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus. Then the cases for the Matt Pocock skills: the extension chains, `setup-*`, `improve-architecture-*`, `audit-architecture-*`, `reflect-*`, `teach-*`, `sharpen-*` and `constraints-*` (scaffolded, `--ablation none` for the user-only ones).
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
@@ -27,11 +27,12 @@ skills/teach/, skills/sharpen/   user-only (pstack): explain via how and why, re
 skills/codebase-design/, skills/domain-modeling/   extensions (mattpocock/skills), called by workflow skills
 skills/prototype/             throwaway prototypes for design questions (mattpocock/skills + pstack)
 skills/setup/, skills/improve-codebase-architecture/   user-only (mattpocock/skills)
+skills/audit-architecture/    user-only (pickle): read-only state and data audit, scheduled report
 references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/; mattpocock-skills.txt
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (18 firing and 6 loading cases, plus 11 cases for the user-only skills and `/pickle:constraints`)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (18 firing and 6 loading cases, plus 12 cases for the user-only skills and `/pickle:constraints`)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)

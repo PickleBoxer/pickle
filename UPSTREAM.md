@@ -9,6 +9,7 @@ Where each pickle file comes from upstream (agent-skills, pstack for `typescript
 - Skills
 - Matt Pocock skills
 - Agent skills
+- pickle skills
 - Scripts
 
 ## Baseline
@@ -107,6 +108,12 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | evals/README.md | eval | as:evals/README.md | vendored | 0.6.13 | upstream's eval guide. Its Tier 1 to 3 and `run-evals.js` parts are not in pickle |
 | evals/skill-impact.md | eval | as:evals/skill-impact.md | vendored | 0.6.13 | log of skill changes rejected on eval evidence |
 | evals/plugin | eval | as:evals/plugin | vendored | 0.6.13 | firing evals: each skill fires on its own description, scored with and without pickle |
+
+## pickle skills
+
+| pickle item | Kind | Source | Relation | Upstream version | Notes |
+|---|---|---|---|---|---|
+| skills/audit-architecture | skill | - | new | n/a | user-only, from the maintainer's dotfiles. Rules at the top, every run a full audit, one Markdown report in `.scratch/reports/`, Explore subagents with a set brief in batches of up to 12, one verifier instead of five audit passes, no `agents/openai.yaml`. Eval `audit-architecture-report` |
 
 ## Scripts
 
