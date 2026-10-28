@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Maintainer only. Lists what changed upstream since each baseline in UPSTREAM.md: pstack/ in
-# cursor/plugins, addyosmani/agent-skills (as: rows) and mattpocock/skills (mp: rows). Per source: new version, new commits,
-# a diff stat per tracked row, and (agent-skills) upstream files no row covers. Fetches the
-# clones, moves no branch.
+# Maintainer only. Lists what changed upstream since UPSTREAM.md last looked: pstack/ in
+# cursor/plugins, addyosmani/agent-skills (as: rows) and mattpocock/skills (mp: rows). Per source: new version, new commits
+# since the Baseline, a diff stat per row and per graft from its own Commit, and (agent-skills) upstream
+# files no row covers. Fetches the clones, moves no branch.
 #
 # Usage: bash scripts/upstream-diff.sh [-p]     -p prints full diffs instead of stats
 # Env:   PSTACK_UPSTREAM_DIR, a clone of https://github.com/cursor/plugins
@@ -25,8 +25,12 @@ sources_tbl="pstack|$plugins|pstack||.cursor-plugin/plugin.json|0
 agent-skills|$agentskills|.|as:|.claude-plugin/plugin.json|1
 mattpocock-skills|$mpskills|.|mp:|.claude-plugin/plugin.json|0"
 
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|script|reference) $/ {
-  for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5}' UPSTREAM.md)
+# item|source|relation|commit for every row, then every graft (relation "graft").
+rows=$(awk -F'|' '/^## /{sec=$0}
+  NF>=9 && $3 ~ /^ (skill|command|agent|script|reference|doc|eval) $/ {
+    for (i=2; i<=7; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|" $5 "|" $7}
+  sec == "## Grafts" && NF==6 && $2 !~ /^ ?(pickle item|---) ?$/ {
+    for (i=2; i<=5; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $4 "|graft|" $5}' UPSTREAM.md)
 
 while IFS='|' read -r name repo dir prefix manifest whole; do
   if ! git -C "$repo" rev-parse --git-dir >/dev/null 2>&1; then
@@ -60,9 +64,9 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   g log --oneline "$base..$new" -- "$dir"
 
   echo
-  echo "## Changed rows"
+  echo "## Changed rows and grafts"
   sources=""
-  while IFS='|' read -r item src rel; do
+  while IFS='|' read -r item src rel from; do
     [ "$src" = "-" ] && continue
     if [ -n "$prefix" ]; then
       case "$src" in "$prefix"*) src_paths=${src#"$prefix"};; *) continue;; esac
@@ -74,11 +78,14 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
     paths=("${paths[@]# }")
     paths=("${paths[@]/#/$pre}")
     sources="$sources ${paths[*]}"
-    stat=$(g diff --stat "$base" "$new" -- "${paths[@]}")
+    for p in "${paths[@]}"; do
+      g cat-file -e "$from:$p" 2>/dev/null || echo "upstream-diff: $item ($rel): $p is not in $name at $from" >&2
+    done
+    stat=$(g diff --stat "$from" "$new" -- "${paths[@]}")
     [ -n "$stat" ] || continue
     echo
-    echo "### $item ($rel) <- $src"
-    if [ "$full" = 1 ]; then g diff "$base" "$new" -- "${paths[@]}"; else echo "$stat"; fi
+    echo "### $item ($rel) <- $src since ${from:0:7}"
+    if [ "$full" = 1 ]; then g diff "$from" "$new" -- "${paths[@]}"; else echo "$stat"; fi
   done <<< "$rows"
 
   # agent-skills is tracked as a whole. For pstack and mattpocock-skills, only the rows pickle took.
@@ -94,4 +101,4 @@ while IFS='|' read -r name repo dir prefix manifest whole; do
   echo
 done <<< "$sources_tbl"
 
-echo "Per row: take, ignore or note the change, bump its Upstream version, then that source's baseline when all its rows are done."
+echo "Per row or graft: take, ignore or note the change and set its Commit (and a row's Upstream version) to the upstream one, then that source's Baseline when all its rows are done."

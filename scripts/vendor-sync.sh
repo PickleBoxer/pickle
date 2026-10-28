@@ -129,6 +129,7 @@ Staged agent-skills $version (${sha:0:7}) on $branch in $wt. Next:
   git -C $wt commit -m "chore(vendor): sync agent-skills $version" -m "Upstream: addyosmani/agent-skills@${sha:0:7}"
   git merge$first --no-ff $branch
   # resolve conflicts, keep your customizations, then set the agent-skills Baseline row in
-  # UPSTREAM.md to $version | ${sha:0:7} and every vendored row's Upstream version to $version
+  # UPSTREAM.md to $version | ${sha:0:7}, every vendored row's Upstream version and Commit to
+  # $version | ${sha:0:7}, and a vendored row's Notes to what main still changes
   bash scripts/check-refs.sh
 EOF

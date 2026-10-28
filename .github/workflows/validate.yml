@@ -10,9 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # check-refs.sh diffs vendored files against the vendor/agent-skills branch
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - run: npx -y @anthropic-ai/claude-code plugin validate . --strict
-      # Skill and agent mentions resolve; UPSTREAM.md matches the files
+      # Skill and agent mentions resolve; UPSTREAM.md matches the files and the vendor branch
       - run: bash scripts/check-refs.sh

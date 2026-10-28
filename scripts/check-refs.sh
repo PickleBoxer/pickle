@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # Fails when a skill or agent mention does not resolve, when a called
 # skill is user-only, when pickle-mode names a skill bare, when an extension calls a skill, or when
-# UPSTREAM.md disagrees with the files.
+# UPSTREAM.md disagrees with the files: rows, grafted sections, and vendored Notes against the
+# vendor/agent-skills branch.
 # Run from anywhere: bash scripts/check-refs.sh
 set -uo pipefail
 cd "$(dirname "$0")/.."
@@ -108,19 +109,45 @@ for f in agents/*.md; do
   done
 done
 
-# UPSTREAM.md rows: item | kind | source | relation | version | notes
-rows=$(awk -F'|' 'NF>=8 && $3 ~ /^ (skill|command|agent|reference|doc|eval|script) $/ {
-  for (i=2; i<=6; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6}' UPSTREAM.md)
+# UPSTREAM.md rows: item | kind | source | relation | version | commit | notes
+rows=$(awk -F'|' 'NF>=9 && $3 ~ /^ (skill|command|agent|reference|doc|eval|script) $/ {
+  for (i=2; i<=8; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5 "|" $6 "|" $7 "|" $8}' UPSTREAM.md)
 [ -n "$rows" ] || err "UPSTREAM.md: no rows found"
-# agent-skills syncs as one: every vendored row has the Baseline version.
+# agent-skills syncs as one: every vendored row has the Baseline version and commit.
 as_ver=$(awk -F'|' '$2 == " agent-skills " {gsub(/ /, "", $4); print $4}' UPSTREAM.md)
+as_sha=$(awk -F'|' '$2 == " agent-skills " {gsub(/ /, "", $5); print $5}' UPSTREAM.md)
+# Vendored Notes are checked against the vendor branch, once main has merged it. CI fetches it.
+vref=""
+for r in refs/heads/vendor/agent-skills refs/remotes/origin/vendor/agent-skills; do
+  git rev-parse -q --verify "$r" >/dev/null && { vref=$r; break; }
+done
+if [ -z "$vref" ]; then
+  err "no vendor/agent-skills branch to check vendored Notes against. Run: git fetch origin vendor/agent-skills:vendor/agent-skills"
+elif ! git merge-base --is-ancestor "$vref" HEAD; then
+  err "$vref has commits HEAD has not merged. Merge it before checking UPSTREAM.md"
+  vref=""
+fi
 
-while IFS='|' read -r item kind src rel ver; do
+while IFS='|' read -r item kind src rel ver sha notes; do
   case "$rel" in ported|rewritten|vendored|new) ;; *) err "UPSTREAM.md: $item: unknown relation '$rel'";; esac
   [ -e "$item" ] || { err "UPSTREAM.md: $item does not exist"; continue; }
+  if [ "$rel" = "new" ]; then
+    [ "$sha" = "-" ] || err "UPSTREAM.md: $item is new, so its Commit is -, not '$sha'"
+  else
+    [[ "$sha" =~ ^[0-9a-f]{7,40}$ ]] || err "UPSTREAM.md: $item: Commit '$sha' is not a commit"
+  fi
   if [ "$rel" = "vendored" ]; then
     case "$src" in as:*) ;; *) err "UPSTREAM.md: $item is vendored, but only as: sources sync";; esac
     [ "$ver" = "$as_ver" ] || err "UPSTREAM.md: $item is vendored at $ver, agent-skills Baseline is $as_ver"
+    [ "$sha" = "$as_sha" ] || err "UPSTREAM.md: $item is vendored at $sha, agent-skills Baseline is $as_sha"
+    if [ -n "$vref" ]; then
+      on_main=0; case "$notes" in *'on `main`'*|*'On `main`'*) on_main=1;; esac
+      if git diff --quiet "$vref" -- "$item"; then
+        [ "$on_main" = 0 ] || err "UPSTREAM.md: $item Notes say on \`main\`, but it matches $vref"
+      else
+        [ "$on_main" = 1 ] || err "UPSTREAM.md: $item differs from $vref, but its Notes do not say what changed on \`main\`"
+      fi
+    fi
   fi
   if [ "$kind" = "skill" ]; then
     sk=$item; [ -d "$sk" ] && sk="$sk/SKILL.md"
@@ -138,6 +165,24 @@ done <<< "$rows"
 # Every shipped skill, agent and command has a row.
 items=$(echo "$rows" | cut -d'|' -f1)
 has_row() { echo "$items" | grep -qxF "$1"; }
+
+# Grafts: item | sections | source | commit. Each section is a heading in the item, and the item
+# sits under a row.
+while IFS='|' read -r item sections src sha; do
+  [ -f "$item" ] || { err "UPSTREAM.md: graft $item does not exist"; continue; }
+  covered=0
+  for i in $items; do case "$item" in "$i"|"$i"/*) covered=1; break;; esac; done
+  [ "$covered" = 1 ] || err "UPSTREAM.md: graft $item is under no row"
+  [ -n "$src" ] && [ "$src" != "-" ] || err "UPSTREAM.md: graft $item has no source"
+  [[ "$sha" =~ ^[0-9a-f]{7,40}$ ]] || err "UPSTREAM.md: graft $item: Commit '$sha' is not a commit"
+  IFS=';' read -ra secs <<< "$sections"
+  for sec in "${secs[@]}"; do
+    sec=$(echo "$sec" | sed -E 's/^ +| +$//g')
+    grep -qxE "#+ $(printf '%s' "$sec" | sed 's/[][\\.*^$()+?{}|]/\\&/g')" "$item" \
+      || err "UPSTREAM.md: graft $item: no heading '$sec'"
+  done
+done < <(awk -F'|' '/^## /{sec=$0} sec == "## Grafts" && NF==6 && $2 !~ /^ ?(pickle item|---) ?$/ {
+  for (i=2; i<=5; i++) {gsub(/^ +| +$/, "", $i)} print $2 "|" $3 "|" $4 "|" $5}' UPSTREAM.md)
 for f in skills/*/SKILL.md; do
   d=${f%/SKILL.md}
   has_row "$d" || has_row "$f" || err "$f: no UPSTREAM.md row"

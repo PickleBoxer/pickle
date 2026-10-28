@@ -58,14 +58,15 @@ bash scripts/check-refs.sh
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), `pickle-mode` names a skill without the call form, or `UPSTREAM.md` disagrees with the files. `claude plugin test .` joins CI with the first mod test.
+`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), `pickle-mode` names a skill without the call form, or `UPSTREAM.md` disagrees with the files (rows, grafted headings, and vendored Notes against `vendor/agent-skills`). `claude plugin test .` joins CI with the first mod test.
 
 ## Vendored skills
 
 - `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit and merge commands. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
-- Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version.
+- Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version and commit. A `vendored` row's Notes say "on `main`" exactly when the file differs from `vendor/agent-skills`.
 - To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
-- `scripts/upstream-diff.sh` lists upstream changes since each baseline: the pstack rows, the `as:` (agent-skills) rows and the `mp:` (mattpocock-skills) rows.
+- `scripts/upstream-diff.sh` lists upstream changes since each row's Commit: the pstack rows, the `as:` (agent-skills) rows and the `mp:` (mattpocock-skills) rows, plus the Grafts.
+- When a file takes sections from a second source, add a row to the Grafts table in `UPSTREAM.md`: the file, the headings, the source and its commit. After taking an upstream change, set that row's or graft's Commit to the upstream commit.
 
 ## Authoring
 
