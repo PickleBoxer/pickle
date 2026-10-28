@@ -44,6 +44,8 @@ Measure before optimizing. Performance work without measurement is guessing — 
 
 Vet the baseline, and every number after it, with [references/benchmark-checklist.md](references/benchmark-checklist.md) before you plan from it or report it.
 
+**Write the decision first.** Before you run, write down the result that would change your decision and the noise floor you expect. Stop when the run-to-run spread is larger than the effect you are looking for.
+
 Two complementary approaches — use both:
 
 - **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.

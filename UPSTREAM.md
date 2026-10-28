@@ -69,7 +69,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/api-and-interface-design | skill | as:skills/api-and-interface-design | vendored | 0.6.13 | aeac41d | on `main`: line in When to Use that calls `pickle:codebase-design` for internal module shape |
 | skills/browser-testing-with-devtools | skill | as:skills/browser-testing-with-devtools | vendored | 0.6.13 | aeac41d | |
 | skills/ci-cd-and-automation | skill | as:skills/ci-cd-and-automation | vendored | 0.6.13 | aeac41d | |
-| skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | aeac41d | on `main`: Readability checks names against `GLOSSARY.md` and calls `pickle:domain-modeling`; Architecture applies the deletion test from `pickle:codebase-design` and escalates a rule flagged twice through `docs/agents/boundaries.md`; Judging Reviewer Findings section before Dead Code Hygiene (from pstack's interrogate lead judgment, without its model panel) |
+| skills/code-review-and-quality | skill | as:skills/code-review-and-quality | vendored | 0.6.13 | aeac41d | on `main`: Readability checks names against `GLOSSARY.md` and calls `pickle:domain-modeling`; Architecture applies the deletion test from `pickle:codebase-design` and escalates a rule flagged twice through `docs/agents/boundaries.md`; Judging Reviewer Findings section before Dead Code Hygiene (from pstack's interrogate lead judgment, without its model panel; upstream deleted it, and point 3 now follows interrogate's rule that a finding counts when a run proves it) |
 | skills/code-simplification | skill | as:skills/code-simplification | vendored | 0.6.13 | aeac41d | on `main`: line after the Redundancy table that calls `pickle:codebase-design` for the deletion test, and a line after Step 1 that calls `pickle:why` |
 | skills/constraint-driven-development | skill | as:skills/constraint-driven-development | vendored | 0.6.13 | aeac41d | on `main`: PHP suppressions in the Floor, PHP rows in the Step 4 tool table, a Composer scripts line; Step 1 detects PHP and Swift configs and existing boundaries and points rules about the code at `AGENTS.md` and `docs/agents/boundaries.md`; Step 4 rows for deptrac, import-linter, depguard, Semgrep rules, PHP-CS-Fixer and PHPCS, Rector, Pest type coverage, Psalm taint analysis, roave/security-advisories and Pest mutate; the pointer line goes in one instruction file; Step 6 lists PHP config moves and puts `CONSTRAINTS.md` under `CODEOWNERS`; PHPStan level and baseline defaults; PHP patterns in `references/floor-guard.md` (`*Test.php`, suppressions, stubs, Pest and PHPUnit skips, `assert*`, any empty `catch`) |
 | skills/context-engineering | skill | as:skills/context-engineering | vendored | 0.6.13 | aeac41d | on `main`: line in Level 3 that calls `pickle:how`; Laravel Boost row in MCP Integrations; Level 1 lines to edit one instruction file and to write rules outside a generated block; Restartable Session Boundaries saves to the feature folder |
@@ -83,7 +83,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | skills/incremental-implementation | skill | as:skills/incremental-implementation | vendored | 0.6.13 | aeac41d | on `main`: line after Contract-First Slicing that calls `pickle:codebase-design` for Sketch First when a slice adds a module other code calls |
 | skills/interview-me | skill | as:skills/interview-me | vendored | 0.6.13 | aeac41d | on `main`: intent saved to `.scratch/<feature-slug>/intent.md` |
 | skills/observability-and-instrumentation | skill | as:skills/observability-and-instrumentation | vendored | 0.6.13 | aeac41d | |
-| skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | aeac41d | on `main`: experiment log in `.scratch/<feature-slug>/PERF.md`. Also on `main`, from pstack's Perf issue playbook and explain-the-number principle: Step 1 and Step 4 point to `references/benchmark-checklist.md`, Step 3 orders fixes cheapest first (the perf mantras), Step 4 names the limiter, and a Verification item |
+| skills/performance-optimization | skill | as:skills/performance-optimization | vendored | 0.6.13 | aeac41d | on `main`: experiment log in `.scratch/<feature-slug>/PERF.md`. Also on `main`, from pstack's Perf issue playbook and explain-the-number principle: Step 1 and Step 4 point to `references/benchmark-checklist.md`, Step 1 writes the decision and noise floor before a run, Step 3 orders fixes cheapest first (the perf mantras), Step 4 names the limiter, and a Verification item |
 | skills/planning-and-task-breakdown | skill | as:skills/planning-and-task-breakdown | vendored | 0.6.13 | aeac41d | on `main`: External tracker follows `docs/agents/issue-tracker.md` from `/pickle:setup`, and a local markdown tracker keeps `todo.md`; plan and todo in `.scratch/<feature-slug>/`, not `tasks/` |
 | skills/security-and-hardening | skill | as:skills/security-and-hardening | vendored | 0.6.13 | aeac41d | on `main`: the "just a prototype" rationalization row names `pickle:prototype` throwaways as the exception |
 | skills/shipping-and-launch | skill | as:skills/shipping-and-launch | vendored | 0.6.13 | aeac41d | |
@@ -104,7 +104,7 @@ From addyosmani/agent-skills, MIT: skills, Claude commands (`.claude/commands/`,
 | agents/security-auditor.md | agent | as:agents/security-auditor.md | vendored | 0.6.13 | aeac41d | |
 | agents/test-engineer.md | agent | as:agents/test-engineer.md | vendored | 0.6.13 | aeac41d | |
 | agents/web-performance-auditor.md | agent | as:agents/web-performance-auditor.md | vendored | 0.6.13 | aeac41d | on `main`: hands remediation to `pickle:performance-optimization` in the Skill tool form, not by its SKILL.md path |
-| references | reference | as:references | vendored | 0.6.13 | aeac41d | checklists and patterns shared by several skills, commands and agents. On `main`: `testing-patterns.md` warns on truthiness matchers; `orchestration-patterns.md` adds Writing a subagent brief (pstack: orchestrate playbook's brief, minus TIMEBOX and STANDING, plus poteto-mode's Subagents ownership and fresh-agent rules) |
+| references | reference | as:references | vendored | 0.6.13 | aeac41d | checklists and patterns shared by several skills, commands and agents. On `main`: `testing-patterns.md` warns on truthiness matchers; `orchestration-patterns.md` adds Writing a subagent brief (pstack: orchestrate playbook's brief, minus TIMEBOX and STANDING, plus poteto-mode's Subagents ownership and fresh-agent rules; GOAL restates the user's goal and "Try one before many" from the Orchestrate rewrite) |
 | references/feature-folder.md | reference | - | new | n/a | - | the `.scratch/<feature-slug>/` layout, slug and lookup rules shared by the Define and Plan skills and commands. Lists `prototype.md` |
 | docs/agents.md | doc | as:docs/agents.md | vendored | 0.6.13 | aeac41d | persona orchestration rules, linked from the vendored agents |
 | docs/adoption-guide.md | doc | as:docs/adoption-guide.md | vendored | 0.6.13 | aeac41d | greenfield and brownfield rollout; on `main`: artifacts in `.scratch/<slug>/` |
@@ -118,16 +118,16 @@ Sections a pickle file took from a source other than its row's. One row per file
 
 | pickle item | Sections | Source | Commit |
 |---|---|---|---|
-| skills/technical-writing/SKILL.md | PR descriptions | skills/poteto-mode/playbooks/opening-a-pr.md | 99743e9 |
+| skills/technical-writing/SKILL.md | PR descriptions | skills/poteto-mode/playbooks/opening-a-pr.md | 23ab063 |
 | skills/reflect/SKILL.md | 2. Review through three lenses | mp:skills/engineering/retro | 49dd158 |
 | skills/prototype/SKILL.md | 1. Name the decision; 2. Pick a branch; 4. Present the result | skills/poteto-mode/playbooks/prototype.md | 88d4751 |
-| skills/code-review-and-quality/SKILL.md | Judging Reviewer Findings | skills/interrogate | 99743e9 |
+| skills/code-review-and-quality/SKILL.md | Judging Reviewer Findings | skills/interrogate/SKILL.md | 23ab063 |
 | skills/debugging-and-error-recovery/SKILL.md | Step 1: Reproduce; Step 2: Localize; Step 4: Fix the Root Cause; Step 5: Guard Against Recurrence; Safe Fallback Patterns | skills/poteto-mode/playbooks/bug-fix.md, skills/principle-fix-root-causes | 99743e9 |
 | skills/deprecation-and-migration/SKILL.md | Internal APIs: Migrate and Delete in One Change | skills/principle-migrate-callers-then-delete-legacy-apis | 99743e9 |
 | skills/git-workflow-and-versioning/SKILL.md | 4. Keep Concerns Separate | skills/principle-sequence-verifiable-units | 99743e9 |
-| skills/performance-optimization/SKILL.md | Step 1: Measure; Step 3: Fix the Bottleneck; Step 4: Verify (Keep or Revert); Verification | skills/poteto-mode/playbooks/perf-issue.md, skills/principle-explain-the-number | 99743e9 |
+| skills/performance-optimization/SKILL.md | Step 1: Measure; Step 3: Fix the Bottleneck; Step 4: Verify (Keep or Revert); Verification | skills/poteto-mode/playbooks/perf-issue.md, skills/principle-explain-the-number | 23ab063 |
 | skills/test-driven-development/SKILL.md | The Prove-It Pattern (Bug Fixes); Check Each Test Against Two Edits; Test Anti-Patterns to Avoid | skills/tdd, skills/principle-test-behavior-not-implementation | 99743e9 |
-| references/orchestration-patterns.md | Writing a subagent brief | skills/poteto-mode/playbooks/orchestrate.md, skills/poteto-mode/SKILL.md | 99743e9 |
+| references/orchestration-patterns.md | Writing a subagent brief | skills/poteto-mode/playbooks/orchestrate.md, skills/poteto-mode/SKILL.md | 23ab063 |
 
 ## pickle skills
 

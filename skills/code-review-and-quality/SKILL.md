@@ -247,7 +247,7 @@ When other reviewers report back (the `/pickle:ship` agents, a fresh-context rev
    - **Premature abstraction.** "Extract an interface" counts only if the code needs to change a second way.
    - **"I'd have done it differently."** Dismiss it unless the reviewer shows a concrete problem with the current approach.
    - **Missing context.** Flags on code the change didn't touch, or on a pattern the codebase uses everywhere.
-3. **Agreement is the strongest signal.** A finding that two reviewers raised independently outranks one raised by a single reviewer. Never dismiss a security or correctness finding only because one reviewer raised it.
+3. **Proof beats agreement.** A finding that comes with a run showing the failure (a failing test, a repro command and its output) outranks any number of unproven ones. Before you act on an unproven correctness or security finding, run it yourself. Never dismiss one only because a single reviewer raised it.
 4. **Show what you dismissed.** List each dismissed finding with a one-line reason, so the user can overrule you.
 
 ## Dead Code Hygiene
