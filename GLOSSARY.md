@@ -40,6 +40,10 @@ _Avoid_: style guide, prose pack
 A user-only skill run on a schedule in its no-questions form, such as improve-codebase-architecture with `report only`, or audit-architecture. It writes a report and changes no code. Set up as a local routine in Claude Code Desktop.
 _Avoid_: cron skill, background job
 
+**Review lane**:
+One extra check a project adds to code review, listed in its `docs/agents/review.md`: a skill or agent run as a subagent on the changed files of one type. Written by setup, run by code-review-and-quality.
+_Avoid_: review pass, reviewer plugin
+
 **Feature folder**:
 The folder `.scratch/<feature-slug>/` that holds one piece of work's intent, idea, spec, plan, task list and local issues, committed as its history. Layout in `references/feature-folder.md`.
 _Avoid_: task folder, work dir, scratch pad

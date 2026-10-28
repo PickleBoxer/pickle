@@ -12,5 +12,7 @@ Review the current changes (staged or recent commits) across all five axes:
 4. **Security** — Input validated? Secrets safe? Auth checked? (use the **security-and-hardening** skill (Skill tool, `pickle:security-and-hardening`))
 5. **Performance** — No N+1 queries? No unbounded ops? (use the **performance-optimization** skill (Skill tool, `pickle:performance-optimization`))
 
+If `docs/agents/review.md` exists, run its lanes and apply its checks, as Repo Lanes in the skill describes. Name every lane you skipped.
+
 Categorize findings as Critical, Required, Optional, or Nit.
 Output a structured review with specific file:line references and fix recommendations.

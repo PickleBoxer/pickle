@@ -15,6 +15,7 @@ In Claude Code, each call passes `subagent_type` matching the persona's `name` f
 1. **`code-reviewer`** — Run a five-axis review (correctness, readability, architecture, security, performance) on the staged changes or recent commits. Output the standard review template.
 2. **`security-auditor`** — Run a vulnerability and threat-model pass. Check OWASP Top 10, secrets handling, auth/authz, dependency CVEs. Output the standard audit report.
 3. **`test-engineer`** — Analyze test coverage for the change. Identify gaps in happy path, edge cases, error paths, and concurrency scenarios. Output the standard coverage analysis.
+4. **Repo lanes**, if `docs/agents/review.md` exists: its matching lanes join the same turn, briefed as Repo Lanes in the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`) describes. Pass its Checks to `code-reviewer` and `security-auditor` in their prompts.
 
 In other harnesses without an Agent tool, invoke each persona's system prompt sequentially and treat their outputs as if returned in parallel — the merge phase still works.
 
@@ -27,7 +28,7 @@ Constraints (from Claude Code's subagent model):
 
 ## Phase B — Merge in main context
 
-Once all three reports are back, the main agent (not a sub-persona) synthesizes them. Judge every finding first, per Judging Reviewer Findings in the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`):
+Once all reports are back, the main agent (not a sub-persona) synthesizes them. Lane findings join Code Quality, and every skipped lane is named in the decision. Judge every finding first, per Judging Reviewer Findings in the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`):
 
 1. **Code Quality** — Aggregate Critical/Required findings from `code-reviewer` and any failing tests, lint, or build output. Resolve duplicates between reviewers.
 2. **Security** — Promote any Critical/High `security-auditor` findings to launch blockers. Cross-reference with `code-reviewer`'s security axis.

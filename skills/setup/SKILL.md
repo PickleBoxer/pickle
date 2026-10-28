@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Configure this repo for pickle's skills: where issues are tracked, where the glossary and ADRs live, which docs source to check first, and a guide to setting boundaries. Offers to set the quality bar. Run once per repo.
+description: Configure this repo for pickle's skills: where issues are tracked, where the glossary and ADRs live, which docs source to check first, a guide to setting boundaries, and the lanes and checks the review adds. Offers to set the quality bar. Run once per repo.
 disable-model-invocation: true
 metadata:
   upstream: mattpocock-skills/skills/engineering/setup-matt-pocock-skills
@@ -15,6 +15,7 @@ Write the per-repo configuration pickle's skills read:
 - **Domain docs**: where `GLOSSARY.md` and ADRs live, and how skills read them
 - **Docs sources**: which docs tool or site to check first for each part of the stack, at the installed version
 - **Boundaries**: a general guide to making a rule stick, the same for every repo
+- **Review**: the lanes and checks the review adds for this repo
 
 Explore, present what you found, confirm with the user, then write. Nothing is written before the user confirms.
 
@@ -31,6 +32,7 @@ Read whatever exists; don't assume:
 - Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
 - MCP servers: those connected in this session (your own tool list) and those in `.mcp.json`. Servers added at user scope or by a plugin never appear in `.mcp.json`. Note docs tools (`laravel-boost`, Context7) and trackers (Linear, Atlassian for Jira); `laravel/boost` in `composer.lock` also counts
 - `CONSTRAINTS.md` at the root
+- Skills and agents that fit the stack: those in this session (your own lists), and those in `.claude/skills/` and `.claude/agents/`, where Laravel Boost installs `laravel-best-practices`
 - Monorepo signals: `pnpm-workspace.yaml`, a `workspaces` field in `package.json`, or a populated `packages/*` with its own `src/`. Their absence means single-context, which is almost every repo.
 
 ## 2. Present findings and ask
@@ -67,6 +69,8 @@ If no `GLOSSARY.md` exists, offer to seed one (recommended: **yes** when the cod
 
 **Section E: Boundaries.** Skip it when `docs/agents/boundaries.md` exists. Otherwise offer, recommended **yes** when the repo has code, to write it from [references/boundaries.md](references/boundaries.md) as it is. It says how agents set boundaries, not which ones this repo has, so it stays true when the code changes: fill in nothing from exploration.
 
+**Section F: Review.** Skip it when `docs/agents/review.md` exists. The code-review-and-quality skill runs each lane in that file as a subagent beside its own review. Propose one lane per skill or agent found in exploration that checks this stack's code, with the file types it covers, recommended **yes** when there is at least one. Then ask for this repo's checks: rules a reviewer should catch that no test or lint rule enforces yet. Offer none of your own; an empty Checks list is fine.
+
 ## 3. Confirm and edit
 
 Show the user a draft of:
@@ -74,6 +78,7 @@ Show the user a draft of:
 - the `## Agent skills` block, and the file it goes in (step 4)
 - `docs/agents/issue-tracker.md`, `docs/agents/domain.md` and `docs/agents/sources.md`
 - `docs/agents/boundaries.md`, if the user said yes in Section E (name the template; it needs no draft)
+- `docs/agents/review.md`, if the user said yes in Section F
 
 Let them edit before writing.
 
@@ -109,9 +114,13 @@ The block:
 ### Boundaries
 
 Before you add or escalate a rule, see `docs/agents/boundaries.md`.
+
+### Review
+
+[one-line summary, such as "Laravel and React lanes, two checks"]. See `docs/agents/review.md`.
 ```
 
-Leave out the Boundaries section when the user said no in Section E.
+Leave out the Boundaries section when the user said no in Section E, and the Review section when they said no in Section F.
 
 Then write the docs files from the templates:
 
@@ -123,6 +132,7 @@ Then write the docs files from the templates:
 - [references/domain.md](references/domain.md): domain docs, with its Layout section filled in and any non-default ADR folder replacing `docs/adr/`
 - [references/sources.md](references/sources.md): docs sources, with the confirmed rows
 - [references/boundaries.md](references/boundaries.md): boundaries, copied as it is
+- [references/review.md](references/review.md): review, with the confirmed lanes and checks (drop the Checks list's example when there are none)
 
 For "other" trackers, write `docs/agents/issue-tracker.md` from the user's description, with a Conventions section naming the exact tool calls to create and read an item, and the same two closing sections the templates have: what "publish to the issue tracker" and "fetch the relevant ticket" mean.
 

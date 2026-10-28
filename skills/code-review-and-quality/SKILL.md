@@ -91,6 +91,12 @@ For detailed profiling and optimization, see `performance-optimization`. Does th
 - Any missing pagination on list endpoints?
 - Any large objects created in hot paths?
 
+## Repo Lanes
+
+When `docs/agents/review.md` exists, apply its Checks with the five axes and run each lane whose When matches a changed file: one Agent call per lane in a single message, with `run_in_background: false`. A skill lane is a `general-purpose` agent that loads the skill; an agent lane is that agent. Brief each: the matching changed files only, findings with `file:line`, change nothing.
+
+Judge lane findings like any reviewer's; where one clashes with a correctness or security finding, the latter wins. Name every lane you skipped and why.
+
 ## Structural Remedies
 
 When you flag a structural problem, propose the move — not just the problem. A review that only says "this is complex" leaves the author guessing. Reach for a named restructuring:
@@ -181,6 +187,8 @@ For each file changed:
 4. Security: Any vulnerabilities?
 5. Performance: Any bottlenecks?
 ```
+
+If the project has `docs/agents/review.md`, run its Repo Lanes too, and judge their findings with your own.
 
 ### Step 4: Categorize Findings
 
