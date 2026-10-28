@@ -25,7 +25,7 @@ Read whatever exists; don't assume:
 - `git remote -v`: GitHub, GitLab (`gitlab.com` or a self-hosted host), another host, or no remote?
 - `CLAUDE.md` (root or `.claude/`) and `AGENTS.md` at the root: which exist, does one only import the other (`@AGENTS.md`), and is there already an `## Agent skills` section? Note any generated block: Laravel Boost rewrites everything inside `<laravel-boost-guidelines>`.
 - `docs/agents/`: does this skill's earlier output exist?
-- `GLOSSARY.md` and `GLOSSARY-MAP.md` at the root
+- `GLOSSARY.md` and `GLOSSARY-MAP.md` at the root, and the older `CONTEXT.md` and `CONTEXT-MAP.md`. If an older file exists, offer to `git mv` it to its `GLOSSARY` name and rewrite those names in `docs/agents/domain.md`
 - ADR folders: `docs/adr/`, `docs/decisions/`, an `.adr-dir` file, any `src/*/docs/adr/`
 - `.scratch/`: feature folders from earlier work; an `issues/` folder in one means local-markdown issues are already in use
 - Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
@@ -52,6 +52,8 @@ Propose the tracker that matches `git remote`: GitHub for github.com, GitLab for
 When the Linear or Atlassian server is not connected, give the user its `claude mcp add` command and offer local markdown until it is: `claude mcp add --transport http linear-server https://mcp.linear.app/mcp` or `claude mcp add --transport http atlassian https://mcp.atlassian.com/v2/mcp`, then `/mcp` to sign in.
 
 - **Other** (YouTrack, Shortcut and so on): ask for one paragraph describing the workflow, and which tool Claude reaches the tracker through (an MCP server or a CLI). Make one read-only call with that tool to check it works. If it fails, say so and offer to continue with local markdown until the tool is connected. Record the paragraph as written, plus the exact tool names
+
+A GitHub or GitLab tracker needs a repo it can reach. When the user picks one and no `git remote` points at that host, ask for the repo URL and wire it up (`git init` if needed, `git remote add origin <url>`) before going further. Done when `gh repo view` or `glab repo view` prints the project from inside this directory. If it can't, stop and tell the user what's missing.
 
 **Section B: Domain docs.** Default to **single-context**: one `GLOSSARY.md` and `docs/adr/` at the root. This fits almost every repo; take it without asking. If an ADR folder other than `docs/adr/` already holds ADRs, record that folder instead.
 
