@@ -150,7 +150,7 @@ test('the guide lists every phase and fills the prompt', async ($, on) => {
 
   for (const surface of SURFACES) {
     const ui = await $.ui.mount({ ...GUIDE, surface })
-    expect(await ui.find({ type: 'Text', text: /Review and ship/ })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /review and ship/i })).toBeDefined()
     await ui.press({ key: 'spec' })
     await ui.unmount()
   }

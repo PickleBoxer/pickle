@@ -5,6 +5,7 @@ import type { Register } from 'claude-code'
 // first task-shaped prompt, and a guide pane opened by /pickle-guide.
 
 const GUIDE = 'guide'
+const GREEN = '#8bc34a'
 const TASK = /\b(build|implement|add|create|refactor|migrate|fix|ship)\b/i
 const EDITS = new Set(['Edit', 'Write', 'NotebookEdit'])
 
@@ -85,7 +86,7 @@ export const register: Register = on => {
     } else if (!isTipped && !e.command && !e.isMeta && TASK.test(e.text)) {
       isTipped = true
       $.ui.toast(
-        'Tip: /pickle:pickle-mode <task> picks the workflow skills for a task like this one',
+        '🥒 Looks like a task. /pickle:pickle-mode picks the skills for it',
       )
     }
 
@@ -119,15 +120,26 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column">
-        <Text>
-          <Text bold>pickle</Text>
-          <Text dimColor> · describe a task after one of these, or just type</Text>
-        </Text>
+        <Box justifyContent="space-between">
+          <Text>
+            <Text color={GREEN} weight="bold">🥒 pickle</Text>
+            <Text dimColor>  describe a task after one of these, or just type</Text>
+          </Text>
+          <Button
+            key="hide"
+            role="dismiss"
+            plain
+            dimColor
+            label="hide"
+            onPress={() => update($, isWelcomeHidden, () => true)}
+          />
+        </Box>
         <Box gap={1}>
           <Button
             key="mode"
             label="Pickle mode"
             hotkey="1"
+            variant="primary"
             onPress={() => $.prompt.fill({ text: '/pickle:pickle-mode ' })}
           />
           <Button
@@ -146,12 +158,8 @@ export const register: Register = on => {
             key="guide"
             label="All commands"
             hotkey="4"
+            dimColor
             onPress={() => $.ui.open({ id: GUIDE, title: 'pickle' })}
-          />
-          <Button
-            key="hide"
-            label="Hide"
-            onPress={() => update($, isWelcomeHidden, () => true)}
           />
         </Box>
       </Box>
@@ -163,22 +171,31 @@ export const register: Register = on => {
 
     return (
       <Box flexDirection="column" gap={1}>
-        <Text dimColor>Pick one to put it in the prompt box.</Text>
         {PHASES.map(phase => (
           <Box key={phase.name} flexDirection="column">
-            <Text bold>{phase.name}</Text>
+            <Text color={GREEN} weight="bold" size="caption">
+              {phase.name.toUpperCase()}
+            </Text>
             {phase.items.map(([name, what]) => (
-              <Box key={name} gap={1}>
-                <Button
-                  key={name}
-                  label={`/pickle:${name}`}
-                  onPress={() => $.prompt.fill({ text: `/pickle:${name} ` })}
-                />
-                <Text dimColor>{what}</Text>
+              <Box key={`row-${name}`} hover={{ backgroundColor: 'subtle' }}>
+                <Box width={30}>
+                  <Button
+                    key={name}
+                    plain
+                    label={name}
+                    onPress={() => $.prompt.fill({ text: `/pickle:${name} ` })}
+                  />
+                </Box>
+                <Text dimColor wrap="truncate-end">
+                  {what}
+                </Text>
               </Box>
             ))}
           </Box>
         ))}
+        <Text dimColor italic>
+          Pick one to put it in the prompt box. Type /pickle: for the rest.
+        </Text>
       </Box>
     )
   })
