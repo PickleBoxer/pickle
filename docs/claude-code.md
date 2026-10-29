@@ -122,7 +122,7 @@ Measured:
 - A skill named like its plugin becomes `/pickle:pickle`, which is why the entry skill is `pickle-mode`.
 - Unknown top-level `plugin.json` keys are stripped with a warning, so `validate --strict` fails (read).
 - `npx skills add PickleBoxer/pickle --skill '*'` installs skill files only: no agents, mod or `userConfig`. Skills must work without them.
-- `version` in `plugin.json` is semver. Claude Code updates users when it changes. Tag each release `v<version>`.
+- `version` in `plugin.json` is semver. Claude Code updates users only when it changes, so bump it on every release. Set it in `plugin.json` only, never also in the marketplace entry. Tag each release `pickle--v<version>`, the form plugin dependency ranges resolve against.
 
 ## Mods
 

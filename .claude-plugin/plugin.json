@@ -1,7 +1,7 @@
 {
   "name": "pickle",
   "displayName": "pickle",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Engineering workflow skills for Claude Code, built on agent-skills and picked per task by one entry skill",
   "author": {
     "name": "PickleBoxer"

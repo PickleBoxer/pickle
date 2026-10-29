@@ -2,9 +2,9 @@
 
 Engineering workflow skills for Claude Code, built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills). Start a task with `/pickle:pickle-mode` and it picks the workflow skills that fit, from spec and planning to review and shipping.
 
-> Early. agent-skills is the baseline, and pickle's own pieces are added back one at a time when evals or real use show a gap. Nothing installable yet.
+> Early. agent-skills is the baseline, and pickle's own pieces are added back one at a time when evals or real use show a gap. Releases stay below 1.0 until the evals are done.
 
-## How it will work
+## How it works
 
 ```
 /pickle:pickle-mode add an OrderStatus enum to orders
@@ -102,7 +102,7 @@ Shared checklists (testing, security, performance, accessibility, observability,
 
 ## Install
 
-Once the first release lands:
+The mod needs Claude Code 2.1.287 or later, or the desktop app's 2.1.286. Mod APIs change between releases; this release is tested with 2.1.309.
 
 ```bash
 /plugin marketplace add PickleBoxer/claude-plugins
