@@ -11,6 +11,7 @@ Where each pickle file comes from upstream (agent-skills, pstack for `typescript
 - Agent skills
 - Grafts
 - pickle skills
+- Mods
 - Scripts
 
 ## Baseline
@@ -134,6 +135,12 @@ Sections a pickle file took from a source other than its row's. One row per file
 | pickle item | Kind | Source | Relation | Upstream version | Commit | Notes |
 |---|---|---|---|---|---|---|
 | skills/audit-architecture | skill | - | new | n/a | - | user-only, from the maintainer's dotfiles. Rules at the top, every run a full audit, one Markdown report in `.scratch/reports/`, Explore subagents with a set brief in batches of up to 12, one verifier instead of five audit passes, no `agents/openai.yaml`. Eval `audit-architecture-report` |
+
+## Mods
+
+| pickle item | Kind | Source | Relation | Upstream version | Commit | Notes |
+|---|---|---|---|---|---|---|
+| hooks/register.tsx | mod | - | new | n/a | - | welcome band, task tip, review suggestion and `/pickle-guide` pane. Shapes from the `plugin-authoring` skill's examples. Tests in `tests/register.test.tsx` |
 
 ## Scripts
 

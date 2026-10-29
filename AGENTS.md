@@ -4,7 +4,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Its own user-only `audit-architecture` audits how a codebase represents state and data. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Its own user-only `audit-architecture` audits how a codebase represents state and data. A mod in `hooks/` points people into pickle: a welcome band above the prompt, a `/pickle:pickle-mode` tip on the first task-shaped prompt, a `/pickle:review` suggestion after a turn with edits, and the `/pickle-guide` pane. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
@@ -16,7 +16,7 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 
 ```
 .claude-plugin/plugin.json    manifest
-.github/workflows/            CI: validate, check-refs
+.github/workflows/            CI: validate, mod tests, check-refs
 skills/pickle-mode/           entry skill: vendored using-agent-skills, renamed and user-only on main
 skills/<agent-skills name>/   24 vendored workflow skills
 skills/typescript-best-practices/   default TypeScript idioms
@@ -28,6 +28,10 @@ skills/codebase-design/, skills/domain-modeling/   extensions (mattpocock/skills
 skills/prototype/             throwaway prototypes for design questions (mattpocock/skills + pstack)
 skills/setup/, skills/improve-codebase-architecture/   user-only (mattpocock/skills)
 skills/audit-architecture/    user-only (pickle): read-only state and data audit, scheduled report
+hooks/                        the mod: hooks.json and register.tsx (welcome band, tips, guide pane)
+types/index.d.ts              the mod's state contract, named in plugin.json
+tests/                        the mod's tests, run by `claude plugin test .`
+tsconfig.json                 type-checks hooks/, types/ and tests/ against the engine's types
 references/                   vendored checklists and patterns shared by skills, commands and agents
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
@@ -55,10 +59,11 @@ UPSTREAM.md                   upstream source and version per pickle file
 ```bash
 claude plugin validate . --strict
 bash scripts/check-refs.sh
+claude plugin test .
 claude --plugin-dir ~/dev/code/pickle
 ```
 
-`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), `pickle-mode` names a skill without the call form, or `UPSTREAM.md` disagrees with the files (rows, grafted headings, and vendored Notes against `vendor/agent-skills`). `claude plugin test .` joins CI with the first mod test.
+`check-refs.sh` fails when a skill or agent mention does not resolve, a called skill is user-only, a skill has unknown frontmatter (`--strict` does not check it), `pickle-mode` names a skill without the call form, or `UPSTREAM.md` disagrees with the files (rows, grafted headings, and vendored Notes against `vendor/agent-skills`). `claude plugin test .` runs the mod's tests in `tests/`. To type-check the mod, load pickle once with `--plugin-dir` so the engine writes `.claude-plugin/types/`, then run `tsc -p .`.
 
 ## Vendored skills
 

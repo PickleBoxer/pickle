@@ -17,5 +17,7 @@ jobs:
         with:
           node-version: 22
       - run: npx -y @anthropic-ai/claude-code plugin validate . --strict
+      # The mod's tests: hooks/register.tsx against tests/
+      - run: npx -y @anthropic-ai/claude-code plugin test .
       # Skill and agent mentions resolve; UPSTREAM.md matches the files and the vendor branch
       - run: bash scripts/check-refs.sh

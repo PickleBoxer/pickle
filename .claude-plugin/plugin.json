@@ -9,6 +9,7 @@
   "homepage": "https://github.com/PickleBoxer/pickle",
   "repository": "https://github.com/PickleBoxer/pickle",
   "license": "MIT",
+  "types": "./types/index.d.ts",
   "experimental": {
     "evals": "evals/plugin"
   },

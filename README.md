@@ -77,6 +77,14 @@ Each run opens a session under **Scheduled** in the sidebar, with the report pat
 | Simplify code | `/pickle:code-simplify` |
 | Ship | `/pickle:ship` |
 
+### In the app
+
+pickle includes a mod that points you to the right command in the terminal and the desktop Code tab:
+
+- **Welcome band.** Above the prompt, buttons put `/pickle:pickle-mode`, `/pickle:sharpen` or `/pickle:setup` in the prompt box, or open the guide. It stays until you click Hide or run a `/pickle:` command.
+- **Tips.** The first prompt in a session that reads like a task shows a tip for `/pickle:pickle-mode`. After a turn that edits files, the prompt box suggests `/pickle:review` (Tab to take it).
+- **Guide.** `/pickle-guide` opens a pane of the commands and user-only skills by phase. Click one to put it in the prompt box.
+
 ### Agents
 
 `code-reviewer`, `security-auditor`, `test-engineer` and `web-performance-auditor`. A project or user agent with the same name overrides pickle's. See [docs/agents.md](docs/agents.md).
