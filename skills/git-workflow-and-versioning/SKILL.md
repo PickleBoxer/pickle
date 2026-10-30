@@ -1,6 +1,6 @@
 ---
 name: git-workflow-and-versioning
-description: Structures git workflow practices. Use when making any code change. Use when committing, branching, resolving conflicts, splitting uncommitted work in a messy working tree into clean atomic commits, opening or reviewing a pull request (PR), pushing to a remote, or when you need to organize work across multiple parallel streams. Use when cutting a release, choosing a semantic version bump, tagging, or writing a changelog.
+description: Structures git work: commits, branches, conflicts, pull requests and releases. Use when committing or writing a commit message, splitting a messy working tree into atomic commits, opening or reviewing a PR, or cutting a release with a version bump, tag and changelog.
 metadata:
   upstream: agent-skills/skills/git-workflow-and-versioning
   upstream-version: 0.6.13

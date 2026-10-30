@@ -1,6 +1,6 @@
 ---
 name: codebase-design
-description: Shared vocabulary and principles for designing deep modules (module, interface, depth, seam, adapter, leverage, locality). Use when deciding a module's shape or where a seam goes, when modules feel shallow or over-split, when code is hard to test without mocking every layer, or when another skill needs the deep-module vocabulary. Covers internal module shape, not HTTP or public API contracts.
+description: Vocabulary and principles for deep modules (interface, depth, seam, adapter, locality). Use when deciding a module's shape or where a seam goes, when modules feel shallow or over-split, or when tests must mock every layer. Not for HTTP or public API contracts.
 user-invocable: false
 metadata:
   upstream: mattpocock-skills/skills/engineering/codebase-design

@@ -1,6 +1,6 @@
 ---
 name: observability-and-instrumentation
-description: Instruments code so production behavior is visible and diagnosable. Use when adding logging, metrics, tracing, or alerting. Use when shipping any feature that runs in production and you need evidence it works. Use when production issues are reported but you can't tell what happened from the available data.
+description: Instruments code so production behavior is visible. Use when adding logging, metrics, tracing or alerting, when shipping a feature that runs in production, or when a production issue can't be explained from the data you have.
 metadata:
   upstream: agent-skills/skills/observability-and-instrumentation
   upstream-version: 0.6.13

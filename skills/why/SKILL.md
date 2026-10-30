@@ -1,6 +1,6 @@
 ---
 name: why
-description: Investigates why code is shaped the way it is, from git history, PRs and any issue tracker, docs, chat, observability, error-tracking or analytics MCP servers in the session, and returns a cited, confidence-tiered answer. Use for "why does X work this way", "why did we pick Y", design rationale, regressions, postmortems and where a threshold came from.
+description: Finds why code is shaped the way it is, from git history, PRs, issues, docs and any MCP sources in the session, as a cited, confidence-tiered answer. Use for "why does X work this way", "why did we pick Y", regressions, postmortems and where a threshold came from.
 argument-hint: "[code, decision or question]"
 metadata:
   upstream: pstack/skills/why

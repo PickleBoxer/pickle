@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Builds and sharpens a project's domain glossary (GLOSSARY.md): challenges terms that clash with it, proposes one canonical word per concept, and writes entries the moment a term is settled. Use when a domain term is fuzzy, overloaded or conflicts with GLOSSARY.md, when naming a new domain concept, or when writing or editing GLOSSARY.md or GLOSSARY-MAP.md.
+description: Builds and sharpens the project's glossary (GLOSSARY.md): flags clashing terms, proposes one word per concept and records settled terms. Use when a domain term is fuzzy or clashes with GLOSSARY.md, when naming a new concept, or when editing GLOSSARY.md or GLOSSARY-MAP.md.
 user-invocable: false
 metadata:
   upstream: mattpocock-skills/skills/engineering/domain-modeling

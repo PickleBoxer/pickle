@@ -1,6 +1,6 @@
 ---
 name: security-and-hardening
-description: Hardens code against vulnerabilities. Use when auditing an input handler for vulnerabilities, when handling user input, authentication, data storage, or external integrations, or when checking a login flow is safe against the OWASP Top Ten. Use when building any feature that accepts untrusted data, manages user sessions, or interacts with third-party services. Use when auditing dependencies for known vulnerabilities, triaging package-manager audit findings, or assessing supply-chain risk in a new package. Use when personal data or privacy compliance (GDPR, CCPA) is involved.
+description: Hardens code against vulnerabilities (OWASP Top Ten). Use when handling untrusted input, authentication, sessions, data storage or third-party services, when auditing an input handler or login flow, when triaging dependency audits or supply-chain risk, or when GDPR or CCPA applies.
 metadata:
   upstream: agent-skills/skills/security-and-hardening
   upstream-version: 0.6.13

@@ -1,6 +1,6 @@
 ---
 name: frontend-ui-engineering
-description: Builds production-quality, accessible, responsive user-facing UIs. Use when building or modifying interfaces and pages, creating components, implementing layouts, meeting WCAG accessibility requirements, managing state, or when the output needs to look and feel production-quality rather than AI-generated.
+description: Builds production-quality, accessible, responsive UIs. Use when building or changing pages, components or layouts, meeting WCAG requirements, managing UI state, or when the output must not look AI-generated.
 metadata:
   upstream: agent-skills/skills/frontend-ui-engineering
   upstream-version: 0.6.13

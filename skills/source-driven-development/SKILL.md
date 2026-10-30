@@ -1,6 +1,6 @@
 ---
 name: source-driven-development
-description: Grounds every implementation decision in official documentation. Use when you want to verify an approach against the official docs before implementing it, or when you want authoritative, source-cited code free from outdated patterns. Use when building with any framework or library where correctness matters.
+description: Grounds implementation decisions in official documentation, with cited sources. Use when verifying an approach against the docs before building, or when building with a framework or library where correctness matters.
 metadata:
   upstream: agent-skills/skills/source-driven-development
   upstream-version: 0.6.13

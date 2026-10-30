@@ -1,6 +1,6 @@
 ---
 name: incremental-implementation
-description: Delivers changes incrementally in thin, verifiable slices. Use when implementing any feature or change that touches more than one file, or when picking up the next task from a plan. Use when rolling a change out behind a feature flag, when you're about to write a large amount of code at once, or when a task feels too big to land in one step.
+description: Delivers changes in thin, verifiable slices. Use when implementing a change that touches more than one file, picking up the next task from a plan, rolling out behind a feature flag, or when a task feels too big to land in one step.
 metadata:
   upstream: agent-skills/skills/incremental-implementation
   upstream-version: 0.6.13

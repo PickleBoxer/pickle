@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Builds a throwaway prototype to settle a design question by trying it instead of arguing it: a clickable logic demo, switchable UI variants, or a small script that observes behavior or timing. Use when the user wants to feel out a state model, see what a UI should look like, or settle a "which approach" question that running something can answer.
+description: Builds a throwaway prototype to settle a design question by trying it: a clickable logic demo, switchable UI variants or a small script. Use when the user wants to feel out a state model or a UI, or settle a "which approach" question by running something.
 argument-hint: "[the design question]"
 metadata:
   upstream: mattpocock-skills/skills/engineering/prototype

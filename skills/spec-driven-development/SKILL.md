@@ -1,6 +1,6 @@
 ---
 name: spec-driven-development
-description: Creates specs before coding. Use when starting a new project, feature, or significant change and no specification exists yet. Use when drafting a PRD or requirements document with objectives and scope, or when requirements are unclear, ambiguous, or only exist as a vague idea. Use when a single requirement spans several independently testable capabilities and needs decomposing into a capability map of modules before specifying.
+description: Writes a spec before code. Use when starting a project, feature or significant change with no spec, when drafting a PRD, when requirements are vague or ambiguous, or when one requirement spans several capabilities that need a capability map first.
 metadata:
   upstream: agent-skills/skills/spec-driven-development
   upstream-version: 0.6.13

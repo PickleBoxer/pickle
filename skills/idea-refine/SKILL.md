@@ -1,6 +1,6 @@
 ---
 name: idea-refine
-description: Refines raw ideas into sharp, actionable concepts through structured divergent and convergent thinking. Use when an idea is still vague, when you need to stress-test assumptions before committing to a plan, or when you want to expand options before converging on one. Triggers on "ideate", "refine this idea", or "stress-test my plan".
+description: Refines raw ideas into sharp, actionable concepts by diverging, then converging. Use when an idea is still vague or you want options before committing to a plan. Triggers on "ideate", "refine this idea" or "stress-test my plan".
 metadata:
   upstream: agent-skills/skills/idea-refine
   upstream-version: 0.6.13

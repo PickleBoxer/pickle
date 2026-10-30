@@ -1,6 +1,6 @@
 ---
 name: code-review-and-quality
-description: Conducts multi-axis code review. Use before merging any change. Use when reviewing code written by yourself, another agent, or a human. Use when you need to assess code quality across multiple dimensions before it enters the main branch. Use when asked to review a diff or a pull request, even when the diff is pasted inline.
+description: Conducts multi-axis code review. Use before merging any change, and when asked to review a diff or pull request by you, another agent or a human, even when the diff is pasted inline.
 metadata:
   upstream: agent-skills/skills/code-review-and-quality
   upstream-version: 0.6.13
