@@ -43,7 +43,7 @@ Run the lifecycle in order for the project's first real feature:
 /pickle:ship   →  when going live     (shipping-and-launch)
 ```
 
-`/pickle:build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`SPEC.md`, `tasks/`) are living documents, keep them in version control while the work is in flight. To switch to other work, archive the current plan to `tasks/archive/` (see Archiving a Plan in [planning-and-task-breakdown](../skills/planning-and-task-breakdown/SKILL.md)). If the feature spans more than one session, those files are also the handoff, see Restartable Session Boundaries in [context-engineering](../skills/context-engineering/SKILL.md).
+`/pickle:build auto` is a good fit for greenfield: you approve the plan once and every task still runs test-driven and commits individually. The spec and plan artifacts (`SPEC.md`, `tasks/`) are living documents, keep them in version control while the work is in flight. To switch to other work, archive the current plan to `docs/work/archive/`; big work gets its own folder in `docs/work/` (see Work Folder in [planning-and-task-breakdown](../skills/planning-and-task-breakdown/SKILL.md)). If the feature spans more than one session, those files are also the handoff, see Restartable Session Boundaries in [context-engineering](../skills/context-engineering/SKILL.md).
 
 ### From the start, treat these as always-on
 

@@ -29,6 +29,7 @@ Decompose work into small, verifiable tasks with explicit acceptance criteria. G
 Before writing any code, operate in read-only mode:
 
 - Read the spec and relevant codebase sections
+- From a tracker issue (key or URL), read it through `docs/agents/issue-tracker.md` and copy its acceptance criteria as written
 - Identify existing patterns and conventions
 - Map dependencies between components
 - Note risks and unknowns
@@ -153,7 +154,7 @@ Create the `tasks/` directory if it does not exist.
 **Never overwrite an incomplete plan.** Before writing `tasks/plan.md` or `tasks/todo.md`, check whether they already exist and still contain unchecked tasks:
 
 - Same work being replanned (the user asked to revise or extend this plan) → update the existing files in place.
-- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, archive it as in Archiving a Plan below, or tell you where the new plan should go).
+- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, archive it as in Work Folder below, or tell you where the new plan should go).
 
 The same rule applies to an external task list target: never bulk-close or delete another plan's open tracker items to make room for new ones.
 
@@ -162,17 +163,13 @@ The same rule applies to an external task list target: never bulk-close or delet
 The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
 
 - **Default: a checklist-style markdown file at `tasks/todo.md`.** This is the convention the `/pickle:build` command and other downstream tooling expect. Use it unless the project says otherwise.
-- **External tracker:** if `docs/agents/issue-tracker.md` exists, follow it: it names the tracker and says what "publish to the issue tracker" means. A local markdown tracker there (`tasks/issues/`) does not count: keep the default `tasks/todo.md`. Otherwise, if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task instead of writing `tasks/todo.md`. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Record Step 5 checkpoints as tracker items too, or as a checklist in the plan document if the tracker has no natural equivalent.
+- **External tracker:** if `docs/agents/issue-tracker.md` exists, follow it: it names the tracker and says what "publish to the issue tracker" means. Local markdown there means no tracker: keep the default `tasks/todo.md`. Otherwise, if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task instead of writing `tasks/todo.md`. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Record Step 5 checkpoints as tracker items too, or as a checklist in the plan document if the tracker has no natural equivalent.
 
 When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look, and keep the plan document's Task List section as an ordered index of tracker item IDs or links rather than a duplicate checklist.
 
-### Archiving a Plan
+### Work Folder
 
-`tasks/` holds one active plan. To set it aside, for reference or to switch to other work, move it to `tasks/archive/<date>-<slug>/`: `<date>` from `date +%Y-%m-%d`, `<slug>` a short kebab-case name from the plan's title, confirmed with the user. Move `plan.md` and `todo.md` together, with `git mv` when they are tracked. Do it when the user asks, or when they pick it at the overwrite check above.
-
-With an external tracker, archive `plan.md` only and leave its tracker items open. Local issues in `tasks/issues/` stay where they are.
-
-To bring an archived plan back, first archive the active one if it still has unchecked tasks, then move the archived files back into `tasks/`. Never read a plan in `tasks/archive/` as the active plan.
+When the work has a folder in `docs/work/<slug>/`, write `plan.md` and `todo.md` there instead of `tasks/`. Big work and archiving: `${CLAUDE_PLUGIN_ROOT}/references/work-folder.md`.
 
 ## Plan Document Template
 
