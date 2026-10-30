@@ -1,6 +1,6 @@
 ---
 name: audit-architecture
-description: Audit a whole codebase read-only for material simplifications in how it represents state and data (invalid-state booleans, repeated branching, missing indexes, unclear ownership). Reviews every subsystem with Explore subagents, verifies every finding against the code and writes a P0 to P3 Markdown report to .scratch/reports/. Not a line-level cleanup (/pickle:code-simplify) or a diff review (/pickle:review).
+description: Audit a whole codebase read-only for material simplifications in how it represents state and data (invalid-state booleans, repeated branching, missing indexes, unclear ownership). Reviews every subsystem with Explore subagents, verifies every finding against the code and writes a P0 to P3 Markdown report to docs/agents/reports/. Not a line-level cleanup (/pickle:code-simplify) or a diff review (/pickle:review).
 argument-hint: "[path to limit the audit]"
 disable-model-invocation: true
 ---
@@ -13,9 +13,9 @@ Direction from the user: $ARGUMENTS
 
 ## Rules
 
-- **Read-only.** The run writes one file, `.scratch/reports/audit-architecture-<timestamp>.md`. No edits, no tests, no git command that changes the repo (commit, add, checkout, stash, reset).
+- **Read-only.** The run writes one file, `docs/agents/reports/audit-architecture-<timestamp>.md`. No edits, no tests, no git command that changes the repo (commit, add, checkout, stash, reset).
 - **No questions.** The run is often a scheduled report with nobody watching. Decide, note the decision in the audit log and go on.
-- **Every run is a full audit.** Don't read earlier reports in `.scratch/reports/`; review the code as it is now.
+- **Every run is a full audit.** Don't read earlier reports in `docs/agents/reports/`; review the code as it is now.
 - **At most 2 findings per subsystem.** Every subsystem gets reviewed, however many there are.
 - **Direction.** A path limits the audit to subsystems under it.
 
@@ -63,7 +63,7 @@ Then check the whole audit. With 3 or more findings, give this to one fresh Expl
 
 ## 4. Write the report
 
-Get `<timestamp>` from `date +%Y-%m-%d-%H%M`, create `.scratch/reports/` if missing and write the report in this shape:
+Get `<timestamp>` from `date +%Y-%m-%d-%H%M`, create `docs/agents/reports/` if missing and write the report in this shape:
 
 ```markdown
 # Architecture audit

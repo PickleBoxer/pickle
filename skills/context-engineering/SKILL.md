@@ -133,7 +133,7 @@ For the proactive discipline that makes these last resorts unnecessary — what 
 
 A fresh session is safe at a completed task boundary, not at an arbitrary token count. Before leaving the current session, persist:
 
-1. the accepted scope and decisions in the spec or plan, in the work's feature folder `.scratch/<feature-slug>/` (see `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`);
+1. the accepted scope and decisions in the spec or plan;
 2. the current task status and the next pending task;
 3. the files changed and the working-tree state;
 4. the exact verification commands and outcomes;

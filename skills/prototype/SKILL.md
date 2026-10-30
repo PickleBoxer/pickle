@@ -40,6 +40,6 @@ Show the variants and the evidence (screenshots, the observed output or timing),
 
 ## 5. Capture it and move on
 
-- Record the question, the variants and the verdict in `.scratch/<feature-slug>/prototype.md` (see `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md`).
-- Keep the prototype itself as a primary source on a throwaway branch such as `prototype/<feature-slug>`, not on the main branch, and name that branch in `prototype.md`.
+- Keep the prototype itself as a primary source on a throwaway branch such as `prototype/<name>`, not on the main branch. Record the question, the variants and the verdict in that branch's commit message.
+- Leave a pointer to the branch where the real work is tracked: the issue, `SPEC.md` or `tasks/plan.md`.
 - The main branch gets only the validated decision. Build it for real with the **incremental-implementation** skill (Skill tool, `pickle:incremental-implementation`): prototype code was written without tests or error handling, so rewrite it rather than promoting it. A pure logic module from [references/logic.md](references/logic.md) is the one part that can lift across, with tests added.

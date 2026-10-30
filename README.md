@@ -32,15 +32,15 @@ These sit beside the workflow skills: pickle-mode routes to some of them, workfl
 | `technical-writing` | writing | Applies a layered standard to docs, PR descriptions and commit messages | On its own, or from pickle-mode and `documentation-and-adrs` |
 | `unslop` | writing | Removes AI writing patterns from any prose | On its own, or from `technical-writing` |
 | `typescript-best-practices` | language | Default TypeScript idioms when your project has none of its own | On its own, for `.ts` and `.tsx` work |
-| `prototype` | design | Builds throwaway code to settle a design question by trying it: a logic demo, UI variants or a timing script. The verdict goes to `.scratch/<feature-slug>/prototype.md` | `/pickle:prototype`, on its own, or from pickle-mode Define. `test-driven-development`, `frontend-ui-engineering` and `security-and-hardening` treat its throwaways as the exception to their rules |
+| `prototype` | design | Builds throwaway code to settle a design question by trying it: a logic demo, UI variants or a timing script. The prototype and its verdict stay on a throwaway branch | `/pickle:prototype`, on its own, or from pickle-mode Define. `test-driven-development`, `frontend-ui-engineering` and `security-and-hardening` treat its throwaways as the exception to their rules |
 | `codebase-design` | extension | Deep modules, seams, the deletion test | From workflow skills only, not in the `/` menu |
 | `domain-modeling` | extension | Your project's `GLOSSARY.md` | From workflow skills only, not in the `/` menu |
 | `teach` | user-only | Explains a change or subsystem so you understand it: runs `how` and `why` and builds the picture up diagram by diagram | `/pickle:teach`, with the change, subsystem or question |
 | `sharpen` | user-only | Rewrites a task prompt to be deeper, not bigger, and hands it back without doing the task | `/pickle:sharpen`, with the prompt |
 | `setup` | user-only | Records where your issues and domain docs live, in `docs/agents/` | `/pickle:setup`, once per repo |
 | `reflect` | user-only | Reviews a finished session and proposes fixes, checks and scripts first, then skill edits and pointers. Applies only the rows you approve | `/pickle:reflect`, with a session ID, a `.jsonl` path or `last N` |
-| `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `.scratch/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
-| `audit-architecture` | user-only | Reviews every subsystem for simpler ways to represent state and data, verifies each finding and writes a P0 to P3 report to `.scratch/reports/`. Every run audits the whole codebase | `/pickle:audit-architecture`, with an optional path, or as a [scheduled report](#scheduled-reports) |
+| `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `docs/agents/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
+| `audit-architecture` | user-only | Reviews every subsystem for simpler ways to represent state and data, verifies each finding and writes a P0 to P3 report to `docs/agents/reports/`. Every run audits the whole codebase | `/pickle:audit-architecture`, with an optional path, or as a [scheduled report](#scheduled-reports) |
 
 ### Scheduled reports
 
@@ -57,7 +57,7 @@ To set one up:
 2. Paste the routine instructions, pick the repo folder, and set the schedule to **Weekly** with a day and time.
 3. Click **Run now** once and allow each tool it asks for, so later runs don't stall on a permission prompt.
 
-Each run opens a session under **Scheduled** in the sidebar, with the report path and a one-line summary per candidate. Reports collect in `.scratch/reports/`, next to the feature folders, and are committed with them. To work through a candidate, run the skill yourself and name that area.
+Each run opens a session under **Scheduled** in the sidebar, with the report path and a one-line summary per candidate. Reports collect in `docs/agents/reports/`. Add that folder to `.gitignore` unless you want to keep them in the repo. To work through a candidate, run the skill yourself and name that area.
 
 - Choose **Local**, not **Cloud**. A [cloud routine](https://code.claude.com/docs/en/routines) runs on a fresh clone, and cloud sessions don't install plugins, so pickle is not there.
 - A local routine runs only while the app is open and the computer is awake. After a missed run, Desktop starts one catch-up run on wake.

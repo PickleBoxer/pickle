@@ -1,11 +1,10 @@
 ---
 description: Break work into small verifiable tasks with acceptance criteria and dependency ordering
-argument-hint: "[feature-slug]"
 ---
 
 Invoke the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`).
 
-Find the feature folder (`.scratch/<feature-slug>/`) as `${CLAUDE_PLUGIN_ROOT}/references/feature-folder.md` describes, using the slug in `$ARGUMENTS` if given. Read its spec (`SPEC.md` or equivalent) and the relevant codebase sections. Then:
+Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:
 
 1. Enter plan mode — read only, no code changes
 2. Identify the dependency graph between components
@@ -14,6 +13,6 @@ Find the feature folder (`.scratch/<feature-slug>/`) as `${CLAUDE_PLUGIN_ROOT}/r
 5. Add checkpoints between phases
 6. Present the plan for human review
 
-Save the plan to `plan.md` in the feature folder and record the task list in the task list target that the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`) defines (default `todo.md` in the feature folder).
+Save the plan to tasks/plan.md and record the task list in the task list target that the **planning-and-task-breakdown** skill (Skill tool, `pickle:planning-and-task-breakdown`) defines (default tasks/todo.md).
 
-If `plan.md` or `todo.md` already exists in the folder with unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan.
+If tasks/plan.md or tasks/todo.md already exists with unchecked tasks for different work, stop and ask before writing: finish it, discard it, or archive it to `tasks/archive/` as the skill's Archiving a Plan describes. Never silently overwrite an incomplete plan.

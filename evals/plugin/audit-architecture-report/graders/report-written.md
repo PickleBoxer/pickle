@@ -1,5 +1,5 @@
 ---
 type: tool_used
 tool: Write
-input_match: '\.scratch/reports/audit-architecture-[^"]*\.md'
+input_match: 'docs/agents/reports/audit-architecture-[^"]*\.md'
 ---

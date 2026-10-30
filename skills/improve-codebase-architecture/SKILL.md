@@ -16,7 +16,7 @@ Direction from the user: $ARGUMENTS
 
 ## Rules
 
-- **No code changes.** The run produces a conversation and one HTML report in `.scratch/reports/`. `GLOSSARY.md` and ADR edits happen only in step 4, through their skills.
+- **No code changes.** The run produces a conversation and one HTML report in `docs/agents/reports/`. `GLOSSARY.md` and ADR edits happen only in step 4, through their skills.
 - **Stop after the report.** Ask which candidate to explore and wait. Propose no interfaces before the user picks one.
 - **"report only"** in the direction: end after step 3 with the report path and a one-line summary per candidate. Ask nothing.
 
@@ -58,7 +58,7 @@ Keep a candidate only when deleting the shallow modules would concentrate comple
 
 ## 3. Report
 
-Write one self-contained HTML file, following [references/html-report.md](references/html-report.md). It is fully offline: inline CSS and hand-built SVG, no scripts, no CDN. Write it to `.scratch/reports/architecture-review-<timestamp>.html` at the repo root, with `<timestamp>` from `date +%Y-%m-%d-%H%M`, so reports collect in one place and each run gets a fresh file. Create the folder if it is missing. It is the only file the run writes outside step 4. Open it (`open` on macOS, `xdg-open` on Linux) and give the absolute path.
+Write one self-contained HTML file, following [references/html-report.md](references/html-report.md). It is fully offline: inline CSS and hand-built SVG, no scripts, no CDN. Write it to `docs/agents/reports/architecture-review-<timestamp>.html` at the repo root, with `<timestamp>` from `date +%Y-%m-%d-%H%M`, so reports collect in one place and each run gets a fresh file. Create the folder if it is missing. It is the only file the run writes outside step 4. Open it (`open` on macOS, `xdg-open` on Linux) and give the absolute path.
 
 At most 6 candidates, strongest first. Each card has:
 

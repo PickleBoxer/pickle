@@ -1,6 +1,6 @@
 # HTML Report Format
 
-The review is one self-contained HTML file in `.scratch/reports/`. It must render offline and behind strict security policies, so it has **no scripts and no external resources**: no CDN, no web fonts, no images by URL. Styling is one inline `<style>` block; diagrams are inline SVG or plain divs.
+The review is one self-contained HTML file in `docs/agents/reports/`. It must render offline and behind strict security policies, so it has **no scripts and no external resources**: no CDN, no web fonts, no images by URL. Styling is one inline `<style>` block; diagrams are inline SVG or plain divs.
 
 ## Scaffold
 
