@@ -15,7 +15,7 @@ Work as a careful, cautious and precise investigator. Be honest about what you k
 
 ## Subagents
 
-- Spawn every subagent with the Agent tool, `subagent_type: "general-purpose"`. It can run `git` and `gh` and call MCP tools. Leave `model` unset.
+- Spawn every subagent with the Agent tool, `subagent_type: "general-purpose"`. It can run `git` and `gh` and call MCP tools. Set `model: "sonnet"` on investigators, which gather evidence. Leave `model` unset on the synthesizer, which weighs it.
 - Set `run_in_background: false` on every Agent call. Send all investigators in one message so they run at the same time.
 - Investigators and the synthesizer only read. Each prompt says: do not edit files, commit, or change anything outside the session.
 - If the Agent tool is not available (for example, inside a subagent at the nesting limit), do each step yourself in order.

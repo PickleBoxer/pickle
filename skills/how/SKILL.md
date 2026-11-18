@@ -25,7 +25,7 @@ When in doubt, take the simple path.
 Split the question into 2 to 4 angles, each a distinct slice of the subsystem. Spawn one explorer per angle with the Agent tool, all in one message so they run at the same time:
 
 - `subagent_type: "Explore"` (read-only). If it is not available, use `"general-purpose"` and keep the prompt's "only read" line.
-- `run_in_background: false`. Leave `model` unset.
+- `run_in_background: false`, `model: "sonnet"`. Explorers gather facts; the explanation is written on the session's model.
 - The prompt is `references/explorer-prompt.md` with the question and the angle filled in.
 
 If the Agent tool is not available (for example, inside a subagent at the nesting limit), explore each angle yourself in turn.
