@@ -38,8 +38,8 @@ Notes on a `vendored` row start with or contain "on `main`" exactly when the fil
 | pickle item | Kind | pstack source | Relation | Upstream version | Commit | Notes |
 |---|---|---|---|---|---|---|
 | skills/typescript-best-practices | skill | skills/typescript-best-practices | ported | 0.15.29 | 88d4751 | model-invocable, no `paths` (ignored for plugin skills) |
-| skills/unslop | skill | skills/unslop | ported | 0.15.25 | 99743e9 | model-invocable (user-only upstream), so other skills can call it. Adds a scope line. Rule numbers kept: other skills cite them |
-| skills/technical-writing | skill | skills/technical-writing | ported | 0.15.25 | 99743e9 | model-invocable (user-only upstream). Calls `pickle:unslop`, drops the rules unslop already owns, project conventions win, no Cursor house rules. Adds a PR descriptions section from pstack's Opening a PR playbook (Why, What changed, Scope, Tradeoffs, Blast radius, Verification), after the repo's own template |
+| skills/unslop | skill | skills/unslop | ported | 0.15.43 | 2f87c85 | model-invocable (user-only upstream), so other skills can call it. Upstream's one-line rules. Adds a scope line. Rule numbers kept: other skills cite them |
+| skills/technical-writing | skill | skills/technical-writing | ported | 0.15.43 | 2f87c85 | model-invocable (user-only upstream). Calls `pickle:unslop`, project conventions win, invented jargon outside unslop rule 26 is proposed in the reply, snippets follow the project's formatting (upstream: tabs). Adds a PR descriptions paragraph from pstack's Opening a PR playbook (title form and the six headings), after the repo's own template, without Cursor's worktree, `/deslop` and forge rules |
 | skills/how | skill | skills/how | rewritten | 0.15.25 | 99743e9 | model-invocable. Claude Code Agent tool (Explore explorers on Sonnet), no model panels. Simple questions and the explanation are written inline, not by an explainer subagent. Uses `GLOSSARY.md` terms when the project has one |
 | skills/why | skill | skills/why | rewritten | 0.15.25 | 99743e9 | model-invocable. Claude Code Agent tool and ToolSearch for MCP discovery, investigators on Sonnet and the synthesizer on the session's model, no model panels. Answers inline when only source control is available. Source guides renamed by category, `source-playbook.md` folded into `SKILL.md`, warehouse guide made generic. Uses `GLOSSARY.md` terms when the project has one |
 | skills/codebase-design/references/sketch-first.md | reference | skills/architect | rewritten | 0.15.43 | 2f87c85 | reference of the `codebase-design` extension, so it calls no skill: the how and why grounding phase and the arena runners are dropped, and design-it-twice covers parallel shapes. Merges the runner prompt's discipline, the red flags codebase-design lacked (as a table) and a shorter rationale template. Shows the sketch and waits before implementing (pstack goes straight on). Uses codebase-design's vocabulary. Step 1 starts by tracing every system the change touches (architect 0.15.43) |
@@ -119,7 +119,7 @@ Sections a pickle file took from a source other than its row's. One row per file
 
 | pickle item | Sections | Source | Commit |
 |---|---|---|---|
-| skills/technical-writing/SKILL.md | PR descriptions | skills/poteto-mode/playbooks/opening-a-pr.md | 23ab063 |
+| skills/technical-writing/SKILL.md | PR descriptions | skills/poteto-mode/playbooks/opening-a-pr.md | 2f87c85 |
 | skills/reflect/SKILL.md | 2. Review through three lenses | mp:skills/engineering/retro | 59db609 |
 | skills/prototype/SKILL.md | 1. Name the decision; 2. Pick a branch; 4. Present the result | skills/poteto-mode/playbooks/prototype.md | 88d4751 |
 | skills/code-review-and-quality/SKILL.md | Judging Reviewer Findings | skills/interrogate/SKILL.md | 23ab063 |
