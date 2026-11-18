@@ -70,6 +70,7 @@ claude --plugin-dir ~/dev/code/pickle
 - `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit and merge commands. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
 - Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version and commit. A `vendored` row's Notes say "on `main`" exactly when the file differs from `vendor/agent-skills`.
 - To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
+- A row's Notes record pickle's deviations, not fixed decisions. On each upstream update, check every Note the update touches again: upstream may have settled it the other way (often from its own evals), and then upstream's version replaces pickle's.
 - `scripts/upstream-diff.sh` lists upstream changes since each row's Commit: the pstack rows, the `as:` (agent-skills) rows and the `mp:` (mattpocock-skills) rows, plus the Grafts.
 - When a file takes sections from a second source, add a row to the Grafts table in `UPSTREAM.md`: the file, the headings, the source and its commit. After taking an upstream change, set that row's or graft's Commit to the upstream commit.
 
@@ -82,7 +83,7 @@ From Anthropic's skill authoring guide. Skill basics and measured behaviour: `do
 - Exact commands or scripts for fragile steps, prose for judgment.
 - One term per concept, from `GLOSSARY.md`. Never use a word it lists under _Avoid_.
 - No time-sensitive statements and no model names in prose.
-- Evals before content. Watch real runs: files never read are badly signposted or unneeded.
+- Watch real runs: files never read are badly signposted or unneeded.
 
 ## Evals
 
