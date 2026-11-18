@@ -89,7 +89,7 @@ Basics:
 - Plugin agents ignore `hooks`, `mcpServers` and `permissionMode` (and `initialPrompt`). Use the plugin's `hooks.json` and `.mcp.json`.
 - When agents share a `name`, the higher-priority location wins and replaces the whole definition: managed, `--agents`, project, user, plugin (lowest). A plugin agent also answers to `pickle:<name>`.
 - Nesting goes up to three layers below the main conversation. At the limit the Agent tool is withheld (a fork keeps it but gets an error). `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` changes the limit. A fork cannot spawn forks.
-- Explore and general-purpose run on the parent's model. The Agent tool's `model` parameter (an alias) wins over the agent definition and `CLAUDE_CODE_SUBAGENT_MODEL`. `how` explorers and `why` investigators pass `sonnet`.
+- Explore and general-purpose run on the parent's model. The Agent tool's `model` parameter (an alias) wins over the agent definition and `CLAUDE_CODE_SUBAGENT_MODEL`. `how`'s subagent passes `sonnet`.
 - A fork inherits the conversation, tools and model. A named subagent starts with only its prompt. A `context: fork` skill behaves like a named subagent, not a fork (inferred).
 
 Measured:

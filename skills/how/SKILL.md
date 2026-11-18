@@ -4,36 +4,23 @@ description: Explains how a part of the codebase works (architecture, runtime fl
 argument-hint: "[subsystem, feature or question]"
 metadata:
   upstream: pstack/skills/how
-  upstream-version: 0.15.25
+  upstream-version: 0.15.43
 ---
 
 # How
 
-Answer "how does X work?" with an architectural explanation: enough for a senior engineer new to the area to build a working mental model, not so much that it reads like annotated source code. For why the code is shaped this way, use the **why** skill (Skill tool, `pickle:why`).
+Explore the codebase to answer "how does X work?" questions. For why the code is shaped this way, use the **why** skill (Skill tool, `pickle:why`).
 
-## 1. Assess complexity
+If the scope is ambiguous, state your interpretation and explore. The user can redirect.
 
-If the scope is ambiguous, state your reading in one line and go on. The user can redirect.
+## 1. Explain
 
-- **Simple**: one module, a small utility, a narrow question such as "how does function X work". Explore and explain it yourself, then go to step 3.
-- **Complex**: a subsystem across several files or services, a cross-cutting feature, a full architectural overview. Go to step 2.
+Spawn one subagent with the Agent tool that explores and explains in one pass: `subagent_type: "Explore"` (read-only; if it is not available, use `"general-purpose"` and add "only read" to the brief), `model: "sonnet"`, `run_in_background: false`. Give it the user's question and this brief:
 
-When in doubt, take the simple path.
+> You are writing an architectural explanation for a senior engineer. Explore the codebase and write an explanation that a senior engineer unfamiliar with this area could read and walk away with a solid mental model. They should understand the architecture well enough to start working in it confidently. You have read-only access to the codebase. If the project has a `GLOSSARY.md` (or a `GLOSSARY-MAP.md` pointing to one per context), use its terms for domain concepts.
 
-## 2. Explore (complex only)
+If the Agent tool is not available (for example, inside a subagent at the nesting limit), explore and explain it yourself with the same brief.
 
-Split the question into 2 to 4 angles, each a distinct slice of the subsystem. Spawn one explorer per angle with the Agent tool, all in one message so they run at the same time:
+## 2. Present
 
-- `subagent_type: "Explore"` (read-only). If it is not available, use `"general-purpose"` and keep the prompt's "only read" line.
-- `run_in_background: false`, `model: "sonnet"`. Explorers gather facts; the explanation is written on the session's model.
-- The prompt is `references/explorer-prompt.md` with the question and the angle filled in.
-
-If the Agent tool is not available (for example, inside a subagent at the nesting limit), explore each angle yourself in turn.
-
-## 3. Explain
-
-Write the explanation yourself from the explorers' findings, or from your own reading on the simple path. Follow `references/explainer-prompt.md`: reconcile overlaps, check contradictions in the code, and use its sections, dropping any that do not apply: Overview, Key Concepts, How It Works, Where Things Live, Gotchas.
-
-Name gaps the explorers flagged instead of hiding them.
-
-If the project has a `GLOSSARY.md` (or a `GLOSSARY-MAP.md` pointing to one per context), use its terms for domain concepts.
+Present the subagent's output. Light edits for clarity or context from the conversation are fine. Do not substantially rewrite it.

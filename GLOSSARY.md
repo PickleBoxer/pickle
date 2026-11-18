@@ -20,10 +20,6 @@ _Avoid_: language pack, rules pack
 A skill that explains code before a change: how (what it does and how it runs), why (the reasons it is shaped that way) or blast-radius (what a change breaks outside its diff). From pstack.
 _Avoid_: research skill, archaeology
 
-**Source guide**:
-A file in why's `references/sources/` with search steps for one evidence category, such as the issue tracker or team chat.
-_Avoid_: playbook
-
 **Extension**:
 A skill that workflow skills call to go deeper on one concern: codebase-design (module shape) or domain-modeling (the domain glossary). Hidden from the `/` menu, and calls no skill itself. From Matt Pocock's skills.
 _Avoid_: base skill, add-on, helper skill
