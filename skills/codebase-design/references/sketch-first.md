@@ -6,7 +6,7 @@ Skip it for a change that adds no module and moves no seam.
 
 ## 1. Write the usage first
 
-Before any type, write what a caller writes: what they import, two or three realistic call sites in their own code, and what comes back. The usage is the spec. The type sketch is derived from it, and when the two disagree, change the sketch, not the usage.
+First trace every system the change touches: callers, stored data, wire formats and other modules that read the same state. Then, before any type, write what a caller writes: what they import, two or three realistic call sites in their own code, and what comes back. The usage is the spec. The type sketch is derived from it, and when the two disagree, change the sketch, not the usage.
 
 ## 2. Sketch the shape
 

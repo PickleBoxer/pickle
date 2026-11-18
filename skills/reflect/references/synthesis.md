@@ -26,6 +26,8 @@ No preamble. One sentence per cell, readable in five seconds per row.
 |---|---|---|---|
 | 1 | the failure, as seen in the session | the change | `check: ...`, `skill: <path> <section>`, ... |
 
+For a `skill:` or `tune description:` row on a skill under `~/.claude/plugins/cache/`, the Routing names the copy's destination, `.claude/skills/<skill>/` or `~/.claude/skills/<skill>/`, not the cache path.
+
 Order by severity: what cost the most time or would recur most often first. The user approves by row number.
 
 ### Rejected
