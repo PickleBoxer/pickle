@@ -1,9 +1,9 @@
 ---
 name: git-workflow-and-versioning
-description: Structures git work: commits, branches, conflicts, pull requests and releases. Use when committing or writing a commit message, splitting a messy working tree into atomic commits, opening or reviewing a PR, or cutting a release with a version bump, tag and changelog.
+description: Structures git work: commits, branches, conflicts, pull requests and releases. Use when committing or writing a commit message, splitting a messy working tree into atomic commits, opening or reviewing a PR, or cutting a release with a version bump, tag and changelog, even when the diff is pasted inline and the message seems easy to write.
 metadata:
   upstream: agent-skills/skills/git-workflow-and-versioning
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Git Workflow and Versioning
@@ -221,8 +221,8 @@ Before every commit:
 # 1. Check what you're about to commit
 git diff --staged
 
-# 2. Ensure no secrets
-git diff --staged | grep -i "password\|secret\|api_key\|token"
+# 2. Ensure no secrets (lists matching file names only — any output means review them)
+git diff --staged -i -G'password|secret|api_key|token' --name-only
 
 # 3. Run tests
 npm test

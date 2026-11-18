@@ -1,9 +1,9 @@
 ---
 name: test-driven-development
-description: Drives changes with the red-green-refactor loop. Use when implementing logic, fixing a bug or changing behavior, or when asked to add tests, even when the code is pasted inline and the request does not mention tests.
+description: Drives changes with the red-green-refactor loop. Use when implementing logic, fixing a bug or changing behavior, or when asked to add tests, even when the code is pasted inline, the request does not mention tests and the answer looks obvious. Writes the failing test first, never the change alone.
 metadata:
   upstream: agent-skills/skills/test-driven-development
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Test-Driven Development
@@ -272,6 +272,8 @@ Preference order (most to least preferred):
 **Use mocks only when:** the real implementation is too slow, non-deterministic, or has side effects you can't control (external APIs, email sending). Over-mocking creates tests that pass while production breaks.
 
 When the code under test builds its own dependencies, or a test has to mock layer after layer, the seam is in the wrong place. Move it with the **codebase-design** skill (Skill tool, `pickle:codebase-design`), then test through the deepened module's interface.
+
+For crash or rollback behavior, exercise the real boundary: an injected exception is not process termination, and a mocked transaction call is not a database rollback.
 
 ### Use the Arrange-Act-Assert Pattern
 

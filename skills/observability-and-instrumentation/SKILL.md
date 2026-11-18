@@ -3,7 +3,7 @@ name: observability-and-instrumentation
 description: Instruments code so production behavior is visible. Use when adding logging, metrics, tracing or alerting, when shipping a feature that runs in production, or when a production issue can't be explained from the data you have.
 metadata:
   upstream: agent-skills/skills/observability-and-instrumentation
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Observability and Instrumentation

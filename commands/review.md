@@ -1,5 +1,6 @@
 ---
 description: Conduct a five-axis code review — correctness, readability, architecture, security, performance
+disable-model-invocation: true
 ---
 
 Invoke the **code-review-and-quality** skill (Skill tool, `pickle:code-review-and-quality`).

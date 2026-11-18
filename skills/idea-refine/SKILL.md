@@ -3,7 +3,7 @@ name: idea-refine
 description: Refines raw ideas into sharp, actionable concepts by diverging, then converging. Use when an idea is still vague or you want options before committing to a plan. Triggers on "ideate", "refine this idea" or "stress-test my plan".
 metadata:
   upstream: agent-skills/skills/idea-refine
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Idea Refine
@@ -31,7 +31,7 @@ Refines raw ideas into sharp, actionable concepts worth building through structu
 This skill is primarily an interactive dialogue. Invoke it with an idea, and the agent will guide you through the process.
 
 ```bash
-# Optional: Initialize the ideas directory
+# Optional. Run from the project root so this creates ./docs/ideas.
 bash "${CLAUDE_SKILL_DIR}/scripts/idea-refine.sh"
 ```
 

@@ -4,7 +4,7 @@ description: Runs a task through pickle's workflow skills, from spec and plannin
 disable-model-invocation: true
 metadata:
   upstream: agent-skills/skills/using-agent-skills
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # pickle-mode

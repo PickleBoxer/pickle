@@ -3,7 +3,7 @@ name: interview-me
 description: Interviews the user one question at a time until the intent behind an ask is clear. Use when an ask is underspecified ("build me X" with no who or why), when the user says "interview me" or "grill me", or before silently filling in ambiguous requirements.
 metadata:
   upstream: agent-skills/skills/interview-me
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Interview Me

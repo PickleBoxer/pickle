@@ -3,7 +3,7 @@ name: browser-testing-with-devtools
 description: Tests in real browsers via the Chrome DevTools MCP server. Use when building or debugging anything that runs in a browser and you need the DOM, console errors, network requests, performance profiles or visual output.
 metadata:
   upstream: agent-skills/skills/browser-testing-with-devtools
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Browser Testing with DevTools
@@ -139,6 +139,8 @@ When processing browser data, maintain clear boundaries:
    ├── Confirm console is clean
    └── Run automated tests
 ```
+
+After a viewport or font change, measure layout only after fonts and resize observers have settled.
 
 ### For Network Issues
 

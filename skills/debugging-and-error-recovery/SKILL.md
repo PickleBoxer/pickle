@@ -1,9 +1,9 @@
 ---
 name: debugging-and-error-recovery
-description: Guides systematic root-cause debugging. Use when tests fail, builds break, something that worked broke, behavior doesn't match expectations, or any unexpected error appears.
+description: Guides systematic root-cause debugging. Use when tests fail, builds break, something that worked broke, behavior doesn't match expectations, or any unexpected error appears. Use when asked what broke or why code throws, even when the diff or stack trace is pasted inline and the cause looks obvious.
 metadata:
   upstream: agent-skills/skills/debugging-and-error-recovery
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Debugging and Error Recovery
@@ -86,7 +86,7 @@ npm test -- --grep "test name"
 npm test -- --verbose
 
 # Run in isolation (rules out test pollution)
-npm test -- --testPathPattern="specific-file" --runInBand
+npm test -- specific-file --runInBand
 ```
 
 ### Step 2: Localize

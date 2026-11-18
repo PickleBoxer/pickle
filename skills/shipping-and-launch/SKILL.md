@@ -3,7 +3,7 @@ name: shipping-and-launch
 description: Prepares production launches. Use when preparing to deploy to production, or when asking what needs to be in place before shipping. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy.
 metadata:
   upstream: agent-skills/skills/shipping-and-launch
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Shipping and Launch
@@ -192,7 +192,7 @@ Client metrics:
 
 ```typescript
 // Set up error boundary with reporting
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends React.Component<React.PropsWithChildren> {
   state = { hasError: false };
 
   static getDerivedStateFromError() {

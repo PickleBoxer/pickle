@@ -3,7 +3,7 @@ name: incremental-implementation
 description: Delivers changes in thin, verifiable slices. Use when implementing a change that touches more than one file, picking up the next task from a plan, rolling out behind a feature flag, or when a task feels too big to land in one step.
 metadata:
   upstream: agent-skills/skills/incremental-implementation
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Incremental Implementation
