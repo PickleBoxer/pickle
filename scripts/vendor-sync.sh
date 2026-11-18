@@ -7,7 +7,7 @@
 # agents, become ${CLAUDE_PLUGIN_ROOT} paths. Other files keep upstream's relative paths, which
 # match pickle's layout. Agent names stay bare, as
 # upstream calls them, so a project or user agent with the same name overrides pickle's. Stages the result in a worktree of the vendor branch and prints the
-# commit and merge commands. Commits nothing, touches no other branch.
+# commit, merge and push commands. Commits nothing, touches no other branch.
 #
 # Usage: bash scripts/vendor-sync.sh [ref]     ref defaults to upstream origin/HEAD
 # Env:   AGENT_SKILLS_UPSTREAM_DIR, a clone of https://github.com/addyosmani/agent-skills
@@ -132,4 +132,6 @@ Staged agent-skills $version (${sha:0:7}) on $branch in $wt. Next:
   # UPSTREAM.md to $version | ${sha:0:7}, every vendored row's Upstream version and Commit to
   # $version | ${sha:0:7}, and a vendored row's Notes to what main still changes
   bash scripts/check-refs.sh
+  # CI checks main against origin/$branch, so push both together
+  git push origin main $branch
 EOF

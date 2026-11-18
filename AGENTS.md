@@ -68,7 +68,7 @@ claude --plugin-dir ~/dev/code/pickle
 
 ## Vendored skills
 
-- `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit and merge commands. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
+- `scripts/vendor-sync.sh [ref]` copies every `vendored` row from agent-skills to the `vendor/agent-skills` branch, at the pickle path its row names, and prints the commit, merge and push commands. Push `vendor/agent-skills` with `main`: CI runs `check-refs.sh` against `origin/vendor/agent-skills`. It rewrites upstream names to `pickle:<name>` and repo paths to `${CLAUDE_PLUGIN_ROOT}`. Agent names stay bare so projects can override them.
 - Edit vendored files on `main`. The merge keeps those edits. After a merge, set the agent-skills Baseline and every `vendored` row to the new version and commit. A `vendored` row's Notes say "on `main`" exactly when the file differs from `vendor/agent-skills`.
 - To stop syncing a skill, change its row to `rewritten` and keep your copy in the next merge.
 - A row's Notes record pickle's deviations, not fixed decisions. On each upstream update, check every Note the update touches again: upstream may have settled it the other way (often from its own evals), and then upstream's version replaces pickle's.
