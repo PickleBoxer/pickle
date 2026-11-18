@@ -35,20 +35,20 @@ bash "${CLAUDE_SKILL_DIR}/scripts/digest.sh" "${CLAUDE_SESSION_ID}" <target> > "
 
 Read the session through three lenses, one after another, weighting findings toward the focus.
 
-- **Judgment:** corrections the user gave (one they had to repeat is the strongest signal), preferences that will recur, verification that was skipped or self-reported instead of checked on the real artifact, a fix that missed callers, docs or sibling consumers, and assumptions about scope.
+- **Judgment:** corrections the user gave (one they had to repeat is the strongest signal), preferences that will recur, verification that was skipped or self-reported instead of checked on the real artifact, a fix that missed callers, docs or sibling consumers, a mistake the review missed, and assumptions about scope.
 - **Tooling:** commands and flags found by trial and error (the digest's failed calls and repeats), files read twice and the largest results that a narrower command or a script would have made cheaper, a multi-step command run more than once, and context the user pasted that the session could have fetched.
 - **Environment:** a file that took long to find, a check that would have caught a mistake (or one that exists but is unwired or broken, or no guardrail at all), where standards live, and steering files that are large, contradictory or could be a check instead.
 
 ## 3. Synthesize
 
-Keep a finding only if it will still hold in six months, would change what a future agent does, and has a home. Drop one-offs, typos, retries and details that drift, such as SHAs, versions and counts. Read the target file first and drop what it already says clearly. If it says it but the line is buried, propose a wording or placement change instead.
+Keep a finding only if it traces to a specific moment in the session (a line of the digest's timeline), will still hold in six months, would change what a future agent does, and has a home. Drop one-offs, typos, retries and details that drift, such as SHAs, versions and counts. Read the target file first and drop what it already says clearly. If it says it but the line is buried, propose a wording or placement change instead.
 
-Route a mechanical finding (a fixed pattern a linter, script, hook or CI job could detect) to `check:`, `hook:` or `script:` when it is cheap to build in this repo. It is built only after approval. A mechanism outside this repo (the harness, a vendor tool, another team's CI) is Backlog. A `skill:` row needs a skill the session used: a `Skill` call, a `Read` of its `SKILL.md`, or a subagent prompt naming it. A skill that should have fired and didn't is `tune description:`. `new skill:` only when nothing existing fits and the pattern recurs. For a skill under `~/.claude/plugins/cache/`, the routing names the copy's destination, not the cache path.
+Route a mechanical finding (a fixed pattern a linter, script, hook or CI job could detect) to `check:`, `hook:` or `script:` when it is cheap to build in this repo. It is built only after approval. Before a `check:` row, read the repo's own check commands (its lint and check scripts, its CI workflow): a check that exists but is unwired or broken gets a row to wire or fix it, not a new check. A mechanism outside this repo (the harness, a vendor tool, another team's CI) is Backlog. A `skill:` row needs a skill the session used: a `Skill` call, a `Read` of its `SKILL.md`, or a subagent prompt naming it. A skill that should have fired and didn't is `tune description:`. `new skill:` only when nothing existing fits and the pattern recurs. For a skill under `~/.claude/plugins/cache/`, the routing names the copy's destination, not the cache path.
 
 Output, no preamble, one sentence per cell:
 
-- **Accepted:** a table of `#`, Problem (as seen in the session), Proposal, Routing (`check: ...`, `skill: <path> <section>`, ...), most costly or most recurring first. The user approves by row number.
-- **Rejected:** the principle, then the reason (durability, specificity, decision-changing, skill-not-used, already-covered or duplicate).
+- **Accepted:** a table of `#`, Problem (as seen in the session, with its timeline line), Proposal, Routing (`check: ...`, `skill: <path> <section>`, ...), most costly or most recurring first. The user approves by row number.
+- **Rejected:** the principle, then the reason (untraceable, durability, specificity, decision-changing, skill-not-used, already-covered or duplicate).
 - **Backlog:** the pattern, what was hit, and the mechanism that would enforce it outside this repo.
 
 ## 4. Approve
@@ -65,7 +65,7 @@ Follow each approved row's routing. Follow the target repo's own rules for the f
 | `hook:` a Claude Code hook | Add it to `.claude/settings.json` (shared) or `.claude/settings.local.json` (personal). A `PreToolUse` hook blocks a call, a `PostToolUse` hook checks after an edit |
 | `script:` a repeated multi-step command | Write it to the repo's scripts folder, with a usage line and a non-zero exit on failure. Run it once on the case from the session and show the output. Then point to it in one line where agents look |
 | `pointer:` navigation | One line in `CLAUDE.md` or `AGENTS.md`, or a `.claude/rules/` file with `paths:` so it loads only for matching files |
-| `standard:` a judgment call for review | The repo's coding standards file, or the reviewer agent's prompt. Not the implementer's steering file |
+| `standard:` a judgment call for review | The Checks in `docs/agents/review.md`, which `pickle:code-review-and-quality` applies. Without that file, the repo's coding standards file or the reviewer agent's prompt. Not the implementer's steering file: the reviewer gets only the diff, so it has room for the rule |
 | `memory:` a personal preference | Claude Code's auto memory, not a project file |
 | `skill:` a gap in a skill body | One line or a tightened sentence: edit it directly. Anything larger (a new section, a table, more than about 10 lines): call the `skill-creator:skill-creator` skill and run its draft, test, iterate loop |
 | `tune description:` a skill that should have fired and didn't | Call `skill-creator:skill-creator` and run its description optimization |
