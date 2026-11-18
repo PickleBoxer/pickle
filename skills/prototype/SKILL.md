@@ -4,7 +4,7 @@ description: Builds a throwaway prototype to settle a design question by trying 
 argument-hint: "[the design question]"
 metadata:
   upstream: mattpocock-skills/skills/engineering/prototype
-  upstream-version: 1.3.1
+  upstream-version: 1.3.2
 ---
 
 # Prototype

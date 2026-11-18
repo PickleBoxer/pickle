@@ -4,7 +4,7 @@ description: Configure this repo for pickle's skills: where issues are tracked, 
 disable-model-invocation: true
 metadata:
   upstream: mattpocock-skills/skills/engineering/setup-matt-pocock-skills
-  upstream-version: 1.3.1
+  upstream-version: 1.3.2
 ---
 
 # Setup

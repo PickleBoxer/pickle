@@ -4,7 +4,7 @@ description: Vocabulary and principles for deep modules (interface, depth, seam,
 user-invocable: false
 metadata:
   upstream: mattpocock-skills/skills/engineering/codebase-design
-  upstream-version: 1.3.1
+  upstream-version: 1.3.2
 ---
 
 # Codebase Design

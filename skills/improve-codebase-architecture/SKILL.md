@@ -5,7 +5,7 @@ argument-hint: "[area, pain point or spec path] [report only]"
 disable-model-invocation: true
 metadata:
   upstream: mattpocock-skills/skills/engineering/improve-codebase-architecture
-  upstream-version: 1.3.1
+  upstream-version: 1.3.2
 ---
 
 # Improve Codebase Architecture

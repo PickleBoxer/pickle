@@ -4,7 +4,7 @@ description: Builds and sharpens the project's glossary (GLOSSARY.md): flags cla
 user-invocable: false
 metadata:
   upstream: mattpocock-skills/skills/engineering/domain-modeling
-  upstream-version: 1.3.1
+  upstream-version: 1.3.2
 ---
 
 # Domain Modeling
