@@ -3,7 +3,7 @@ name: deprecation-and-migration
 description: Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when migrating a database schema in production, such as renaming or dropping a column without downtime (expand/contract). Use when deciding whether to maintain or sunset existing code.
 metadata:
   upstream: agent-skills/skills/deprecation-and-migration
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Deprecation and Migration
@@ -148,6 +148,11 @@ class LegacyTaskService implements OldTaskAPI {
     const task = this.newService.findById(String(id));
     return this.toOldFormat(task);
   }
+
+  // Translate the new shape back into what old consumers expect
+  private toOldFormat(task: Task): OldTask {
+    return { id: Number(task.id), title: task.title, done: task.status === 'done' };
+  }
 }
 ```
 
@@ -160,7 +165,7 @@ function getTaskService(userId: string): TaskService {
   if (featureFlags.isEnabled('new-task-service', { userId })) {
     return new NewTaskService();
   }
-  return new LegacyTaskService();
+  return new OldTaskService();
 }
 ```
 

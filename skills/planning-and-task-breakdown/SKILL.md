@@ -3,7 +3,7 @@ name: planning-and-task-breakdown
 description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible.
 metadata:
   upstream: agent-skills/skills/planning-and-task-breakdown
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Planning and Task Breakdown
@@ -170,6 +170,8 @@ When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked 
 
 ```markdown
 # Implementation Plan: [Feature/Project Name]
+
+Source spec: [path to the spec this plan was generated from, e.g. SPEC.md or SPEC-<change>.md; omit if no spec]
 
 ## Overview
 [One paragraph summary of what we're building]

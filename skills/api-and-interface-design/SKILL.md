@@ -3,7 +3,7 @@ name: api-and-interface-design
 description: Guides stable API and interface design. Use when designing APIs, module boundaries, or any public interface. Use when creating REST or GraphQL endpoints, defining type contracts between modules, or establishing boundaries between frontend and backend.
 metadata:
   upstream: agent-skills/skills/api-and-interface-design
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # API and Interface Design
@@ -199,7 +199,9 @@ The unique constraint *is* the mechanism. A store that cannot enforce uniqueness
 
 ```typescript
 if (existing.requestHash !== hash(req.body)) {
-  return res.status(422).json({ error: 'idempotency key reused with a different payload' });
+  return res.status(422).json({
+    error: { code: 'IDEMPOTENCY_KEY_REUSED', message: 'Idempotency key reused with a different payload' },
+  });
 }
 ```
 

@@ -3,7 +3,7 @@ name: performance-optimization
 description: Optimizes application performance across frontend, backend, queries, and databases. Use when performance requirements exist, when you suspect performance regressions, when Core Web Vitals or load times need improvement, when N+1 query patterns need fixing, or when profiling reveals bottlenecks.
 metadata:
   upstream: agent-skills/skills/performance-optimization
-  upstream-version: 0.6.13
+  upstream-version: 0.6.16
 ---
 
 # Performance Optimization
@@ -208,8 +208,8 @@ Lighthouse Performance score: ≥ 90
 # Bundle size check
 npx bundlesize --config bundlesize.config.json
 
-# Lighthouse CI
-npx lhci autorun
+# Lighthouse CI. The CLI package is @lhci/cli; unscoped `lhci` on npm is not it.
+npx --package=@lhci/cli lhci autorun
 ```
 
 ## See Also
