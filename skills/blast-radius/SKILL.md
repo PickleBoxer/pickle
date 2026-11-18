@@ -4,7 +4,7 @@ description: Finds what a change could break outside its diff before it ships, a
 argument-hint: "[change, diff, PR or commit]"
 metadata:
   upstream: pstack/skills/blast-radius
-  upstream-version: 0.15.25
+  upstream-version: 0.15.43
 ---
 
 # Blast radius

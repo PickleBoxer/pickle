@@ -5,7 +5,7 @@ argument-hint: "[task prompt]"
 disable-model-invocation: true
 metadata:
   upstream: pstack/skills/sharpen
-  upstream-version: 0.15.42
+  upstream-version: 0.15.43
 ---
 
 The task to sharpen: $ARGUMENTS
