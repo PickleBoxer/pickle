@@ -41,6 +41,7 @@ These sit beside the workflow skills: pickle-mode routes to some of them, workfl
 | `reflect` | user-only | Reviews a finished session and proposes fixes, checks and scripts first, then skill edits and pointers. Applies only the rows you approve | `/pickle:reflect`, with a session ID, a `.jsonl` path or `last N` |
 | `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `docs/agents/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
 | `audit-architecture` | user-only | Reviews every subsystem for simpler ways to represent state and data, verifies each finding and writes a P0 to P3 report to `docs/agents/reports/`. Every run audits the whole codebase | `/pickle:audit-architecture`, with an optional path, or as a [scheduled report](#scheduled-reports) |
+| `prune-comments` | user-only | Sorts every comment into Tautology, Excuse, Stale or Decision Record. Deletes the first three, files an issue per Excuse, moves architecture decisions to ADRs, then adds a ratchet so no file gains comments | `/pickle:prune-comments`, with an optional path |
 
 ### Scheduled reports
 

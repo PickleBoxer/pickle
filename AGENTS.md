@@ -4,7 +4,7 @@ Guide for agents working in this repo. `.claude/CLAUDE.md` imports this file (a 
 
 ## What pickle is
 
-A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Its own user-only `audit-architecture` audits how a codebase represents state and data. A mod in `hooks/` points people into pickle: a welcome band above the prompt, a `/pickle:pickle-mode` tip on the first task-shaped prompt, a `/pickle:review` suggestion after a turn with edits, and the `/pickle-guide` pane. Origin and licenses: `CREDITS.md`.
+A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills). The user starts `/pickle:pickle-mode <task>`: the vendored `using-agent-skills`, renamed and made user-only, which maps the task to the 24 workflow skills. pickle also ships nine skills from pstack: `typescript-best-practices`, `unslop`, `technical-writing` and the user-only `sharpen` (ported), `how`, `why`, `blast-radius` and the user-only `reflect` and `teach` (rewritten for Claude Code; `reflect` merges in mattpocock's `retro`). From mattpocock/skills it ships two extensions, `codebase-design` and `domain-modeling`, which workflow skills call, `prototype` (merged with pstack's Prototype playbook), and two user-only skills, `/pickle:setup` and `/pickle:improve-codebase-architecture`. Its own user-only `audit-architecture` audits how a codebase represents state and data, and `prune-comments` deletes comments that add nothing, files an issue per excuse and holds the rest with a ratchet. A mod in `hooks/` points people into pickle: a welcome band above the prompt, a `/pickle:pickle-mode` tip on the first task-shaped prompt, a `/pickle:review` suggestion after a turn with edits, and the `/pickle-guide` pane. Origin and licenses: `CREDITS.md`.
 
 ## Next
 
@@ -28,6 +28,7 @@ skills/codebase-design/, skills/domain-modeling/   extensions (mattpocock/skills
 skills/prototype/             throwaway prototypes for design questions (mattpocock/skills + pstack)
 skills/setup/, skills/improve-codebase-architecture/   user-only (mattpocock/skills)
 skills/audit-architecture/    user-only (pickle): read-only state and data audit, scheduled report
+skills/prune-comments/        user-only (pickle): classify and delete comments, scripts/comment-ratchet.sh
 hooks/                        the mod: hooks.json and register.tsx (welcome band, tips, guide pane)
 types/index.d.ts              the mod's state contract, named in plugin.json
 tests/                        the mod's tests, run by `claude plugin test .`
