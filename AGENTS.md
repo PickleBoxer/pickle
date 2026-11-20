@@ -39,6 +39,7 @@ LICENSES/                     agent-skills.txt, for every vendored file outside 
 evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (26 firing and 6 loading cases, plus 13 cases for the user-only skills, `/pickle:constraints` and `/pickle:review`)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               home-repo.md (guide: set up a home repo),
+                              software-factory.md (guide: what a software factory is, set one up),
                               agents.md and adoption-guide.md (vendored)
 scripts/                      check-refs.sh (CI), upstream-diff.sh and vendor-sync.sh (maintainer)
 UPSTREAM.md                   upstream source and version per pickle file
