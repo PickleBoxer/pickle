@@ -28,7 +28,7 @@ Read whatever exists; don't assume:
 - `docs/agents/`: does this skill's earlier output exist?
 - `GLOSSARY.md` and `GLOSSARY-MAP.md` at the root, and the older `CONTEXT.md` and `CONTEXT-MAP.md`. If an older file exists, offer to `git mv` it to its `GLOSSARY` name and rewrite those names in `docs/agents/domain.md`
 - ADR folders: `docs/adr/`, `docs/decisions/`, an `.adr-dir` file, any `src/*/docs/adr/`
-- `tasks/`, `docs/work/` or an older `.scratch/`: plans or local issues already in use
+- `tasks/`, `.scratch/` or an older `docs/work/`: plans or local issues already in use
 - Lockfiles (`composer.lock`, `package-lock.json` and so on): the main frameworks and their installed versions
 - MCP servers: those connected in this session (your own tool list) and those in `.mcp.json`. Servers added at user scope or by a plugin never appear in `.mcp.json`. Note docs tools (`laravel-boost`, Context7) and trackers (Linear, Atlassian for Jira); `laravel/boost` in `composer.lock` also counts
 - `CONSTRAINTS.md` at the root
@@ -47,7 +47,7 @@ Propose the tracker that matches `git remote`: GitHub for github.com, GitLab for
 
 - **GitHub**: the repo's GitHub Issues, through the `gh` CLI
 - **GitLab**: the repo's GitLab Issues, through the [`glab`](https://gitlab.com/gitlab-org/cli) CLI
-- **Local markdown**: no tracker; tasks in `todo.md`, big work's tickets in its work folder's `issues/` (solo projects, repos without a remote)
+- **Local markdown**: no tracker; tasks in `todo.md`, big work's tickets in `.scratch/<slug>/issues/` (solo projects, repos without a remote)
 - **Linear**: Linear issues through Linear's MCP server. Check it with `list_teams` and ask which team (and project, if any) this repo's issues go to
 - **Jira**: Jira issues through Atlassian's MCP server. Check it with `getAccessibleAtlassianResources` (it returns the `cloudId` every Jira tool needs), then `listJiraProjects`, and ask which project key this repo's issues go to
 

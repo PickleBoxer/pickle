@@ -154,7 +154,7 @@ Create the `tasks/` directory if it does not exist.
 **Never overwrite an incomplete plan.** Before writing `tasks/plan.md` or `tasks/todo.md`, check whether they already exist and still contain unchecked tasks:
 
 - Same work being replanned (the user asked to revise or extend this plan) → update the existing files in place.
-- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, archive it as in Work Folder below, or tell you where the new plan should go).
+- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, park it in `.scratch/<slug>/` as in Scratch Folder below, or tell you where the new plan should go).
 
 The same rule applies to an external task list target: never bulk-close or delete another plan's open tracker items to make room for new ones.
 
@@ -167,9 +167,9 @@ The task list target is where tasks and checkpoints are recorded. It is defined 
 
 When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look, and keep the plan document's Task List section as an ordered index of tracker item IDs or links rather than a duplicate checklist.
 
-### Work Folder
+### Scratch Folder
 
-When the work has a folder in `docs/work/<slug>/`, write `plan.md` and `todo.md` there instead of `tasks/`. Big work and archiving: `${CLAUDE_PLUGIN_ROOT}/references/work-folder.md`.
+The active plan always lives in `tasks/`. Big work keeps its hub, tickets, research and inputs in `.scratch/<slug>/`, and a plan set aside for other work is parked there with its spec. Layout, parking and resuming: `${CLAUDE_PLUGIN_ROOT}/references/scratch-folder.md`.
 
 ## Plan Document Template
 

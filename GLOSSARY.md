@@ -40,9 +40,9 @@ _Avoid_: cron skill, background job
 One extra check a project adds to code review, listed in its `docs/agents/review.md`: a skill or agent run as a subagent on the changed files of one type. Written by setup, run by code-review-and-quality.
 _Avoid_: review pass, reviewer plugin
 
-**Work folder**:
-The folder `docs/work/<slug>/` that big work gets: its spec first, then plan, tickets, research and inputs as the work needs them. Small work stays in `tasks/`. Layout in `references/work-folder.md`.
-_Avoid_: feature folder, task folder, scratch pad
+**Scratch folder**:
+The folder `.scratch/<slug>/` that holds big work's hub, tickets, research and inputs, and a parked plan with its spec. The active spec and plan stay in `SPEC.md` and `tasks/`. Layout in `references/scratch-folder.md`.
+_Avoid_: work folder, feature folder, scratch pad
 
 ## Evals
 
