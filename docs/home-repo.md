@@ -11,7 +11,7 @@ Based on [The Home Repo Pattern](https://www.aihero.dev/the-home-repo-pattern) (
 | Where it lives | Next to your repos: `~/dev/code/home` beside `~/dev/code/api` |
 | Personal or team | Personal first; share it once it works |
 | Which repos | Repos with a commit in the last year |
-| Instruction file | `AGENTS.md`, plus a `CLAUDE.md` that only says `@AGENTS.md`, which Claude Code loads in its place (**read**, `/en/memory.mdx`) |
+| Instruction file | `AGENTS.md`, plus a `CLAUDE.md` that only says `@AGENTS.md`, which Claude Code loads in its place (**read**, [memory](https://code.claude.com/docs/en/memory)) |
 
 ## 1. Create the repo
 
@@ -63,7 +63,7 @@ A skill in a repo that anyone opens without the home repo stays in that repo, ev
 
 ## 3. Write AGENTS.md
 
-Keep it under 200 lines (**read**, `/en/memory.mdx`).
+Keep it under 200 lines (**read**, [memory](https://code.claude.com/docs/en/memory)).
 
 ```md
 # AGENTS.md
@@ -94,7 +94,7 @@ This is the home repo. Start sessions here. Shared skills are in
 
 One line per repo: name, what it is, path, remote, any warning. Past about 20 repos, point to one file per area instead (`Billing: see repos/billing.md`), each listing its repos.
 
-The "read its own" and "list its skills" rules are needed because Claude Code does not load other repos' instructions or skills from settings-added directories (**read**, `/en/permissions.mdx`).
+The "read its own" and "list its skills" rules are needed because Claude Code does not load other repos' instructions or skills from settings-added directories (**read**, [permissions](https://code.claude.com/docs/en/permissions)).
 
 ## 4. Configure Claude Code
 
@@ -108,7 +108,7 @@ Give the agent file access to the repos in `.claude/settings.local.json` (paths 
 }
 ```
 
-Reads there need no prompt; edits follow your permission mode. It applies after you accept the trust dialog for the home repo (**read**, `/en/permissions.mdx`, `/en/settings-reference.mdx`).
+Reads there need no prompt; edits follow your permission mode. It applies after you accept the trust dialog for the home repo (**read**, [permissions](https://code.claude.com/docs/en/permissions), [settings-reference](https://code.claude.com/docs/en/settings-reference)).
 
 Plugins for every session go in the committed `.claude/settings.json`:
 
@@ -121,7 +121,7 @@ Plugins for every session go in the committed `.claude/settings.json`:
 }
 ```
 
-This turns a plugin on but does not install it. Each person runs `claude plugin install code-formatter@acme-tools --scope project` once (**read**, `/en/settings-reference.mdx`).
+This turns a plugin on but does not install it. Each person runs `claude plugin install code-formatter@acme-tools --scope project` once (**read**, [settings-reference](https://code.claude.com/docs/en/settings-reference)).
 
 ## 5. Copy the shared material
 
@@ -141,7 +141,7 @@ Where someone does use the repo on its own, keep both copies and sync changes by
 
 ## 6. Use repo skills
 
-What a home repo session loads from another repo (**read**, `/en/skills.mdx`, `/en/permissions.mdx`):
+What a home repo session loads from another repo (**read**, [skills](https://code.claude.com/docs/en/skills), [permissions](https://code.claude.com/docs/en/permissions)):
 
 | How it reaches the repo | Skills | `CLAUDE.md` |
 |---|---|---|

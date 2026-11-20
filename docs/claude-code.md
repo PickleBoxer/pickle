@@ -27,18 +27,18 @@ Setup is in `AGENTS.md`, Working rules. Never answer Claude Code questions from 
 
 | Topic | Page |
 |---|---|
-| Skill frontmatter, substitutions, `!` injection, compaction | `/en/skills.mdx` |
-| Subagent frontmatter, nesting, forks, resume | `/en/sub-agents.mdx` |
-| Built-in tools and which subagents get them | `/en/tools-reference.mdx` |
-| Built-in commands and bundled skills | `/en/commands.mdx` |
-| Hook events and types | `/en/hooks.mdx` |
-| MCP config, scopes, tool names, tool search | `/en/mcp.mdx` |
-| Plugin components and what each loads | `/en/plugins/components.mdx` |
-| `plugin.json` keys | `/en/plugins/manifest-reference.mdx` |
-| `claude plugin` commands | `/en/plugins/cli-reference.mdx` |
-| Evals | `/en/plugin-evals.mdx` |
-| Mods | `/en/plugins/mods/overview.mdx`, `reference.mdx`, `events.mdx`, `test.mdx` |
-| CLAUDE.md, rules, auto memory | `/en/memory.mdx` |
+| Skill frontmatter, substitutions, `!` injection, compaction | [skills](https://code.claude.com/docs/en/skills) |
+| Subagent frontmatter, nesting, forks, resume | [sub-agents](https://code.claude.com/docs/en/sub-agents) |
+| Built-in tools and which subagents get them | [tools-reference](https://code.claude.com/docs/en/tools-reference) |
+| Built-in commands and bundled skills | [commands](https://code.claude.com/docs/en/commands) |
+| Hook events and types | [hooks](https://code.claude.com/docs/en/hooks) |
+| MCP config, scopes, tool names, tool search | [mcp](https://code.claude.com/docs/en/mcp) |
+| Plugin components and what each loads | [plugins/components](https://code.claude.com/docs/en/plugins/components) |
+| `plugin.json` keys | [plugins/manifest-reference](https://code.claude.com/docs/en/plugins/manifest-reference) |
+| `claude plugin` commands | [plugins/cli-reference](https://code.claude.com/docs/en/plugins/cli-reference) |
+| Evals | [plugin-evals](https://code.claude.com/docs/en/plugin-evals) |
+| Mods | [plugins/mods/overview](https://code.claude.com/docs/en/plugins/mods/overview), [reference](https://code.claude.com/docs/en/plugins/mods/reference), [events](https://code.claude.com/docs/en/plugins/mods/events), [test](https://code.claude.com/docs/en/plugins/mods/test) |
+| CLAUDE.md, rules, auto memory | [memory](https://code.claude.com/docs/en/memory) |
 
 ## Extension points
 

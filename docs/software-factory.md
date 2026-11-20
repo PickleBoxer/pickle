@@ -195,12 +195,12 @@ Claude Code has the parts of a local factory built in. You trade Sandcastle's sa
 
 | Factory part | Claude Code feature | Source |
 |---|---|---|
-| One isolated checkout per run | `claude --worktree <name>` creates `.claude/worktrees/<name>/` on branch `worktree-<name>` | **read**, `/en/worktrees.mdx` |
-| Unattended run | `claude --bg "<prompt>"` starts a background session that moves into its own worktree before it edits; `claude agents` shows every session and which need you | **read**, `/en/agent-view.mdx` |
-| A step in a script | `claude -p "<prompt>" --allowedTools "Read,Edit,Bash"` exits non-zero when the run fails | **read**, `/en/headless.mdx` |
-| Sandbox | `/sandbox` or `sandbox.enabled` limits the files and hosts shell commands can reach; file tools, hooks and MCP servers run outside it | **read**, `/en/sandboxing.mdx` |
-| Event-driven runs in CI | Claude Code GitHub Actions | **read**, `/en/github-actions.mdx` |
-| Runs in the cloud on a schedule, an API call or a GitHub event | Scheduled tasks, at claude.ai/code/routines or `/schedule` (research preview) | **read**, `/en/routines.mdx` |
+| One isolated checkout per run | `claude --worktree <name>` creates `.claude/worktrees/<name>/` on branch `worktree-<name>` | **read**, [worktrees](https://code.claude.com/docs/en/worktrees) |
+| Unattended run | `claude --bg "<prompt>"` starts a background session that moves into its own worktree before it edits; `claude agents` shows every session and which need you | **read**, [agent-view](https://code.claude.com/docs/en/agent-view) |
+| A step in a script | `claude -p "<prompt>" --allowedTools "Read,Edit,Bash"` exits non-zero when the run fails | **read**, [headless](https://code.claude.com/docs/en/headless) |
+| Sandbox | `/sandbox` or `sandbox.enabled` limits the files and hosts shell commands can reach; file tools, hooks and MCP servers run outside it | **read**, [sandboxing](https://code.claude.com/docs/en/sandboxing) |
+| Event-driven runs in CI | Claude Code GitHub Actions | **read**, [github-actions](https://code.claude.com/docs/en/github-actions) |
+| Runs in the cloud on a schedule, an API call or a GitHub event | Scheduled tasks, at claude.ai/code/routines or `/schedule` (research preview) | **read**, [routines](https://code.claude.com/docs/en/routines) |
 
 A minimal loop with `claude -p`:
 
@@ -208,7 +208,7 @@ A minimal loop with `claude -p`:
 gh issue list --label afk --state open --json number --jq '.[].number' | while read -r n; do claude -p --worktree "issue-$n" "Fix GitHub issue #$n. Read it with gh issue view $n. Add a failing test first, run the checks, commit when they pass, then push the branch and open a draft PR with gh pr create --draft." --allowedTools "Read,Edit,Write,Bash(gh *),Bash(git *),Bash(npm test *)"; done
 ```
 
-`claude -p --worktree` skips the workspace trust check (**read**, `/en/worktrees.mdx`), so run it only in repos you trust. Add `.claude/worktrees/` to `.gitignore`. For isolation beyond shell commands, run Claude Code itself in a container or VM (**read**, `/en/sandbox-environments.mdx`).
+`claude -p --worktree` skips the workspace trust check (**read**, [worktrees](https://code.claude.com/docs/en/worktrees)), so run it only in repos you trust. Add `.claude/worktrees/` to `.gitignore`. For isolation beyond shell commands, run Claude Code itself in a container or VM (**read**, [sandbox-environments](https://code.claude.com/docs/en/sandbox-environments)).
 
 ## 4. Add the gates with pickle
 
