@@ -60,3 +60,13 @@ When the user states how something works, check whether the code agrees. If you 
 When a term is resolved, update `GLOSSARY.md` right there. Don't batch these up: capture them as they happen. Use the format in [references/glossary-format.md](references/glossary-format.md).
 
 `GLOSSARY.md` should be totally devoid of implementation details. Do not treat it as a spec, a scratch pad, or a place for implementation decisions. It is a glossary and nothing else.
+
+### Offer ADRs sparingly
+
+When settling a term also settles a design decision, offer an ADR only when all three are true:
+
+1. **Hard to reverse**: the cost of changing your mind later is meaningful
+2. **Surprising without context**: a future reader will wonder "why did they do it this way?"
+3. **The result of a real trade-off**: there were genuine alternatives and you picked one for specific reasons
+
+If any of the three is missing, skip the ADR. On a yes, write it with the **documentation-and-adrs** skill (Skill tool, `pickle:documentation-and-adrs`). When that skill is the one that called this skill, don't offer: the ADR is already being written.

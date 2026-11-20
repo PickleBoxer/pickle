@@ -21,7 +21,7 @@ A skill that explains code before a change: how (what it does and how it runs), 
 _Avoid_: research skill, archaeology
 
 **Extension**:
-A skill that workflow skills call to go deeper on one concern: codebase-design (module shape) or domain-modeling (the domain glossary). Hidden from the `/` menu, and calls no skill itself. From Matt Pocock's skills.
+A skill that workflow skills call to go deeper on one concern: codebase-design (module shape) or domain-modeling (the domain glossary). Hidden from the `/` menu. From Matt Pocock's skills.
 _Avoid_: base skill, add-on, helper skill
 
 **Domain glossary**:

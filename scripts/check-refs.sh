@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Fails when a skill or agent mention does not resolve, when a called
-# skill is user-only, when pickle-mode names a skill bare, when an extension calls a skill, or when
+# skill is user-only, when pickle-mode names a skill bare, when an extension is missing or shows in the / menu, or when
 # UPSTREAM.md disagrees with the files: rows, grafted sections, and vendored Notes against the
 # vendor/agent-skills branch.
 # Run from anywhere: bash scripts/check-refs.sh
@@ -90,14 +90,10 @@ while IFS=: read -r l t; do
 done < <(sed -E 's/\*\*[a-z0-9-]+\*\* skill \(Skill tool, `pickle:[a-z0-9-]+`\)//g; s/pickle:[a-z0-9-]+//g' "$pm" \
   | grep -noE "(^|[^a-z0-9-])($names)([^a-z0-9-]|\$)|\`($words)\`|\*\*($words)\*\*" | sed -E 's/:[^a-z`*]*/:/; s/[^a-z0-9`*-]*$//')
 
-# Extensions are called by workflow skills and call nothing themselves, so dependencies point one way:
-# pickle-mode, then workflow skills, then extensions.
+# Extensions are called by workflow skills and stay out of the / menu.
 for x in codebase-design domain-modeling; do
   [ -d "skills/$x" ] || { err "skills/$x: extension is missing"; continue; }
   [ "$(fm_key "skills/$x/SKILL.md" user-invocable)" = "false" ] || err "skills/$x/SKILL.md: extension needs user-invocable: false"
-  while IFS=: read -r f l m; do
-    err "$f:$l: extension $x calls ${m##*[^a-z0-9:-]}, but extensions call no skill"
-  done < <(grep -rnoE '(^|[^/[:alnum:]-])pickle:[a-z0-9-]+' "skills/$x")
 done
 
 # Agent skills: preload lists. A user-only skill there is skipped silently.
