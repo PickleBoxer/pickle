@@ -141,6 +141,33 @@ test('a turn with edits suggests a review', async ($, on) => {
   expect(suggested).toEqual(['/pickle:review'])
 })
 
+test('a review or ship with no edits suggests reflect', async ($, on) => {
+  const suggested: string[] = []
+  on('prompt.suggest', (_, e) => {
+    suggested.push(e.text)
+
+    return { isShown: true }
+  })
+  on('prompt.submit', (_, e) => ({ text: e.text }))
+  on('tool.call', () => ({ result: {} }))
+  on('turn.complete', () => ({ text: '' }))
+
+  await submit($, 'what changed?')
+  await complete($)
+  expect(suggested).toEqual([])
+
+  await submit($, '/pickle:review', { name: 'pickle:review', args: '' })
+  await $.tool.call({ tool: 'Edit', file_path: 'a.ts', old_string: 'a', new_string: 'b' })
+  await complete($)
+  expect(suggested).toEqual(['/pickle:review'])
+
+  await submit($, '/pickle:review', { name: 'pickle:review', args: '' })
+  await complete($)
+  await submit($, '/pickle:ship', { name: 'pickle:ship', args: '' })
+  await complete($)
+  expect(suggested).toEqual(['/pickle:review', '/pickle:reflect', '/pickle:reflect'])
+})
+
 test('the guide lists every phase and fills the prompt', async ($, on) => {
   const filled: string[] = []
   on('prompt.fill', (_, e) => {

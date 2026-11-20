@@ -3,11 +3,14 @@ import type { Register } from 'claude-code'
 
 // Three ways into pickle: a welcome band above the prompt, a tip on the
 // first task-shaped prompt, and a guide pane opened by /pickle-guide.
+// After a turn it suggests the next step: review after edits, reflect after
+// a review or ship that changed nothing.
 
 const GUIDE = 'guide'
 const GREEN = '#8bc34a'
 const TASK = /\b(build|implement|add|create|refactor|migrate|fix|ship)\b/i
 const EDITS = new Set(['Edit', 'Write', 'NotebookEdit'])
+const FINISHERS = new Set(['pickle:review', 'pickle:ship'])
 
 const isWelcomeHidden = atom(
   { plugin: 'pickle', key: 'isWelcomeHidden' } as const,
@@ -46,6 +49,7 @@ const PHASES = [
       ['review', 'review the change'],
       ['webperf', 'audit web performance'],
       ['ship', 'pre-launch checklist'],
+      ['reflect', 'review this session'],
     ],
   },
   {
@@ -54,7 +58,6 @@ const PHASES = [
       ['teach', 'explain how and why code works'],
       ['audit-architecture', 'audit state and data'],
       ['improve-codebase-architecture', 'find deepening opportunities'],
-      ['reflect', 'review this session'],
     ],
   },
 ] as const
@@ -62,6 +65,7 @@ const PHASES = [
 export const register: Register = on => {
   let isTipped = false
   let edits = 0
+  let isFinishing = false
 
   on('session.start', async ($, e, next) => {
     await $.command.register({
@@ -80,6 +84,7 @@ export const register: Register = on => {
 
   on('prompt.submit', async ($, e, next) => {
     edits = 0
+    isFinishing = FINISHERS.has(e.command?.name ?? '')
 
     if (e.command?.name.startsWith('pickle:')) {
       isTipped = true
@@ -107,6 +112,8 @@ export const register: Register = on => {
 
     if (edits > 0) {
       void $.prompt.suggest({ text: '/pickle:review' })
+    } else if (isFinishing) {
+      void $.prompt.suggest({ text: '/pickle:reflect' })
     }
 
     return done
