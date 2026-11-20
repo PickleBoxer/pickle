@@ -135,7 +135,7 @@ Sections a pickle file took from a source other than its row's. One row per file
 | pickle item | Kind | Source | Relation | Upstream version | Commit | Notes |
 |---|---|---|---|---|---|---|
 | skills/audit-architecture | skill | - | new | n/a | - | user-only, from the maintainer's dotfiles. Rules at the top, every run a full audit, one Markdown report in `docs/agents/reports/`, Explore subagents with a set brief in batches of up to 12, one verifier instead of five audit passes, no `agents/openai.yaml`. Eval `audit-architecture-report` |
-| skills/prune-comments | skill | - | new | n/a | - | user-only, from a comment-cleanup prompt the maintainer shared. Changes from the prompt: directives, docblocks and license headers are not comments; a Decision Record goes to an ADR only when it passes documentation-and-adrs' three tests, otherwise it stays; Excuses go to `.scratch/` issue files and reach the tracker only on a yes; the ratchet is `scripts/comment-ratchet.sh` with a per-file baseline instead of a lint rule, since no common linter bans all comments; lines removed are measured from the diff |
+| skills/prune-comments | skill | - | new | n/a | - | user-only, from a comment-cleanup prompt the maintainer shared. Changes from the prompt: directives, docblocks and license headers are not comments; a Decision Record goes to an ADR only when it passes documentation-and-adrs' three tests, otherwise it stays; Excuses go to `.scratch/` issue files and reach the tracker only on a yes; the ratchet is `scripts/comment-ratchet.sh` with a per-file baseline instead of a lint rule, since no common linter bans all comments; lines removed are measured from the diff. Eval `prune-comments-waits-for-confirmation` |
 
 ## Mods
 

@@ -8,7 +8,7 @@ A Claude Code plugin built on [addyosmani/agent-skills](https://github.com/addyo
 
 ## Next
 
-1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus. Then the cases for the Matt Pocock skills: the extension chains, `setup-*`, `improve-architecture-*`, `audit-architecture-*`, `reflect-*`, `teach-*`, `sharpen-*`, `constraints-*` and `review-runs-repo-lanes` (scaffolded, `--ablation none` for the user-only ones).
+1. With the user's go-ahead, run the firing evals until the skills fire on their own, and the loading evals at 3 runs on Sonnet and Opus. Then the cases for the Matt Pocock skills: the extension chains, `setup-*`, `improve-architecture-*`, `audit-architecture-*`, `reflect-*`, `teach-*`, `sharpen-*`, `prune-comments-*`, `constraints-*` and `review-runs-repo-lanes` (scaffolded, `--ablation none` for the user-only ones).
 2. Trim vendored skills on `main` where evals show they are too long or overlap.
 3. Outcome evals, token evals, then the Sonnet and Opus pass before a release.
 
@@ -37,7 +37,7 @@ references/                   vendored checklists and patterns shared by skills,
 commands/                     9 vendored commands (/pickle:build, /pickle:ship, ...)
 agents/                       4 vendored agents (code-reviewer, security-auditor, test-engineer, web-performance-auditor)
 LICENSES/                     agent-skills.txt, for every vendored file outside skills/; mattpocock-skills.txt
-evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (26 firing and 6 loading cases, plus 13 cases for the user-only skills, `/pickle:constraints` and `/pickle:review`)
+evals/                        vendored from agent-skills: README.md, skill-impact.md and plugin/ (26 firing and 6 loading cases, plus 14 cases for the user-only skills, `/pickle:constraints` and `/pickle:review`)
 docs/                         claude-code.md (native features, plugin and mod notes),
                               home-repo.md (guide: set up a home repo),
                               software-factory.md (guide: what a software factory is, set one up),
