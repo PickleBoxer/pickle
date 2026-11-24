@@ -26,6 +26,7 @@ const PHASES = [
     name: 'Start',
     items: [
       ['pickle-mode', 'map a task to the workflow skills'],
+      ['reframe', 'learn the words for what you build'],
       ['sharpen', 'rewrite a rough prompt'],
       ['in-your-own-words', 'restate your goal before work starts'],
       ['setup', 'set up this repo for pickle'],
