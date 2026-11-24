@@ -168,6 +168,48 @@ test('a review or ship with no edits suggests reflect', async ($, on) => {
   expect(suggested).toEqual(['/pickle:review', '/pickle:reflect', '/pickle:reflect'])
 })
 
+test('a long first ask gets the in-your-own-words tip instead', async ($, on) => {
+  const toasts: string[] = []
+  on('ui.toast', (_, e) => {
+    toasts.push(e.text)
+
+    return { value: undefined }
+  })
+  on('prompt.submit', (_, e) => ({ text: e.text }))
+
+  await submit($, `Thread from support: search is broken again. ${'They renamed a product and search misses it. '.repeat(20)}`)
+  await submit($, 'add a dark mode toggle')
+
+  expect(toasts).toHaveLength(1)
+  expect(toasts[0]).toMatch(/pickle:in-your-own-words/)
+})
+
+test('a correction suggests correct once, ahead of review', async ($, on) => {
+  const suggested: string[] = []
+  on('prompt.suggest', (_, e) => {
+    suggested.push(e.text)
+
+    return { isShown: true }
+  })
+  on('prompt.submit', (_, e) => ({ text: e.text }))
+  on('tool.call', () => ({ result: {} }))
+  on('turn.complete', () => ({ text: '' }))
+
+  await submit($, 'run the tests again')
+  await complete($)
+  expect(suggested).toEqual([])
+
+  await submit($, 'remove the console.log, I told you we never ship those')
+  await $.tool.call({ tool: 'Edit', file_path: 'a.ts', old_string: 'a', new_string: 'b' })
+  await complete($)
+  expect(suggested).toEqual(['/pickle:correct'])
+
+  await submit($, 'you keep adding it back')
+  await $.tool.call({ tool: 'Edit', file_path: 'a.ts', old_string: 'a', new_string: 'b' })
+  await complete($)
+  expect(suggested).toEqual(['/pickle:correct', '/pickle:review'])
+})
+
 test('the guide lists every phase and fills the prompt', async ($, on) => {
   const filled: string[] = []
   on('prompt.fill', (_, e) => {

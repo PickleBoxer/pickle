@@ -134,7 +134,7 @@ A mod is a plugin with function hooks, on by default from Claude Code 2.1.287. T
 - Tests: `claude plugin test .`, which needs at least one `*.test.ts` or `*.test.tsx`. A hook that passes to `next` in a `ui.render` test needs a test hook that draws for the engine.
 - `$.command.register({ name })` declares a bare `/<name>`, not `/<plugin>:<name>`, so prefix the name with the plugin's. A `command.run` matcher must name it as a literal, or `validate` lists the hook as a gate.
 - Desktop (measured, 2.1.309): a docked `Pane` opens as its own region on the right, over the session details panel. No render site draws inside that panel.
-- pickle's mod: the welcome band (`AbovePrompt`, terminal and desktop only, hidden by Hide or any `/pickle:` command), the task tip (`prompt.submit` toast, once a session), the review suggestion (`turn.complete`, after a turn with edits) and the guide pane (`/pickle-guide`).
+- pickle's mod: the welcome band (`AbovePrompt`, terminal and desktop only, hidden by Hide or any `/pickle:` command), the task tip (`prompt.submit` toast, once a session: `/pickle:in-your-own-words` for a prompt over 600 characters, else `/pickle:pickle-mode` for a task-shaped one), the suggestions (`turn.complete`: `/pickle:correct` after the first prompt matching a correction phrase, else `/pickle:review` after a turn with edits, else `/pickle:reflect` after a review or ship) and the guide pane (`/pickle-guide`).
 
 ## Best practices
 

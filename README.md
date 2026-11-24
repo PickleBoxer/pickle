@@ -85,7 +85,7 @@ Each run opens a session under **Scheduled** in the sidebar, with the report pat
 pickle includes a mod that points you to the right command in the terminal and the desktop Code tab:
 
 - **Welcome band.** Above the prompt, buttons put `/pickle:pickle-mode`, `/pickle:sharpen` or `/pickle:setup` in the prompt box, or open the guide. It stays until you click Hide or run a `/pickle:` command.
-- **Tips.** The first prompt in a session that reads like a task shows a tip for `/pickle:pickle-mode`. After a turn that edits files, the prompt box suggests `/pickle:review` (Tab to take it). After a `/pickle:review` or `/pickle:ship` that changes nothing, it suggests `/pickle:reflect`.
+- **Tips.** The first prompt in a session that reads like a task shows a tip for `/pickle:pickle-mode`. A long one (a pasted thread or report) shows a tip for `/pickle:in-your-own-words` instead. The first time you correct Claude in a session ("I told you", "you keep", "we never"), the prompt box suggests `/pickle:correct`. After a turn that edits files, the prompt box suggests `/pickle:review` (Tab to take it). After a `/pickle:review` or `/pickle:ship` that changes nothing, it suggests `/pickle:reflect`.
 - **Guide.** `/pickle-guide` opens a pane of the commands and user-only skills by phase. Click one to put it in the prompt box.
 
 ### Agents

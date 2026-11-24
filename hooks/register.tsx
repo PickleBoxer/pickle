@@ -2,13 +2,17 @@ import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
 
 // Three ways into pickle: a welcome band above the prompt, a tip on the
-// first task-shaped prompt, and a guide pane opened by /pickle-guide.
-// After a turn it suggests the next step: review after edits, reflect after
-// a review or ship that changed nothing.
+// first task-shaped or long prompt, and a guide pane opened by /pickle-guide.
+// After a turn it suggests the next step: correct after the user corrects a
+// repeated mistake (once), review after edits, reflect after a review or ship
+// that changed nothing.
 
 const GUIDE = 'guide'
 const GREEN = '#8bc34a'
 const TASK = /\b(build|implement|add|create|refactor|migrate|fix|ship)\b/i
+const CORRECTION =
+  /\b(i told you|told you (before|already)|how many times|you keep|i already said|stop (doing|using|adding)|we never|same mistake)\b/i
+const LONG_ASK = 600
 const EDITS = new Set(['Edit', 'Write', 'NotebookEdit'])
 const FINISHERS = new Set(['pickle:review', 'pickle:ship'])
 
@@ -23,6 +27,7 @@ const PHASES = [
     items: [
       ['pickle-mode', 'map a task to the workflow skills'],
       ['sharpen', 'rewrite a rough prompt'],
+      ['in-your-own-words', 'restate your goal before work starts'],
       ['setup', 'set up this repo for pickle'],
     ],
   },
@@ -56,7 +61,6 @@ const PHASES = [
   {
     name: 'Understand',
     items: [
-      ['in-your-own-words', 'restate your goal before work starts'],
       ['teach', 'explain how and why code works'],
       ['audit-architecture', 'audit state and data'],
       ['improve-codebase-architecture', 'find deepening opportunities'],
@@ -68,6 +72,8 @@ export const register: Register = on => {
   let isTipped = false
   let edits = 0
   let isFinishing = false
+  let isCorrection = false
+  let isCorrectSuggested = false
 
   on('session.start', async ($, e, next) => {
     await $.command.register({
@@ -87,10 +93,17 @@ export const register: Register = on => {
   on('prompt.submit', async ($, e, next) => {
     edits = 0
     isFinishing = FINISHERS.has(e.command?.name ?? '')
+    isCorrection = !e.command && !e.isMeta && CORRECTION.test(e.text)
+    const isLong = e.text.length > LONG_ASK
 
     if (e.command?.name.startsWith('pickle:')) {
       isTipped = true
       await update($, isWelcomeHidden, () => true)
+    } else if (!isTipped && !e.command && !e.isMeta && isLong) {
+      isTipped = true
+      $.ui.toast(
+        '🥒 Long ask. /pickle:in-your-own-words checks it was understood first',
+      )
     } else if (!isTipped && !e.command && !e.isMeta && TASK.test(e.text)) {
       isTipped = true
       $.ui.toast(
@@ -112,7 +125,10 @@ export const register: Register = on => {
   on('turn.complete', async ($, e, next) => {
     const done = await next(e)
 
-    if (edits > 0) {
+    if (isCorrection && !isCorrectSuggested) {
+      isCorrectSuggested = true
+      void $.prompt.suggest({ text: '/pickle:correct' })
+    } else if (edits > 0) {
       void $.prompt.suggest({ text: '/pickle:review' })
     } else if (isFinishing) {
       void $.prompt.suggest({ text: '/pickle:reflect' })
