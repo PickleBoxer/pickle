@@ -137,6 +137,8 @@ Fix the one thing Step 2 identified, nothing else. Try the cheapest kind of fix 
 6. Do it concurrently.
 7. Do it cheaper.
 
+When the fix moves a seam or changes an interface other modules call (a batch API in place of a per-item one, a cache layer between modules), sketch it before writing it, per Sketch First in the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
+
 The anti-patterns below are the usual suspects; each entry gives the rule and the signature to recognize it, and links to a worked fix in [references/optimization-patterns.md](references/optimization-patterns.md). Open the one you need when you reach that code, not before.
 
 **Backend**

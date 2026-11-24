@@ -146,6 +146,8 @@ Ask: "Why does this happen?" until you reach the actual cause, not just where it
 
 Then grep for the same pattern elsewhere and fix every instance, not only the one that was reported.
 
+When the fix moves a seam or changes an interface other modules call, sketch it before writing it (usage first, then types with stub bodies), per Sketch First in the **codebase-design** skill (Skill tool, `pickle:codebase-design`).
+
 **Two failed fixes means a wrong assumption.** When two fixes have failed the same check, stop. Write down, in one sentence, the assumption both fixes made. Test that assumption with evidence before you try a third fix.
 
 ### Step 5: Guard Against Recurrence
