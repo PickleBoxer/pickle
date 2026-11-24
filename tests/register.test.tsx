@@ -75,6 +75,37 @@ test('the band fills the prompt with pickle-mode, on each surface', async ($, on
   expect(filled).toEqual(['/pickle:pickle-mode ', '/pickle:pickle-mode '])
 })
 
+const LOGO_ELEMENTS = {
+  tile: { terminal: { type: 'Image' }, desktop: { type: 'Svg' } },
+  'tile-text': {
+    terminal: { type: 'Text', text: ' p ' },
+    desktop: { type: 'Svg' },
+  },
+  badge: {
+    terminal: { type: 'Text', text: ' pickle ' },
+    desktop: { type: 'Text', text: ' pickle ' },
+  },
+  pixel: { terminal: { type: 'Raster' }, desktop: { type: 'Svg' } },
+  'pixel-tall': { terminal: { type: 'Raster' }, desktop: { type: 'Svg' } },
+} as const
+
+for (const [logo, queries] of Object.entries(LOGO_ELEMENTS)) {
+  test(`the ${logo} logo draws on each surface`, { options: { logo } }, async $ => {
+    for (const surface of SURFACES) {
+      const ui = await $.ui.mount({ ...BAND, surface })
+      expect(await ui.find(queries[surface])).toBeDefined()
+      await ui.unmount()
+    }
+  })
+}
+
+test('the band draws the tile logo by default', async $ => {
+  const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })
+  const tile = await ui.find({ type: 'Svg' })
+  expect(tile?.props.source).toMatch(/<rect/)
+  await ui.unmount()
+})
+
 test('the band hides after Hide', async ($, on) => {
   engineDraws(on)
   const ui = await $.ui.mount({ ...BAND, surface: 'desktop' })

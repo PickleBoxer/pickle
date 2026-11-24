@@ -1,6 +1,8 @@
 import { atom, read, update } from 'claude-code'
 import type { Register } from 'claude-code'
 
+import { drawLogo, isLogo } from './logo'
+
 // Three ways into pickle: a welcome band above the prompt, a tip on the
 // first task-shaped or long prompt, and a guide pane opened by /pickle-guide.
 // After a turn it suggests the next step: correct after the user corrects a
@@ -69,7 +71,9 @@ const PHASES = [
   },
 ] as const
 
-export const register: Register = on => {
+export const register: Register = (on, options) => {
+  const logo = isLogo(options.logo) ? options.logo : 'tile'
+
   let isTipped = false
   let edits = 0
   let isFinishing = false
@@ -143,11 +147,12 @@ export const register: Register = on => {
       return next(e)
     }
 
-    const { Box, Button, Text } = $.ui.resolve(e)
+    const els = $.ui.resolve(e)
+    const { Box, Button } = els
 
     return (
-      <Box gap={1}>
-        <Text color={GREEN}>🥒</Text>
+      <Box gap={1} alignItems="center">
+        {drawLogo(els, e.surface, logo)}
         <Button
           key="mode"
           label="Pickle mode"

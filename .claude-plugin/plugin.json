@@ -10,6 +10,21 @@
   "repository": "https://github.com/PickleBoxer/pickle",
   "license": "MIT",
   "types": "./types/index.d.ts",
+  "userConfig": {
+    "logo": {
+      "type": "string",
+      "title": "Welcome band logo",
+      "description": "pickle's mark in the welcome band. tile: a green \"p\" tile (a picture in kitty, Ghostty and iTerm2, the word pickle in other terminals). tile-text: the same tile as text, in every terminal. badge: \"pickle\" on green. pixel and pixel-tall: a pixel pickle one or two rows tall in the terminal. Outside the terminal, tile and tile-text draw the tile and pixel and pixel-tall a vector pickle.",
+      "options": [
+        "tile",
+        "tile-text",
+        "badge",
+        "pixel",
+        "pixel-tall"
+      ],
+      "default": "tile"
+    }
+  },
   "experimental": {
     "evals": "evals/plugin"
   },

@@ -32,7 +32,7 @@ skills/no-comments/           user-only (pstack): comment-sicko deletes comments
 skills/correct/               user-only (pstack): mines history for repeated mistakes, makes each one impossible
 skills/in-your-own-words/     user-only (pstack): restate the user's goal and problem before work starts
 skills/reframe/               user-only (pstack): teach the expert words for what you're building, rewrite the ask
-hooks/                        the mod: hooks.json and register.tsx (welcome band, tips, guide pane)
+hooks/                        the mod: hooks.json, register.tsx (welcome band, tips, guide pane) and logo.tsx (the band's logo, the `logo` option)
 types/index.d.ts              the mod's state contract, named in plugin.json
 tests/                        the mod's tests, run by `claude plugin test .`
 tsconfig.json                 type-checks hooks/, types/ and tests/ against the engine's types
