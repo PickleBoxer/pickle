@@ -42,6 +42,7 @@ These sit beside the workflow skills: pickle-mode routes to some of them, workfl
 | `improve-codebase-architecture` | user-only | Scans for shallow modules worth deepening, writes an offline HTML report to `docs/agents/reports/` and grills you through the one you pick | `/pickle:improve-codebase-architecture`, or as a weekly [scheduled report](#scheduled-reports) |
 | `audit-architecture` | user-only | Reviews every subsystem for simpler ways to represent state and data, verifies each finding and writes a P0 to P3 report to `docs/agents/reports/`. Every run audits the whole codebase | `/pickle:audit-architecture`, with an optional path, or as a [scheduled report](#scheduled-reports) |
 | `no-comments` | user-only | Hands the comments to the `comment-sicko` agent, which deletes every comment outside a short keep list and flags the code a comment was excusing. Fixes the accepted flags and offers a type, test or lint for each claimed constraint | `/pickle:no-comments`, with optional files or a diff |
+| `correct` | user-only | Mines commits, reverts and review comments for mistakes agents repeat, and makes each one impossible at the highest level that works: architecture, then types, lint, a test, docs last. Proves each check fails on a real past mistake. Fixes only the classes you approve | `/pickle:correct`, with an optional mistake class |
 
 ### Scheduled reports
 
@@ -98,7 +99,7 @@ Shared checklists (testing, security, performance, accessibility, observability,
 - Commands live under `pickle:`, so `/pickle:review` never clashes with the built-in `/review`.
 - Agent names stay bare, so your own agents can override them.
 - Vendored skills will be trimmed where evals show they are too long or overlap.
-- `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach`, `sharpen` and `no-comments` are added from pstack. `reflect` also takes the environment checks from Matt Pocock's `retro`.
+- `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach`, `sharpen`, `no-comments` and `correct` are added from pstack. `reflect` also takes the environment checks from Matt Pocock's `retro`.
 - `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype` are added from Matt Pocock's skills, `prototype` merged with pstack's Prototype playbook. ADRs default to `docs/adr/`.
 
 ## Install
@@ -160,7 +161,7 @@ claude --allowedTools TaskCreate
 
 ## Credits
 
-Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach`, `sharpen` and `no-comments` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
+Built on Addy Osmani's [agent-skills](https://github.com/addyosmani/agent-skills), with `typescript-best-practices`, `how`, `why`, `technical-writing`, `unslop`, `blast-radius`, `reflect`, `teach`, `sharpen`, `no-comments` and `correct` from Lauren Tan's [pstack](https://github.com/cursor/plugins/tree/main/pstack), and `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype` from Matt Pocock's [skills](https://github.com/mattpocock/skills). See [CREDITS.md](CREDITS.md).
 
 ## License
 

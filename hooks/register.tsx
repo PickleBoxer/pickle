@@ -50,6 +50,7 @@ const PHASES = [
       ['webperf', 'audit web performance'],
       ['ship', 'pre-launch checklist'],
       ['reflect', 'review this session'],
+      ['correct', 'make repeated mistakes impossible'],
     ],
   },
   {
