@@ -56,6 +56,7 @@ const PHASES = [
   {
     name: 'Understand',
     items: [
+      ['in-your-own-words', 'restate your goal before work starts'],
       ['teach', 'explain how and why code works'],
       ['audit-architecture', 'audit state and data'],
       ['improve-codebase-architecture', 'find deepening opportunities'],
