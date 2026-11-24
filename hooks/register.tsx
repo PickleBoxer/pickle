@@ -146,49 +146,42 @@ export const register: Register = on => {
     const { Box, Button, Text } = $.ui.resolve(e)
 
     return (
-      <Box flexDirection="column">
-        <Box justifyContent="space-between">
-          <Text>
-            <Text color={GREEN} weight="bold">🥒 pickle</Text>
-            <Text dimColor>  describe a task after one of these, or just type</Text>
-          </Text>
-          <Button
-            key="hide"
-            role="dismiss"
-            plain
-            dimColor
-            label="hide"
-            onPress={() => update($, isWelcomeHidden, () => true)}
-          />
-        </Box>
-        <Box gap={1}>
-          <Button
-            key="mode"
-            label="Pickle mode"
-            hotkey="1"
-            variant="primary"
-            onPress={() => $.prompt.fill({ text: '/pickle:pickle-mode ' })}
-          />
-          <Button
-            key="sharpen"
-            label="Sharpen a prompt"
-            hotkey="2"
-            onPress={() => $.prompt.fill({ text: '/pickle:sharpen ' })}
-          />
-          <Button
-            key="setup"
-            label="Set up this repo"
-            hotkey="3"
-            onPress={() => $.prompt.fill({ text: '/pickle:setup' })}
-          />
-          <Button
-            key="guide"
-            label="All commands"
-            hotkey="4"
-            dimColor
-            onPress={() => $.ui.open({ id: GUIDE, title: 'pickle' })}
-          />
-        </Box>
+      <Box gap={1}>
+        <Text color={GREEN}>🥒</Text>
+        <Button
+          key="mode"
+          label="Pickle mode"
+          hotkey="1"
+          variant="primary"
+          onPress={() => $.prompt.fill({ text: '/pickle:pickle-mode ' })}
+        />
+        <Button
+          key="sharpen"
+          label="Sharpen a prompt"
+          hotkey="2"
+          onPress={() => $.prompt.fill({ text: '/pickle:sharpen ' })}
+        />
+        <Button
+          key="setup"
+          label="Set up this repo"
+          hotkey="3"
+          onPress={() => $.prompt.fill({ text: '/pickle:setup' })}
+        />
+        <Button
+          key="guide"
+          label="All commands"
+          hotkey="4"
+          dimColor
+          onPress={() => $.ui.open({ id: GUIDE, title: 'pickle' })}
+        />
+        <Button
+          key="hide"
+          role="dismiss"
+          plain
+          dimColor
+          label="hide"
+          onPress={() => update($, isWelcomeHidden, () => true)}
+        />
       </Box>
     )
   })
