@@ -40,7 +40,7 @@ const PHASES = [
       ['build', 'implement in small steps'],
       ['test', 'test-first'],
       ['code-simplify', 'simplify without changing behaviour'],
-      ['prune-comments', 'delete comments, ratchet the rest'],
+      ['no-comments', 'delete comments, flag workarounds'],
     ],
   },
   {

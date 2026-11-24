@@ -1,6 +1,6 @@
 # Upstream
 
-Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how`, `why`, `blast-radius`, `reflect`, `teach`, `sharpen`, performance-optimization's benchmark checklist and codebase-design's sketch-first reference, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype`), and the upstream version and commit it was last compared against. The Grafts table does the same for sections a pickle file took from a second source. The only place pickle records upstream versions. `scripts/check-refs.sh` checks these tables against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
+Where each pickle file comes from upstream (agent-skills, pstack for `typescript-best-practices`, `unslop`, `technical-writing`, `how`, `why`, `blast-radius`, `reflect`, `teach`, `sharpen`, `no-comments` and its `comment-sicko` agent, performance-optimization's benchmark checklist and codebase-design's sketch-first reference, and mattpocock-skills for `codebase-design`, `domain-modeling`, `setup`, `improve-codebase-architecture` and `prototype`), and the upstream version and commit it was last compared against. The Grafts table does the same for sections a pickle file took from a second source. The only place pickle records upstream versions. `scripts/check-refs.sh` checks these tables against the files, and `scripts/upstream-diff.sh` lists what changed upstream since the baseline. `scripts/vendor-sync.sh` refreshes the `vendored` rows.
 
 ## Contents
 
@@ -48,6 +48,8 @@ Notes on a `vendored` row start with or contain "on `main`" exactly when the fil
 | skills/teach | skill | skills/teach | rewritten | 0.15.43 | 93b916d | user-only. Calls `pickle:how`, `pickle:why` and `pickle:unslop` in the Skill tool form (all model-invocable in pickle; `how` and `why` are user-only upstream). Diagrams are ASCII in code blocks, not Mermaid or generated images (Claude Code has no image tool). Passes `why` a scoped question. Code shown as `file:line` excerpts or `git diff` hunks, no debugger. Voice rules that `unslop` owns dropped; adds `$ARGUMENTS` and `GLOSSARY.md` terms |
 | skills/performance-optimization/references/benchmark-checklist.md | reference | skills/benchmark-checklist | ported | 0.15.43 | 93b916d | reference of a vendored skill, not a skill: no frontmatter. Adds the macOS core count, drops the pstack playbook links, and sends run evidence to `PERF.md` |
 | skills/sharpen | skill | skills/sharpen | ported | 0.15.43 | 93b916d | user-only. Text from #729 (rewrite only, does not do the task) with #1236's last line (prototype what an experiment can settle). Adds `$ARGUMENTS`, examples of raw material and outside checks, the prompt in one fenced code block, and "Don't start the task" |
+| skills/no-comments | skill | skills/no-comments | ported | 0.15.48 | ca782ed | user-only. Spawns `comment-sicko` through the Agent tool as `pickle:comment-sicko`; `/why` is `pickle:why` and `/architect` is `pickle:codebase-design` with its sketch-first reference, both in the Skill tool form. Drops the poteto-mode reasoning-level line and the principle skill names (not in pickle). Adds `$ARGUMENTS` and an argument-hint |
+| agents/comment-sicko.md | agent | agents/comment-sicko.md | ported | 0.15.48 | ca782ed | spawned by `no-comments`. `tools` limited to Read, Grep, Glob, Edit, Bash and Skill (no Write); `/why` as the Skill tool form; the description names `/pickle:no-comments` so Claude does not delegate to it otherwise |
 
 ## Matt Pocock skills
 
@@ -135,7 +137,6 @@ Sections a pickle file took from a source other than its row's. One row per file
 | pickle item | Kind | Source | Relation | Upstream version | Commit | Notes |
 |---|---|---|---|---|---|---|
 | skills/audit-architecture | skill | - | new | n/a | - | user-only, from the maintainer's dotfiles. Rules at the top, every run a full audit, one Markdown report in `docs/agents/reports/`, Explore subagents with a set brief in batches of up to 12, one verifier instead of five audit passes, no `agents/openai.yaml`. Eval `audit-architecture-report` |
-| skills/prune-comments | skill | - | new | n/a | - | user-only, from a comment-cleanup prompt the maintainer shared. Changes from the prompt: directives, docblocks and license headers are not comments; a Decision Record goes to an ADR only when it passes documentation-and-adrs' three tests, otherwise it stays; Excuses go to `.scratch/` issue files and reach the tracker only on a yes; the ratchet is `scripts/comment-ratchet.sh` with a per-file baseline instead of a lint rule, since no common linter bans all comments; lines removed are measured from the diff. Eval `prune-comments-waits-for-confirmation` |
 
 ## Mods
 

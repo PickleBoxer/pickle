@@ -1,4 +1,0 @@
-schema_version: "1.1"
-name: prune-comments-waits-for-confirmation
-context:
-  scaffold_script: fixture.sh
