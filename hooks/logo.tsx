@@ -1,7 +1,8 @@
 import type { ElementTable, RenderSurface } from 'claude-code'
 
-// pickle's mark in the welcome band, picked by the `logo` option. The terminal
-// draws Raster and Image, the other surfaces Svg, so each mark names both.
+// pickle's marks: the welcome band's, picked by the `logo` option, and the
+// guide pane's tile. The terminal draws Raster and Image, the other surfaces
+// Svg, so each mark names both.
 
 export const LOGOS = ['tile', 'tile-text', 'badge', 'pixel', 'pixel-tall'] as const
 export type Logo = (typeof LOGOS)[number]
@@ -37,6 +38,7 @@ const PALETTE: Record<string, number> = {
   D: hex(DARK),
   B: hex(BUMP),
   H: hex(SHINE),
+  K: hex(INK),
 }
 
 // Two pixel rows per cell: the top pixel is the foreground of '▀', the bottom
@@ -85,6 +87,18 @@ const P_GLYPH = [
   '##....',
   '##....',
 ]
+
+// 12x12 pixels, 12 by 6 cells: the guide pane's tile, the "p" at column 3, row 2.
+const TILE_BIG = rasterCells(
+  Array.from({ length: 12 }, (_, y) =>
+    Array.from({ length: 12 }, (_, x) => {
+      const isCorner = (x === 0 || x === 11) && (y < 2 || y > 9)
+      const isEdge = (x < 2 || x > 9) && (y === 0 || y === 11)
+      if (isCorner || isEdge) return '.'
+      return P_GLYPH[y - 2]?.[x - 3] === '#' ? 'K' : 'L'
+    }).join(''),
+  ),
+)
 
 // 16x16 pixels: a rounded green square with a dark "p", the Svg tile's twin.
 const tilePixels = () => {
@@ -175,6 +189,28 @@ export const drawLogo = (
   return (
     <Text color={GREEN} weight="bold">
       pickle
+    </Text>
+  )
+}
+
+export const drawGuideMark = (els: ElementTable, surface: RenderSurface) => {
+  if (surface === 'terminal' && 'Raster' in els) {
+    const { Raster } = els
+
+    return <Raster key="guide-mark" {...TILE_BIG} />
+  }
+
+  if ('Svg' in els) {
+    const { Svg } = els
+
+    return <Svg source={TILE_SVG} alt="pickle" width={40} height={40} />
+  }
+
+  const { Text } = els
+
+  return (
+    <Text backgroundColor={GREEN} color={INK} weight="bold">
+      {' p '}
     </Text>
   )
 }

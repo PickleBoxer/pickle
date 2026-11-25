@@ -241,6 +241,27 @@ test('a correction suggests correct once, ahead of review', async ($, on) => {
   expect(suggested).toEqual(['/pickle:correct', '/pickle:review'])
 })
 
+test('the guide opens with the tile, title, version and tagline', async ($, on) => {
+  const paths: string[] = []
+  on('fs.read', (_, e) => {
+    paths.push(e.path)
+
+    return { value: JSON.stringify({ name: 'pickle', version: '1.2.3' }) }
+  })
+  on('command.register', (_, e) => ({ value: { command: e.name } }))
+  on('session.start', () => ({ cwd: '/' }))
+  await $.session.start({ cwd: '/', surface: 'terminal', isInteractive: true })
+
+  for (const [surface, mark] of [['terminal', 'Raster'], ['desktop', 'Svg']] as const) {
+    const ui = await $.ui.mount({ ...GUIDE, surface })
+    expect(await ui.find({ type: mark })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: ' v1.2.3' })).toBeDefined()
+    expect(await ui.find({ type: 'Text', text: /picked per task/ })).toBeDefined()
+    await ui.unmount()
+  }
+  expect(paths).toEqual([expect.stringMatching(/\.claude-plugin\/plugin\.json$/)])
+})
+
 test('the guide lists every phase and fills the prompt', async ($, on) => {
   const filled: string[] = []
   on('prompt.fill', (_, e) => {

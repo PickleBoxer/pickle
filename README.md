@@ -87,7 +87,7 @@ pickle includes a mod that points you to the right command in the terminal and t
 
 - **Welcome band.** Above the prompt, buttons put `/pickle:pickle-mode`, `/pickle:sharpen` or `/pickle:setup` in the prompt box, or open the guide. It stays until you click Hide or run a `/pickle:` command. Pick its logo with the plugin's `logo` option (`/plugin configure`): `tile` (the default), `tile-text`, `badge`, `pixel` or `pixel-tall`. In the terminal, `tile` is a picture where the terminal can show one (kitty, Ghostty, iTerm2) and the word pickle elsewhere; the others are text or colored cells and show in every terminal.
 - **Tips.** The first prompt in a session that reads like a task shows a tip for `/pickle:pickle-mode`. A long one (a pasted thread or report) shows a tip for `/pickle:in-your-own-words` instead. The first time you correct Claude in a session ("I told you", "you keep", "we never"), the prompt box suggests `/pickle:correct`. After a turn that edits files, the prompt box suggests `/pickle:review` (Tab to take it). After a `/pickle:review` or `/pickle:ship` that changes nothing, it suggests `/pickle:reflect`.
-- **Guide.** `/pickle-guide` opens a pane of the commands and user-only skills by phase. Click one to put it in the prompt box.
+- **Guide.** `/pickle-guide` opens a pane of the commands and user-only skills by phase, under a header with the pickle tile, the version and a one-line summary. Click one to put it in the prompt box.
 
 ### Agents
 

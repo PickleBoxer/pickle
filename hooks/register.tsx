@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
-import type { Register } from 'claude-code'
+import type { EngineInterface, Register } from 'claude-code'
 
-import { drawLogo, isLogo } from './logo'
+import { drawGuideMark, drawLogo, isLogo } from './logo'
 
 // Three ways into pickle: a welcome band above the prompt, a tip on the
 // first task-shaped or long prompt, and a guide pane opened by /pickle-guide.
@@ -10,6 +10,7 @@ import { drawLogo, isLogo } from './logo'
 // that changed nothing.
 
 const GUIDE = 'guide'
+const TAGLINE = 'Engineering workflow skills, picked per task'
 const GREEN = '#8bc34a'
 const TASK = /\b(build|implement|add|create|refactor|migrate|fix|ship)\b/i
 const CORRECTION =
@@ -71,6 +72,23 @@ const PHASES = [
   },
 ] as const
 
+// The version shown in the guide's header, from the manifest; none if unread.
+const readVersion = async ($: EngineInterface) => {
+  try {
+    const manifest: unknown = JSON.parse(
+      await $.fs.read(`${$.plugin.root}/.claude-plugin/plugin.json`),
+    )
+    return typeof manifest === 'object' &&
+      manifest !== null &&
+      'version' in manifest &&
+      typeof manifest.version === 'string'
+      ? manifest.version
+      : ''
+  } catch {
+    return ''
+  }
+}
+
 export const register: Register = (on, options) => {
   const logo = isLogo(options.logo) ? options.logo : 'tile'
 
@@ -79,8 +97,10 @@ export const register: Register = (on, options) => {
   let isFinishing = false
   let isCorrection = false
   let isCorrectSuggested = false
+  let version = ''
 
   on('session.start', async ($, e, next) => {
+    version = await readVersion($)
     await $.command.register({
       name: 'pickle-guide',
       description: "Open a pane of pickle's commands and skills",
@@ -192,10 +212,23 @@ export const register: Register = (on, options) => {
   })
 
   on('ui.render', { component: 'Pane', requestId: GUIDE }, async ($, e) => {
-    const { Box, Button, Text } = $.ui.resolve(e)
+    const els = $.ui.resolve(e)
+    const { Box, Button, Text } = els
 
     return (
       <Box flexDirection="column" gap={1}>
+        <Box gap={2} alignItems="center">
+          {drawGuideMark(els, e.surface)}
+          <Box flexDirection="column">
+            <Text>
+              <Text color={GREEN} weight="bold">
+                pickle
+              </Text>
+              {version && <Text dimColor>{` v${version}`}</Text>}
+            </Text>
+            <Text dimColor>{TAGLINE}</Text>
+          </Box>
+        </Box>
         {PHASES.map(phase => (
           <Box key={phase.name} flexDirection="column">
             <Text color={GREEN} weight="bold" size="caption">
