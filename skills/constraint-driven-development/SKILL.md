@@ -69,9 +69,10 @@ Q1: Beyond the floor, which of these do you want enforced?
     (c) Performance budgets
     (d) Accessibility
     (e) Architecture boundaries
+    (f) Complexity per function
 GUESS: (a) and (b) — you have a test runner already and you're handling user input.
 DEFAULT if unsure: (a) and (b).
-Say what each pick costs: (c) and (d) need a running URL, (e) needs a rules file written.
+Say what each pick costs: (c) and (d) need a running URL, (e) needs a rules file written, (f) needs a baseline of today's offenders.
 ```
 
 ```
@@ -175,17 +176,26 @@ Picking a dimension means installing something. Don't leave the user with a numb
 | Type coverage (Pest) | Pest type coverage plugin | `composer require --dev pestphp/pest-plugin-type-coverage` | `vendor/bin/pest --type-coverage --min=100` | below the minimum |
 | Security: code (PHP) | Psalm taint analysis | `composer require --dev vimeo/psalm` | `vendor/bin/psalm --taint-analysis` | any taint finding |
 | Security: install (PHP) | roave/security-advisories | `composer require --dev roave/security-advisories:dev-latest` | blocks `composer require` itself | a known-vulnerable version |
+| Complexity (PHP, cyclomatic) | PHPMD 3, `CyclomaticComplexity` from `rulesets/codesize.xml` | `composer require --dev phpmd/phpmd` | `vendor/bin/phpmd analyze --ruleset <ruleset.xml> --baseline-file <baseline.xml> <changed files>` | over `reportLevel` (10), not in the baseline |
+| Complexity (PHP, cognitive) | tomasvotruba/cognitive-complexity, a PHPStan extension | `composer require --dev tomasvotruba/cognitive-complexity` | `vendor/bin/phpstan analyse -c <complexity.neon> <changed files>` | over `cognitive_complexity.function` or `.class`, not in the baseline |
+| Complexity (JS/TS, cyclomatic) | ESLint core rule `complexity` | already there | `eslint .` with `"complexity": ["error", { "max": 10 }]` | any error |
+| Complexity (JS/TS, cognitive) | Biome `noExcessiveCognitiveComplexity` (off by default) | `npm i -D @biomejs/biome` | `biome lint .` with `maxAllowedComplexity` set | any error |
+| Complexity (Python) | Ruff `C901` (off by default) | `pip install ruff` | `ruff check --select C901 .` with `lint.mccabe.max-complexity = 10` | any error |
+| Complexity (Go) | golangci-lint `gocyclo`, `gocognit` | already in golangci-lint | `golangci-lint run` with `min-complexity` set for each | any violation |
+| Complexity (Swift) | SwiftLint `cyclomatic_complexity` (on by default) | already in SwiftLint | `swiftlint lint` | error at 20, warning at 10 |
+| Complexity (Rust) | Clippy `cognitive_complexity` (restriction group, off by default) | `rustup component add clippy` | `cargo clippy -- -W clippy::cognitive_complexity` with `cognitive-complexity-threshold` in `clippy.toml` | any warning |
 | Assertion quality | Stryker | `npm i -D @stryker-mutator/core` | `stryker run --mutate <changed files>` | mutation score |
 | Assertion quality (PHP) | Infection | `composer require --dev infection/infection` | `vendor/bin/infection --git-diff-lines --git-diff-base=origin/main` | mutation score |
 | Assertion quality (Pest) | Pest mutate | already in Pest | `vendor/bin/pest --mutate --path=<changed files>` | mutation score |
 
-Five things that will bite you if you skip them:
+Six things that will bite you if you skip them:
 
 1. **`--redact` on gitleaks is not optional.** Without it the matched secret lands in the agent's transcript, which is how a leaked key ends up in a log, a summary, or a commit message. Report the rule and the location, never the value.
 2. **Lighthouse and axe need a URL.** They only work against a running app, so they belong in the runtime stage against a preview deploy or a local server you start first. If the project has no URL to hit — a CLI, a library, a desktop app — say so and drop the dimension rather than inventing a check that can't run.
 3. **Scope the expensive ones to the diff.** `stryker run --mutate` on the whole repo takes hours and gets turned off; on the files a change touched it takes under a minute. Same for Semgrep, which takes a path list.
 4. **Coverage needs no second test run.** Read the lcov your suite already writes and intersect it with `git diff`. Running the suite twice to get a number is the fastest way to make people hate this.
-5. **Semgrep's registry rules are free to run; check the licence before redistributing them.** `opengrep` is a drop-in fork with the same rule format and JSON output if that matters to your legal team.
+5. **Gate complexity on changed files, with a baseline.** Most codebases already have methods over any sane limit, so a whole-repo gate is red on day one. Freeze today's offenders in the tool's baseline (PHPMD `--generate-baseline`, PHPStan `--generate-baseline`), check only the files a change touches, and split a method rather than add a baseline entry. Baselines match by method name, so a frozen method can still grow: say so in the review.
+6. **Semgrep's registry rules are free to run; check the licence before redistributing them.** `opengrep` is a drop-in fork with the same rule format and JSON output if that matters to your legal team.
 
 `semgrep scan` and `axe` can exit 0 on findings; copy [scripts/quality-gate.mjs](scripts/quality-gate.mjs) into the project's `scripts/` directory to enforce these thresholds.
 Keep the scanner before `&&` so a failed scan stops the command.
@@ -234,7 +244,7 @@ Someone will point out that if the agent writes the code and the checks, the che
 
 Agents don't craft clever loopholes. They hit a red check and take the cheapest road to green. Watch for these five moves in the diff, at review time:
 
-1. **The threshold moved.** A budget lowered, a severity dropped, a check removed from the fast stage. Compare `CONSTRAINTS.md` against its state at the branch point. On PHP the threshold also lives in config: new entries in `phpstan-baseline.neon`, a lower `level:` or new `ignoreErrors` in `phpstan.neon`, a lower `--min` or `minMsi`, files added to `<exclude>` in `phpunit.xml`, a removed `declare(strict_types=1)`.
+1. **The threshold moved.** A budget lowered, a severity dropped, a check removed from the fast stage. Compare `CONSTRAINTS.md` against its state at the branch point. On PHP the threshold also lives in config: new entries in `phpstan-baseline.neon`, a lower `level:` or new `ignoreErrors` in `phpstan.neon`, a lower `--min` or `minMsi`, files added to `<exclude>` in `phpunit.xml`, a removed `declare(strict_types=1)`. For complexity: new entries in a complexity baseline, a raised `reportLevel`, `max`, `min-complexity` or `cognitive_complexity` limit.
 2. **A test got easier.** `.skip` added, a test file deleted, assertions pulled out of tests that stayed.
 3. **A checker got silenced.** New `@ts-ignore` or `eslint-disable`. Some suppressions deserve special attention because they switch off a check you're relying on: `istanbul ignore` and `@codeCoverageIgnore` drop code from coverage instead of testing it, `Stryker disable` and `@infection-ignore-all` hide a surviving mutant, `nosemgrep` and `gitleaks:allow` do it for security findings.
 4. **Work is unfinished.** A stub that throws, an empty `catch` turning a failure into silence, a `TODO` standing where the implementation should be.
@@ -277,6 +287,9 @@ When the user has no opinion, use these. They're chosen to be met by most codeba
 | Ratchet tolerance | 0.5% | Absorbs drift when an unrelated file moves the number |
 | PHPStan level (new project) | the highest level that passes today, with no baseline | A baseline from day one hides errors nobody chose to keep |
 | PHPStan baseline | today's entry count, must not grow | The baseline is a list of silenced errors |
+| Cyclomatic complexity | 10 per method | McCabe's original limit, and the default of PHPMD and SwiftLint's warning |
+| Cognitive complexity | 15 per function | Biome's default; Sonar's model, which counts nesting, so deep `if` trees cost more than flat `switch` arms |
+| Complexity baseline | today's entry count, must not grow | Same as the PHPStan baseline: every entry is a method nobody split |
 
 State the number and the reason together. A threshold without a rationale gets deleted by the next person who hits it.
 
